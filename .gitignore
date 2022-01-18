@@ -1,4 +1,5 @@
-README.md
+!README.md
+!.gitignore
 target/
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
