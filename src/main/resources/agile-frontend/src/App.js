@@ -5,9 +5,10 @@ import LoginPage from './pages/LoginPage'
 import React from 'react';
 
 const App = () =>{
+  var isSuccess = false
   return(
     <div>
-      <p>Hello World</p>
+      <LoginPage isSuccess={isSuccess}/>
     </div>
   )
 }
