@@ -1,16 +1,19 @@
-import { Route, Switch, Redirect} from 'react-router-dom'
 import './App.css';
 import MainPage from './pages/MainPage'
 import LoginPage from './pages/LoginPage'
+import Register from './components/Register';
 import React from 'react';
+import {
+  BrowserRouter as Router,
+  Routes, Route, Link
+} from "react-router-dom"
 
 const App = () =>{
   var isSuccess = false
   return(
-    <div>
-      <LoginPage isSuccess={isSuccess}/>
-    </div>
+    <LoginPage isSuccess={isSuccess}/>
   )
 }
 
 export default App;
+//<LoginPage isSuccess={isSuccess}/>

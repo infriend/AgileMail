@@ -1,6 +1,5 @@
 import React from 'react'
-import {  IllustrationIdle } from '@douyinfe/semi-illustrations';
-import {Layout,Row,Col,Empty, Space} from '@douyinfe/semi-ui'
+import {Layout} from '@douyinfe/semi-ui'
 import Login from '../components/Login'
 import '../css/loginpage.css'
 const LoginPage = (isSuccess) => {
