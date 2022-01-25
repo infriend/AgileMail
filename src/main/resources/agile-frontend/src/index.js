@@ -9,13 +9,15 @@ import {
   BrowserRouter,
   Routes, Route,
 } from "react-router-dom"
+import HelpCenter from './components/HelpCenter';
 ReactDOM.render(
   <BrowserRouter>
     <Routes>
       <Route path='/' element = {<App/>} />
       <Route path='/login' element = {<LoginPage/>} />
-      <Route path='/main' element = {<MainPage/>} />
+      <Route path='/main/*' element = {<MainPage/>} />
       <Route path='/register' element = {<Register />} />
+      <Route path='/helpcenter' element= {<HelpCenter />} />
     </Routes>
  </BrowserRouter>,
   document.getElementById('root')
@@ -36,3 +38,6 @@ ReactDOM.render(
    </Routes>
   </BrowserRouter>,
  */
+/*
+<Route path='/writemail' element={<ContentWrite/>} />
+*/

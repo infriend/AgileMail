@@ -35,7 +35,7 @@ const Login = () => {
             }>
               <Form 
                 
-                style={{ lineHeight: 2}}>
+                style={{ lineHeight: 1}}>
                 <Row>
                     <Col >
                         <Form.InputGroup  label={{ text: (<span>用户名</span>), required: true }} labelPosition='top'>
@@ -48,7 +48,7 @@ const Login = () => {
                 <Row>
                  <Col>
                         <Form>
-                            <Form.Input field='密码*' mode="password"  placeholder='请输入密码' style={{width:470}} showClear/>
+                            <Form.Input label={{text:('密码'),required: true}} mode="password"  placeholder='请输入密码' style={{width:470} } showClear/>
                          </Form> 
                     </Col>
                 </Row>

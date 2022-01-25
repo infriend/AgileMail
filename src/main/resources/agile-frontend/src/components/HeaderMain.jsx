@@ -1,8 +1,10 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Button,Avatar,Nav } from '@douyinfe/semi-ui';
 import Icon, { IconUndo, IconSemiLogo, IconHelpCircle} from '@douyinfe/semi-icons'
 const HeaderMain = () => {
     var username = 'agileUser123'
+    const navigate = useNavigate()
     return(
         <div>
         <Nav mode="horizontal" defaultSelectedKeys={['Home']}>
@@ -34,6 +36,7 @@ const HeaderMain = () => {
                         color: 'var(--semi-color-text-2)',
                         marginRight: '12px',
                     }}
+                    onClick={()=>navigate('/helpcenter')}
                 />
                 <Button
                     theme="borderless"
@@ -42,6 +45,7 @@ const HeaderMain = () => {
                         color: 'var(--semi-color-text-2)',
                         marginRight: '12px',
                     }}
+                    onClick={()=>navigate('/')}
                 />
             </Nav.Footer>
         </Nav>
