@@ -22,6 +22,7 @@ const HeaderMain = () => {
                         color: 'var(--semi-color-text-0)',
                         fontWeight: '700',
                     }}
+                    onClick={()=>navigate('/main')}
                 >
                     邮箱首页
                 </span>

@@ -1,7 +1,7 @@
 import './App.css';
 import MainPage from './pages/MainPage'
 import LoginPage from './pages/LoginPage'
-import Register from './components/Register';
+import Register from './pages/Register';
 import React from 'react';
 import {
   BrowserRouter as Router,

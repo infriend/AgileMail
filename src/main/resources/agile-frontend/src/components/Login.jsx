@@ -1,7 +1,6 @@
 import React, { useRef, useState } from 'react'
 import {history  } from "react-router-dom"
 import { Button, Card ,Row, Col, Form,Avatar,Space,Typography} from '@douyinfe/semi-ui'
-import Register from './Register'
 const Login = () => {
     const { Meta } = Card;
     const { Text } = Typography;

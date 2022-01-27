@@ -1,23 +1,21 @@
 import React ,{useMemo}from 'react';
-import { Col, Layout, Row,Table, Button} from '@douyinfe/semi-ui';
+import { Col, Layout, Row,Table, Button,Toast} from '@douyinfe/semi-ui';
 import Icon, { IconMore} from '@douyinfe/semi-icons'
-const AlreadySend = () => {
-    var all = 60
+const AddressBook= () => {
+    
+    var all = 30
+
     const columns = [
         {
-            title: '收信人',
-            dataIndex: 'toName',
+            title: '姓名',
+            dataIndex: 'addrName',
             width: 'auto',
 
         },
         {
-            title: '主题',
+            title: '邮箱',
             dataIndex: 'mainTitle',
             width:500,
-        },
-        {
-            title: '更新日期',
-            dataIndex: 'updateTime',
         },
         {
             title: '',
@@ -30,40 +28,40 @@ const AlreadySend = () => {
     const data = [
         {
             key: '1',
-            mainTitle: 'Semi Design 设计稿.fig',
-            toName: '姜鹏志',
+            mainTitle: 'aqweqe@agile.com',
+            addrName: '姜鹏志',
             updateTime: '2020-02-02 05:13',
 
         },
         {
             key: '2',
-            mainTitle: 'Semi Design 分享演示文稿',
-            toName: '郝宣',
+            mainTitle: 'aqweqe@agile.com',
+            addrName: '郝宣',
             updateTime: '2020-01-17 05:31',
         },
         {
             key: '3',
-            mainTitle: '设计文档',
-            toName: 'Zoey Edwards',
+            mainTitle: 'aqweqe@agile.com',
+            addrName: 'Zoey Edwards',
             updateTime: '2020-01-26 11:01',
         },
         {
             key: '4',
-            mainTitle: 'Semi Pro 设计稿.fig',
-            toName: '姜鹏志',
+            mainTitle: 'aqweqe@agile.com',
+            addrName: '姜鹏志',
             updateTime: '2020-02-02 05:13',
 
         },
         {
             key: '5',
-            mainTitle: 'Semi Pro 分享演示文稿',
-            toName: '郝宣',
+            mainTitle: 'aqweqe@agile.com',
+            addrName: '郝宣',
             updateTime: '2020-01-17 05:31',
         },
         {
             key: '6',
-            mainTitle: 'Semi Pro 设计文档',
-            toName: 'Zoey Edwards',
+            mainTitle: 'aqweqe@agile.com',
+            addrName: 'Zoey Edwards',
             updateTime: '2020-01-26 11:01',
         },
     ];
@@ -84,7 +82,7 @@ const AlreadySend = () => {
     }), []);
     return(
         <><div>
-            <h4>已发送，一共{all}封</h4>
+            <h4>通讯录，一共{all}位联系人</h4>
         </div>
             <div
                 style={{
@@ -95,9 +93,10 @@ const AlreadySend = () => {
                 }}
             >
                 <Table columns={columns} dataSource={data} rowSelection={rowSelection} pagination={pagination} />
-                <Button type='primary' theme='solid' style={{ width: 100, marginTop: 12, marginRight: 30,marginLeft:30 }}>删除草稿</Button>
-                <Button style={{marginTop: 12,width:100}}>转发</Button>
+                <Button type='primary' theme='solid' style={{ width: 100, marginTop: 12, marginRight: 30,marginLeft:30 }}
+                onClick={() => Toast.success('删除成功')}>删除联系人</Button>
+                <Button style={{marginTop: 12,width:100}}>添加联系人</Button>
             </div></>
     )
 }
-export default AlreadySend
+export default AddressBook

@@ -1,23 +1,46 @@
 import React ,{useMemo}from 'react';
-import { Col, Layout, Row,Table, Button} from '@douyinfe/semi-ui';
+import { Col, Layout, Row,Table, Button,Toast} from '@douyinfe/semi-ui';
 import Icon, { IconMore} from '@douyinfe/semi-icons'
+import { useNavigate } from 'react-router-dom';
 const DraftBox = () => {
+    const navigate = useNavigate()
     var all = 60
     const columns = [
         {
             title: '收信人',
             dataIndex: 'toName',
             width: 'auto',
+            render: (text, record, index) => {
+                return (
+                    <div onClick={() => navigate('/main/readmail')}>
+                        {text}
+                    </div>
+                );
+            }
 
         },
         {
             title: '主题',
             dataIndex: 'mainTitle',
             width:500,
+            render: (text, record, index) => {
+                return (
+                    <div onClick={() => navigate('/main/readmail')}>
+                        {text}
+                    </div>
+                );
+            }
         },
         {
             title: '更新日期',
             dataIndex: 'updateTime',
+            render: (text, record, index) => {
+                return (
+                    <div onClick={() => navigate('/main/readmail')}>
+                        {text}
+                    </div>
+                );
+            }
         },
         {
             title: '',
@@ -95,7 +118,8 @@ const DraftBox = () => {
                 }}
             >
                 <Table columns={columns} dataSource={data} rowSelection={rowSelection} pagination={pagination} />
-                <Button type='primary' theme='solid' style={{ width: 100, marginTop: 12, marginRight: 30,marginLeft:30 }}>删除草稿</Button>
+                <Button type='primary' theme='solid' style={{ width: 100, marginTop: 12, marginRight: 30,marginLeft:30 }}
+                onClick={() => Toast.success('删除成功')}>删除草稿</Button>
                 <Button style={{marginTop: 12,width:100}}>转发</Button>
             </div></>
     )
