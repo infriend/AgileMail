@@ -4,6 +4,8 @@ Project for NJU SE Agile Development Class.
 
 Environment: Java 8, MySQL5.7, Ubuntu 18.04-Server.
 
+We shall build our mail system based on spring-boot-starter-mail
+
 For further reference, please consider the following sections:
 
 * [Official Apache Maven documentation](https://maven.apache.org/guides/index.html)
