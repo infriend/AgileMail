@@ -5,12 +5,13 @@ import HeaderMain from '../components/HeaderMain';
 import SidererMain from '../components/SiderMain';
 import ContentMain from '../components/ContentMain';
 
-const MainPage = () =>{
+const MainPage = ({useraddr,setUseraddr}) =>{
     const { Header, Footer, Sider, Content } = Layout;
+    console.log("main:"+useraddr.name)
     return (
         <Layout className="mainPage" style={{ border: '1px solid var(--semi-color-border)',height: '100%',weight:'100%',position:'absolute'}}>
             <Header style={{ backgroundColor: 'var(--semi-color-bg-1)' }}>
-                <HeaderMain />
+                <HeaderMain useraddr = {useraddr} setUseraddr = {setUseraddr}/>
             </Header>
             <Layout >
                 <Sider style={{ backgroundColor: 'var(--semi-color-bg-1)' }}>
@@ -21,7 +22,7 @@ const MainPage = () =>{
                     padding: '24px',
                     backgroundColor: 'var(--semi-color-bg-0)',
                 }}>
-                    <ContentMain />
+                    <ContentMain useraddr = {useraddr} setUseraddr = {setUseraddr}/>
                 </Content>
             </Layout>
             <Footer style={{

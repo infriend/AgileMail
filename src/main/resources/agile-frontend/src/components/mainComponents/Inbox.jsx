@@ -1,8 +1,8 @@
 import React ,{useMemo}from 'react';
 import { Col, Layout, Row,Table, Button,Typography,Toast} from '@douyinfe/semi-ui';
-import Icon, { IconMore} from '@douyinfe/semi-icons'
+import testdata from '../../data/testdata.json'
 import { useNavigate } from 'react-router-dom';
-const Inbox = () => {
+const Inbox = ({useraddr,setUseraddr}) => {
     const navigate = useNavigate()
     var all = 60
     var notRead = 5
@@ -15,7 +15,7 @@ const Inbox = () => {
             render: (text, record, index) => {
                 return (
                     <div onClick={() => navigate('/main/readmail')}>
-                        <Text >{text}</Text>
+                        {text}
                     </div>
                 );
             }
@@ -28,7 +28,7 @@ const Inbox = () => {
             render: (text, record, index) => {
                 return (
                     <div onClick={() => navigate('/main/readmail')}>
-                        <Text >{text}</Text>
+                        {text}
                     </div>
                 );
             }
@@ -39,59 +39,36 @@ const Inbox = () => {
             render: (text, record, index) => {
                 return (
                     <div onClick={() => navigate('/main/readmail') }>
-                        <Text>{text}</Text>
+                        {text}
                     </div>
                 );
             }
         },
         {
-            title: '',
-            dataIndex: 'operate',
-            render: () => {
-                return <IconMore />;
-            }
+            title: '邮箱类型',
+            dataIndex: 'mailType',
+            render: (text, record, index) => {
+                return(
+                    <div onClick={() => navigate('/main/readmail') }>
+                {text}
+            </div>
+                );
+            },
+            filters: [
+                {
+                    text: 'GMail',
+                    value: 'GMail',
+                },
+                {
+                    text: '163mail',
+                    value: '163mail',
+                },
+            ],
+            onFilter: (value,text, record) => {record.mailType.includes(value)},
+            
         },
     ];
-    const data = [
-        {
-            key: '1',
-            mainTitle: 'Semi Design 设计稿.fig',
-            fromName: '姜鹏志',
-            updateTime: '2020-02-02 05:13',
-
-        },
-        {
-            key: '2',
-            mainTitle: 'Semi Design 分享演示文稿',
-            fromName: '郝宣',
-            updateTime: '2020-01-17 05:31',
-        },
-        {
-            key: '3',
-            mainTitle: '设计文档',
-            fromName: 'Zoey Edwards',
-            updateTime: '2020-01-26 11:01',
-        },
-        {
-            key: '4',
-            mainTitle: 'Semi Pro 设计稿.fig',
-            fromName: '姜鹏志',
-            updateTime: '2020-02-02 05:13',
-
-        },
-        {
-            key: '5',
-            mainTitle: 'Semi Pro 分享演示文稿',
-            fromName: '郝宣',
-            updateTime: '2020-01-17 05:31',
-        },
-        {
-            key: '6',
-            mainTitle: 'Semi Pro 设计文档',
-            fromName: 'Zoey Edwards',
-            updateTime: '2020-01-26 11:01',
-        },
-    ];
+    const data = testdata.inbox_Data
     const rowSelection = {
         onSelect: (record, selected) => {
             console.log(`select row: ${selected}`, record);

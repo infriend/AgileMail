@@ -1,8 +1,8 @@
 import React from 'react';
 import { Col, Form, Row, Button, Upload,Toast} from '@douyinfe/semi-ui';
 import Icon, { IconUpload} from '@douyinfe/semi-icons'
-const ContentWrite = () => {
-    var username = "AgileUser123"
+const ContentWrite = ({useraddr,setUseraddr}) => {
+    var username = useraddr.name
     return(
         <><div>
             <h4>晚上好，{username}</h4>

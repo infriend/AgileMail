@@ -1,7 +1,8 @@
 import React ,{useMemo}from 'react';
-import { Col, Layout, Row,Table, Button,Toast} from '@douyinfe/semi-ui';
+import { Col, Layout, Row,Table, Button,Toast,Modal} from '@douyinfe/semi-ui';
+import testdata from '../../data/testdata.json'
 import Icon, { IconMore} from '@douyinfe/semi-icons'
-const AddressBook= () => {
+const AddressBook= ({useraddr,setUseraddr}) => {
     
     var all = 30
 
@@ -25,46 +26,7 @@ const AddressBook= () => {
             }
         },
     ];
-    const data = [
-        {
-            key: '1',
-            mainTitle: 'aqweqe@agile.com',
-            addrName: '姜鹏志',
-            updateTime: '2020-02-02 05:13',
-
-        },
-        {
-            key: '2',
-            mainTitle: 'aqweqe@agile.com',
-            addrName: '郝宣',
-            updateTime: '2020-01-17 05:31',
-        },
-        {
-            key: '3',
-            mainTitle: 'aqweqe@agile.com',
-            addrName: 'Zoey Edwards',
-            updateTime: '2020-01-26 11:01',
-        },
-        {
-            key: '4',
-            mainTitle: 'aqweqe@agile.com',
-            addrName: '姜鹏志',
-            updateTime: '2020-02-02 05:13',
-
-        },
-        {
-            key: '5',
-            mainTitle: 'aqweqe@agile.com',
-            addrName: '郝宣',
-            updateTime: '2020-01-17 05:31',
-        },
-        {
-            key: '6',
-            mainTitle: 'aqweqe@agile.com',
-            addrName: 'Zoey Edwards',
-            updateTime: '2020-01-26 11:01',
-        },
-    ];
+    const data = testdata.addData
     const rowSelection = {
         onSelect: (record, selected) => {
             console.log(`select row: ${selected}`, record);

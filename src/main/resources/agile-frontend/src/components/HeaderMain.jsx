@@ -2,8 +2,9 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button,Avatar,Nav } from '@douyinfe/semi-ui';
 import Icon, { IconUndo, IconSemiLogo, IconHelpCircle} from '@douyinfe/semi-icons'
-const HeaderMain = () => {
-    var username = 'agileUser123'
+const HeaderMain = ({useraddr,setUseraddr}) => {
+    var username = useraddr.name
+    var addr = useraddr.addr
     const navigate = useNavigate()
     return(
         <div>
@@ -26,7 +27,7 @@ const HeaderMain = () => {
                 >
                     邮箱首页
                 </span>
-                <span style={{ marginRight: '24px' }}>{username}@agilemail.com</span>
+                <span style={{ marginRight: '24px' }}>{username}{addr}</span>
                
             </span>
             <Nav.Footer>

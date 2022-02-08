@@ -1,8 +1,8 @@
 import React ,{useMemo}from 'react';
 import { Col, Layout, Row,Table, Button,Toast} from '@douyinfe/semi-ui';
-import Icon, { IconMore} from '@douyinfe/semi-icons'
+import testdata from '../../data/testdata.json'
 import { useNavigate } from 'react-router-dom';
-const DraftBox = () => {
+const DraftBox = ({useraddr,setUseraddr}) => {
     const navigate = useNavigate()
     var all = 60
     const columns = [
@@ -43,53 +43,16 @@ const DraftBox = () => {
             }
         },
         {
-            title: '',
-            dataIndex: 'operate',
-            render: () => {
-                return <IconMore />;
+            title: '邮箱类型',
+            dataIndex: 'mailType',
+            render: (text, record, index) => {
+                <div onClick={() => navigate('/main/readmail') }>
+                {text}
+            </div>
             }
         },
     ];
-    const data = [
-        {
-            key: '1',
-            mainTitle: 'Semi Design 设计稿.fig',
-            toName: '姜鹏志',
-            updateTime: '2020-02-02 05:13',
-
-        },
-        {
-            key: '2',
-            mainTitle: 'Semi Design 分享演示文稿',
-            toName: '郝宣',
-            updateTime: '2020-01-17 05:31',
-        },
-        {
-            key: '3',
-            mainTitle: '设计文档',
-            toName: 'Zoey Edwards',
-            updateTime: '2020-01-26 11:01',
-        },
-        {
-            key: '4',
-            mainTitle: 'Semi Pro 设计稿.fig',
-            toName: '姜鹏志',
-            updateTime: '2020-02-02 05:13',
-
-        },
-        {
-            key: '5',
-            mainTitle: 'Semi Pro 分享演示文稿',
-            toName: '郝宣',
-            updateTime: '2020-01-17 05:31',
-        },
-        {
-            key: '6',
-            mainTitle: 'Semi Pro 设计文档',
-            toName: 'Zoey Edwards',
-            updateTime: '2020-01-26 11:01',
-        },
-    ];
+    const data = testdata.draft_Data
     const rowSelection = {
         onSelect: (record, selected) => {
             console.log(`select row: ${selected}`, record);

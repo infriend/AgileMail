@@ -1,7 +1,7 @@
 import React from 'react';
 import { Col, Form, Row, Button,Typography,Card} from '@douyinfe/semi-ui';
 import Icon, { IconUpload} from '@douyinfe/semi-icons'
-const Readmail = () =>{
+const Readmail = ({useraddr,setUseraddr}) =>{
     const { Section, Input } = Form;
     const {Text,Paragraph} = Typography
     const data =  {

@@ -3,7 +3,7 @@ import { Col, Layout, Row } from '@douyinfe/semi-ui';
 import {Nav } from '@douyinfe/semi-ui';
 import Icon, { IconMailStroked1, IconUserGroup, IconSetting,IconEdit} from '@douyinfe/semi-icons'
 import { useNavigate } from 'react-router-dom';
-const SiderMain = () => {
+const SiderMain = ({useraddr,setUseraddr}) => {
     const navigate = useNavigate()
     
     return(

@@ -2,8 +2,8 @@ import React from 'react';
 import { Col, Layout, Row,Button,Empty} from '@douyinfe/semi-ui';
 import { IllustrationSuccess, IllustrationSuccessDark } from '@douyinfe/semi-illustrations';
 import { useNavigate } from 'react-router-dom';
-const InitialMain = () => {
-    var username = "AgileUser123"
+const InitialMain = ({useraddr,setUseraddr}) => {
+    var username = useraddr.name
     const navigate = useNavigate()
     return(
         <><div>

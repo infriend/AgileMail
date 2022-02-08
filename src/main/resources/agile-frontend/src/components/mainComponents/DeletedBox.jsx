@@ -1,8 +1,8 @@
 import React ,{useMemo}from 'react';
 import { Col, Layout, Row,Table, Popconfirm, Button, Toast} from '@douyinfe/semi-ui';
-import Icon, { IconMore} from '@douyinfe/semi-icons'
+import testdata from '../../data/testdata.json'
 import { useNavigate } from 'react-router-dom';
-const DeletedBox = () => {
+const DeletedBox = ({useraddr,setUseraddr}) => {
     var all = 5
     const navigate = useNavigate()
     const columns = [
@@ -42,16 +42,16 @@ const DeletedBox = () => {
             }
         },
         {
-            title: '',
-            dataIndex: 'operate',
-            render: () => {
-                return <IconMore />;
+            title: '邮箱类型',
+            dataIndex: 'mailType',
+            render: (text, record, index) => {
+                <div onClick={() => navigate('/main/readmail') }>
+                {text}
+            </div>
             }
         },
     ];
-    const data = [
-
-    ];
+    const data = testdata.deleted_Data
     const rowSelection = {
         onSelect: (record, selected) => {
             console.log(`select row: ${selected}`, record);
