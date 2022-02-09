@@ -1,14 +1,19 @@
 import React ,{useMemo}from 'react';
 import { Col, Layout, Row,Table, Popconfirm, Button, Toast} from '@douyinfe/semi-ui';
-import testdata from '../../data/testdata.json'
 import { useNavigate } from 'react-router-dom';
-const DeletedBox = ({useraddr,setUseraddr}) => {
-    var all = 5
+import api from '../../api/api'
+const DeletedBox = ({useraddr,setUseraddr,boxData,setBoxData}) => {
+    var all
+    if(boxData == undefined){
+        all = 0
+        api.getDeleteList(useraddr,boxData,setBoxData)
+    }
+    else all = boxData.length
     const navigate = useNavigate()
     const columns = [
         {
             title: '发信人',
-            dataIndex: 'fromName',
+            dataIndex: 'from',
             width: 'auto',
             render: (text, record, index) => {
                 return (
@@ -20,7 +25,7 @@ const DeletedBox = ({useraddr,setUseraddr}) => {
         },
         {
             title: '主题',
-            dataIndex: 'mainTitle',
+            dataIndex: 'subject',
             width:500,
             render: (text, record, index) => {
                 return (
@@ -32,7 +37,7 @@ const DeletedBox = ({useraddr,setUseraddr}) => {
         },
         {
             title: '更新日期',
-            dataIndex: 'updateTime',
+            dataIndex: 'datetime',
             render: (text, record, index) => {
                 return (
                     <div onClick={() => navigate('/main/readmail')}>
@@ -42,8 +47,8 @@ const DeletedBox = ({useraddr,setUseraddr}) => {
             }
         },
         {
-            title: '邮箱类型',
-            dataIndex: 'mailType',
+            title: '收件邮箱',
+            dataIndex: 'fromEmailAccount',
             render: (text, record, index) => {
                 <div onClick={() => navigate('/main/readmail') }>
                 {text}
@@ -51,7 +56,7 @@ const DeletedBox = ({useraddr,setUseraddr}) => {
             }
         },
     ];
-    const data = testdata.deleted_Data
+    const data = boxData
     const rowSelection = {
         onSelect: (record, selected) => {
             console.log(`select row: ${selected}`, record);

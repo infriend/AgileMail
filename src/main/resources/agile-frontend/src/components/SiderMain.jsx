@@ -3,9 +3,20 @@ import { Col, Layout, Row } from '@douyinfe/semi-ui';
 import {Nav } from '@douyinfe/semi-ui';
 import Icon, { IconMailStroked1, IconUserGroup, IconSetting,IconEdit} from '@douyinfe/semi-icons'
 import { useNavigate } from 'react-router-dom';
-const SiderMain = ({useraddr,setUseraddr}) => {
+import api from '../api/api'
+const SiderMain = ({useraddr,setUseraddr,addrData,setAddrData,boxData,setBoxData}) => {
     const navigate = useNavigate()
-    
+    const siderOnSelect = (data) =>{
+        /*if(data.itemKey == 'addressbook'){
+            //api.getAddrBook(useraddr,addrData,setAddrData)
+        }else if(data.itemKey == 'inbox'){
+            api.getInboxList(useraddr,boxData,setBoxData)
+            console.log("siderinbox:"+boxData[0].subject)
+        }else if(data.itemKey == 'draft'){
+            api.getDraftList(useraddr,boxData,setBoxData)
+        }*/
+        navigate('/main/'+data.itemKey)
+    }
     return(
         <Nav
         style={{ maxWidth: 220, height: '100%' }}
@@ -21,7 +32,7 @@ const SiderMain = ({useraddr,setUseraddr}) => {
                 items: [{itemKey:'draft',text: '草稿箱'}, {itemKey:'alreadySent',text: '已发送'},{itemKey:'deleted',text: '已删除'}],
             },   
         ]}
-        onSelect={data => navigate('/main/'+data.itemKey)}
+        onSelect={siderOnSelect}
         onClick={data => {console.log(data.itemKey)}}
         footer={{
             collapseButton: true,

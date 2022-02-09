@@ -1,32 +1,35 @@
-import React ,{useMemo}from 'react';
+import React ,{useMemo,useState}from 'react';
 import { Col, Layout, Row,Table, Button,Toast,Modal} from '@douyinfe/semi-ui';
-import testdata from '../../data/testdata.json'
-import Icon, { IconMore} from '@douyinfe/semi-icons'
-const AddressBook= ({useraddr,setUseraddr}) => {
+import api from '../../api/api'
+const AddressBook= ({useraddr,setUseraddr,addrData,setAddrData}) => {
     
-    var all = 30
+    var all
+    if(addrData == undefined) {
+        all = 0
+        api.getAddrBook(useraddr,addrData,setAddrData)
+        }
+    else all = addrData.length
 
     const columns = [
         {
             title: '姓名',
-            dataIndex: 'addrName',
+            dataIndex: 'name',
             width: 'auto',
 
         },
         {
             title: '邮箱',
-            dataIndex: 'mainTitle',
+            dataIndex: 'emailAddress',
             width:500,
         },
         {
-            title: '',
-            dataIndex: 'operate',
-            render: () => {
-                return <IconMore />;
-            }
+            title: '来自邮箱',
+            dataIndex: 'fromEmailAccount',
+            width:'auto'
         },
     ];
-    const data = testdata.addData
+    const data = addrData
+    
     const rowSelection = {
         onSelect: (record, selected) => {
             console.log(`select row: ${selected}`, record);
@@ -54,7 +57,7 @@ const AddressBook= ({useraddr,setUseraddr}) => {
                     padding: '16px',
                 }}
             >
-                <Table columns={columns} dataSource={data} rowSelection={rowSelection} pagination={pagination} />
+                <Table columns={columns} dataSource={data} rowSelection={rowSelection} pagination={pagination} rowKey="id"/>
                 <Button type='primary' theme='solid' style={{ width: 100, marginTop: 12, marginRight: 30,marginLeft:30 }}
                 onClick={() => Toast.success('删除成功')}>删除联系人</Button>
                 <Button style={{marginTop: 12,width:100}}>添加联系人</Button>

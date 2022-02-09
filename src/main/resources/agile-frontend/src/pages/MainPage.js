@@ -7,6 +7,8 @@ import ContentMain from '../components/ContentMain';
 
 const MainPage = ({useraddr,setUseraddr}) =>{
     const { Header, Footer, Sider, Content } = Layout;
+    const [boxData,setBoxData] = useState();
+    const [addrData, setAddrData] = useState();
     console.log("main:"+useraddr.name)
     return (
         <Layout className="mainPage" style={{ border: '1px solid var(--semi-color-border)',height: '100%',weight:'100%',position:'absolute'}}>
@@ -15,14 +17,16 @@ const MainPage = ({useraddr,setUseraddr}) =>{
             </Header>
             <Layout >
                 <Sider style={{ backgroundColor: 'var(--semi-color-bg-1)' }}>
-                    <SidererMain />    
+                    <SidererMain useraddr={useraddr} setUseraddr={setUseraddr} addrData={addrData} setAddrData={setAddrData}
+                    boxData={boxData} setBoxData={setBoxData} />    
                 </Sider>
                 <Content
                     style={{
                     padding: '24px',
                     backgroundColor: 'var(--semi-color-bg-0)',
                 }}>
-                    <ContentMain useraddr = {useraddr} setUseraddr = {setUseraddr}/>
+                    <ContentMain useraddr = {useraddr} setUseraddr = {setUseraddr} addrData={addrData} setAddrData={setAddrData}
+                    boxData={boxData} setBoxData={setBoxData}/>
                 </Content>
             </Layout>
             <Footer style={{

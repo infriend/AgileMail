@@ -1,16 +1,20 @@
 import React ,{useMemo}from 'react';
-import { Col, Layout, Row,Table, Button,Typography,Toast} from '@douyinfe/semi-ui';
-import testdata from '../../data/testdata.json'
+import { Col, Layout, Row,Table, Button,Toast} from '@douyinfe/semi-ui';
+import api from '../../api/api'
 import { useNavigate } from 'react-router-dom';
-const Inbox = ({useraddr,setUseraddr}) => {
+const Inbox = ({useraddr,setUseraddr,boxData,setBoxData}) => {
     const navigate = useNavigate()
-    var all = 60
+    var all
+    if(boxData == undefined){
+        all = 0
+        api.getInboxList(useraddr,boxData,setBoxData)
+    }
+    else all = boxData.length
     var notRead = 5
-    const {Text,Paragraph} = Typography
     const columns = [
         {
             title: '发信人',
-            dataIndex: 'fromName',
+            dataIndex: 'from',
             width: 'auto',
             render: (text, record, index) => {
                 return (
@@ -23,7 +27,7 @@ const Inbox = ({useraddr,setUseraddr}) => {
         },
         {
             title: '主题',
-            dataIndex: 'mainTitle',
+            dataIndex: 'subject',
             width:500,
             render: (text, record, index) => {
                 return (
@@ -34,8 +38,8 @@ const Inbox = ({useraddr,setUseraddr}) => {
             }
         },
         {
-            title: '更新日期',
-            dataIndex: 'updateTime',
+            title: '收信日期',
+            dataIndex: 'datetime',
             render: (text, record, index) => {
                 return (
                     <div onClick={() => navigate('/main/readmail') }>
@@ -45,8 +49,8 @@ const Inbox = ({useraddr,setUseraddr}) => {
             }
         },
         {
-            title: '邮箱类型',
-            dataIndex: 'mailType',
+            title: '收信邮箱',
+            dataIndex: 'fromEmailAccount',
             render: (text, record, index) => {
                 return(
                     <div onClick={() => navigate('/main/readmail') }>
@@ -68,7 +72,7 @@ const Inbox = ({useraddr,setUseraddr}) => {
             
         },
     ];
-    const data = testdata.inbox_Data
+    const data = boxData
     const rowSelection = {
         onSelect: (record, selected) => {
             console.log(`select row: ${selected}`, record);
@@ -80,7 +84,6 @@ const Inbox = ({useraddr,setUseraddr}) => {
             console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
         },
     };
-
     const pagination = useMemo(() => ({
         pageSize: 7
     }), []);
@@ -96,7 +99,7 @@ const Inbox = ({useraddr,setUseraddr}) => {
                     padding: '16px',
                 }}
             >
-                <Table columns={columns} dataSource={data} rowSelection={rowSelection} pagination={pagination} />
+                <Table columns={columns} dataSource={data} rowSelection={rowSelection} pagination={pagination} rowKey="id"/>
                 <Button type='primary' theme='solid' style={{ width: 100, marginTop: 12, marginRight: 30,marginLeft:30 }}
                 onClick={() => Toast.success('删除成功')}>删除邮件</Button>
                 <Button style={{marginTop: 12,width:100}}>转发</Button>

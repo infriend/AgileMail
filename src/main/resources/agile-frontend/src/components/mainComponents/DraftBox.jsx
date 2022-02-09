@@ -1,14 +1,19 @@
 import React ,{useMemo}from 'react';
 import { Col, Layout, Row,Table, Button,Toast} from '@douyinfe/semi-ui';
-import testdata from '../../data/testdata.json'
 import { useNavigate } from 'react-router-dom';
-const DraftBox = ({useraddr,setUseraddr}) => {
+import api from '../../api/api'
+const DraftBox = ({useraddr,setUseraddr,boxData,setBoxData}) => {
     const navigate = useNavigate()
-    var all = 60
+    var all
+    if(boxData == undefined){
+        all = 0
+        api.getDraftList(useraddr,boxData,setBoxData)
+    }
+    else all = boxData.length
     const columns = [
         {
             title: '收信人',
-            dataIndex: 'toName',
+            dataIndex: 'to',
             width: 'auto',
             render: (text, record, index) => {
                 return (
@@ -21,7 +26,7 @@ const DraftBox = ({useraddr,setUseraddr}) => {
         },
         {
             title: '主题',
-            dataIndex: 'mainTitle',
+            dataIndex: 'subject',
             width:500,
             render: (text, record, index) => {
                 return (
@@ -33,7 +38,7 @@ const DraftBox = ({useraddr,setUseraddr}) => {
         },
         {
             title: '更新日期',
-            dataIndex: 'updateTime',
+            dataIndex: 'datetime',
             render: (text, record, index) => {
                 return (
                     <div onClick={() => navigate('/main/readmail')}>
@@ -43,8 +48,8 @@ const DraftBox = ({useraddr,setUseraddr}) => {
             }
         },
         {
-            title: '邮箱类型',
-            dataIndex: 'mailType',
+            title: '发信邮箱',
+            dataIndex: 'fromEmailAccount',
             render: (text, record, index) => {
                 <div onClick={() => navigate('/main/readmail') }>
                 {text}
@@ -52,7 +57,9 @@ const DraftBox = ({useraddr,setUseraddr}) => {
             }
         },
     ];
-    const data = testdata.draft_Data
+    if(boxData == undefined)
+        api.getDraftList(useraddr,boxData,setBoxData)
+    const data = boxData
     const rowSelection = {
         onSelect: (record, selected) => {
             console.log(`select row: ${selected}`, record);

@@ -9,18 +9,23 @@ import AlreadySend from './mainComponents/AlreadySend';
 import DeletedBox from './mainComponents/DeletedBox';
 import ReadMail from './mainComponents/ReadMail';
 import { Routes, Route,Outlet } from "react-router-dom"
-const ContentMain = ({useraddr,setUseraddr}) => {
-    var username = "AgileUser123"
+const ContentMain = ({useraddr,setUseraddr,addrData,setAddrData,boxData,setBoxData}) => {
+    var username = useraddr.name
     return(
         <>
         <Routes>
             <Route index element={<InitialMain useraddr = {useraddr} setUseraddr = {setUseraddr}/>} />
             <Route path='/writemail' element={<ContentWrite useraddr = {useraddr} setUseraddr = {setUseraddr}/>} />
-            <Route path='/inbox' element={<Inbox useraddr = {useraddr} setUseraddr = {setUseraddr}/>} />
-            <Route path='/addressbook' element={<AddressBook useraddr = {useraddr} setUseraddr = {setUseraddr}/>} />
-            <Route path='/draft' element={<DraftBox useraddr = {useraddr} setUseraddr = {setUseraddr}/>} />
-            <Route path='/alreadysent' element={<AlreadySend useraddr = {useraddr} setUseraddr = {setUseraddr}/>} />
-            <Route path='/deleted' element={<DeletedBox useraddr = {useraddr} setUseraddr = {setUseraddr} />} />
+            <Route path='/inbox' element={<Inbox useraddr = {useraddr} setUseraddr = {setUseraddr}
+                                boxData={boxData} setBoxData={setBoxData}/>} />
+            <Route path='/addressbook' element={<AddressBook useraddr = {useraddr} setUseraddr = {setUseraddr} 
+                                                        addrData={addrData} setAddrData={setAddrData}/>} />
+            <Route path='/draft' element={<DraftBox useraddr = {useraddr} setUseraddr = {setUseraddr}
+                                                        boxData={boxData} setBoxData={setBoxData}/>} />
+            <Route path='/alreadysent' element={<AlreadySend useraddr = {useraddr} setUseraddr = {setUseraddr}
+                                                        boxData={boxData} setBoxData={setBoxData}/>} />
+            <Route path='/deleted' element={<DeletedBox useraddr = {useraddr} setUseraddr = {setUseraddr}
+                                                        boxData={boxData} setBoxData={setBoxData} />} />
             <Route path='/readmail' element={<ReadMail useraddr = {useraddr} setUseraddr = {setUseraddr}/>} />
         </Routes>
 
