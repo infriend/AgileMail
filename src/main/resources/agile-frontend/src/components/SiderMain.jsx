@@ -7,14 +7,18 @@ import api from '../api/api'
 const SiderMain = ({useraddr,setUseraddr,addrData,setAddrData,boxData,setBoxData}) => {
     const navigate = useNavigate()
     const siderOnSelect = (data) =>{
-        /*if(data.itemKey == 'addressbook'){
-            //api.getAddrBook(useraddr,addrData,setAddrData)
+        if(data.itemKey == 'addressbook'){
+            api.getAddrBook(useraddr,addrData,setAddrData)
         }else if(data.itemKey == 'inbox'){
             api.getInboxList(useraddr,boxData,setBoxData)
             console.log("siderinbox:"+boxData[0].subject)
         }else if(data.itemKey == 'draft'){
             api.getDraftList(useraddr,boxData,setBoxData)
-        }*/
+        }else if(data.itemKey == 'alreadySent'){
+            api.getSentList(useraddr,boxData,setBoxData)
+        }else if(data.itemKey == 'deleted'){
+            api.getDeleteList(useraddr,boxData,setBoxData)
+        }
         navigate('/main/'+data.itemKey)
     }
     return(

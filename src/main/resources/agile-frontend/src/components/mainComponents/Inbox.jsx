@@ -11,14 +11,20 @@ const Inbox = ({useraddr,setUseraddr,boxData,setBoxData}) => {
     }
     else all = boxData.length
     var notRead = 5
+    const mailOnclick = (id) => {
+        console.log(id)
+        console.log(data[id-1])
+        //navigate('/main/readmail')
+    }
     const columns = [
         {
             title: '发信人',
             dataIndex: 'from',
             width: 'auto',
             render: (text, record, index) => {
+                var id = record.id
                 return (
-                    <div onClick={() => navigate('/main/readmail')}>
+                    <div onClick={()=>mailOnclick(id)}>
                         {text}
                     </div>
                 );
@@ -28,10 +34,11 @@ const Inbox = ({useraddr,setUseraddr,boxData,setBoxData}) => {
         {
             title: '主题',
             dataIndex: 'subject',
-            width:500,
+            width:450,
             render: (text, record, index) => {
+                var id = record.id
                 return (
-                    <div onClick={() => navigate('/main/readmail')}>
+                    <div onClick={()=>mailOnclick(id)}>
                         {text}
                     </div>
                 );
@@ -41,8 +48,9 @@ const Inbox = ({useraddr,setUseraddr,boxData,setBoxData}) => {
             title: '收信日期',
             dataIndex: 'datetime',
             render: (text, record, index) => {
+                var id = record.id
                 return (
-                    <div onClick={() => navigate('/main/readmail') }>
+                    <div onClick={()=>mailOnclick(id)}>
                         {text}
                     </div>
                 );
@@ -52,10 +60,11 @@ const Inbox = ({useraddr,setUseraddr,boxData,setBoxData}) => {
             title: '收信邮箱',
             dataIndex: 'fromEmailAccount',
             render: (text, record, index) => {
+                var id = record.id
                 return(
-                    <div onClick={() => navigate('/main/readmail') }>
-                {text}
-            </div>
+                    <div onClick={()=>mailOnclick(id)}>
+                        {text}
+                    </div>
                 );
             },
             filters: [

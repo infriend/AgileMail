@@ -1,0 +1,36 @@
+"filename", "language", "JavaScript", "XML", "CSS", "Markdown", "JSON", "JavaScript React", "HTML", "comment", "blank", "total"
+"c:\Users\zx\Desktop\scrum\AgileMail\src\main\resources\agile-frontend\README.md", "Markdown", 0, 0, 0, 5, 0, 0, 0, 0, 5, 10
+"c:\Users\zx\Desktop\scrum\AgileMail\src\main\resources\agile-frontend\db.json", "JSON", 0, 0, 0, 0, 218, 0, 0, 0, 0, 218
+"c:\Users\zx\Desktop\scrum\AgileMail\src\main\resources\agile-frontend\package-lock.json", "JSON", 0, 0, 0, 0, 11672, 0, 0, 0, 1, 11673
+"c:\Users\zx\Desktop\scrum\AgileMail\src\main\resources\agile-frontend\package.json", "JSON", 0, 0, 0, 0, 42, 0, 0, 0, 1, 43
+"c:\Users\zx\Desktop\scrum\AgileMail\src\main\resources\agile-frontend\public\index.html", "HTML", 0, 0, 0, 0, 0, 0, 20, 23, 1, 44
+"c:\Users\zx\Desktop\scrum\AgileMail\src\main\resources\agile-frontend\public\manifest.json", "JSON", 0, 0, 0, 0, 25, 0, 0, 0, 1, 26
+"c:\Users\zx\Desktop\scrum\AgileMail\src\main\resources\agile-frontend\src\App.css", "CSS", 0, 0, 33, 0, 0, 0, 0, 0, 6, 39
+"c:\Users\zx\Desktop\scrum\AgileMail\src\main\resources\agile-frontend\src\App.js", "JavaScript", 21, 0, 0, 0, 0, 0, 0, 11, 0, 32
+"c:\Users\zx\Desktop\scrum\AgileMail\src\main\resources\agile-frontend\src\App.test.js", "JavaScript", 7, 0, 0, 0, 0, 0, 0, 0, 2, 9
+"c:\Users\zx\Desktop\scrum\AgileMail\src\main\resources\agile-frontend\src\api\api.js", "JavaScript", 102, 0, 0, 0, 0, 0, 0, 4, 1, 107
+"c:\Users\zx\Desktop\scrum\AgileMail\src\main\resources\agile-frontend\src\components\ContentMain.jsx", "JavaScript React", 0, 0, 0, 0, 0, 35, 0, 0, 1, 36
+"c:\Users\zx\Desktop\scrum\AgileMail\src\main\resources\agile-frontend\src\components\HeaderMain.jsx", "JavaScript React", 0, 0, 0, 0, 0, 56, 0, 0, 1, 57
+"c:\Users\zx\Desktop\scrum\AgileMail\src\main\resources\agile-frontend\src\components\Login.jsx", "JavaScript React", 0, 0, 0, 0, 0, 101, 0, 1, 3, 105
+"c:\Users\zx\Desktop\scrum\AgileMail\src\main\resources\agile-frontend\src\components\SiderMain.jsx", "JavaScript React", 0, 0, 0, 0, 0, 35, 0, 8, 0, 43
+"c:\Users\zx\Desktop\scrum\AgileMail\src\main\resources\agile-frontend\src\components\mainComponents\AddressBook.jsx", "JavaScript React", 0, 0, 0, 0, 0, 62, 0, 0, 5, 67
+"c:\Users\zx\Desktop\scrum\AgileMail\src\main\resources\agile-frontend\src\components\mainComponents\AlreadySend.jsx", "JavaScript React", 0, 0, 0, 0, 0, 93, 0, 0, 2, 95
+"c:\Users\zx\Desktop\scrum\AgileMail\src\main\resources\agile-frontend\src\components\mainComponents\ContentWrite.jsx", "JavaScript React", 0, 0, 0, 0, 0, 72, 0, 3, 1, 76
+"c:\Users\zx\Desktop\scrum\AgileMail\src\main\resources\agile-frontend\src\components\mainComponents\DeletedBox.jsx", "JavaScript React", 0, 0, 0, 0, 0, 102, 0, 0, 1, 103
+"c:\Users\zx\Desktop\scrum\AgileMail\src\main\resources\agile-frontend\src\components\mainComponents\DraftBox.jsx", "JavaScript React", 0, 0, 0, 0, 0, 95, 0, 0, 2, 97
+"c:\Users\zx\Desktop\scrum\AgileMail\src\main\resources\agile-frontend\src\components\mainComponents\Inbox.jsx", "JavaScript React", 0, 0, 0, 0, 0, 107, 0, 0, 2, 109
+"c:\Users\zx\Desktop\scrum\AgileMail\src\main\resources\agile-frontend\src\components\mainComponents\InnitialMain.jsx", "JavaScript React", 0, 0, 0, 0, 0, 43, 0, 0, 2, 45
+"c:\Users\zx\Desktop\scrum\AgileMail\src\main\resources\agile-frontend\src\components\mainComponents\ReadMail.jsx", "JavaScript React", 0, 0, 0, 0, 0, 83, 0, 0, 2, 85
+"c:\Users\zx\Desktop\scrum\AgileMail\src\main\resources\agile-frontend\src\css\loginpage.css", "CSS", 0, 0, 20, 0, 0, 0, 0, 0, 1, 21
+"c:\Users\zx\Desktop\scrum\AgileMail\src\main\resources\agile-frontend\src\css\mainpage.css", "CSS", 0, 0, 5, 0, 0, 0, 0, 0, 0, 5
+"c:\Users\zx\Desktop\scrum\AgileMail\src\main\resources\agile-frontend\src\index.css", "CSS", 0, 0, 12, 0, 0, 0, 0, 0, 2, 14
+"c:\Users\zx\Desktop\scrum\AgileMail\src\main\resources\agile-frontend\src\index.js", "JavaScript", 17, 0, 0, 0, 0, 0, 0, 0, 1, 18
+"c:\Users\zx\Desktop\scrum\AgileMail\src\main\resources\agile-frontend\src\logo.svg", "XML", 0, 1, 0, 0, 0, 0, 0, 0, 0, 1
+"c:\Users\zx\Desktop\scrum\AgileMail\src\main\resources\agile-frontend\src\pages\HelpCenter.js", "JavaScript", 9, 0, 0, 0, 0, 0, 0, 0, 0, 9
+"c:\Users\zx\Desktop\scrum\AgileMail\src\main\resources\agile-frontend\src\pages\LoginPage.js", "JavaScript", 21, 0, 0, 0, 0, 0, 0, 0, 0, 21
+"c:\Users\zx\Desktop\scrum\AgileMail\src\main\resources\agile-frontend\src\pages\MainPage.js", "JavaScript", 48, 0, 0, 0, 0, 0, 0, 0, 2, 50
+"c:\Users\zx\Desktop\scrum\AgileMail\src\main\resources\agile-frontend\src\pages\Register.js", "JavaScript", 9, 0, 0, 0, 0, 0, 0, 0, 0, 9
+"c:\Users\zx\Desktop\scrum\AgileMail\src\main\resources\agile-frontend\src\reportWebVitals.js", "JavaScript", 12, 0, 0, 0, 0, 0, 0, 0, 2, 14
+"c:\Users\zx\Desktop\scrum\AgileMail\src\main\resources\agile-frontend\src\setupTests.js", "JavaScript", 1, 0, 0, 0, 0, 0, 0, 4, 1, 6
+"c:\Users\zx\Desktop\scrum\AgileMail\src\main\resources\agile-frontend\src\utils\config.js", "JavaScript", 2, 0, 0, 0, 0, 0, 0, 1, 1, 4
+"Total", "-", 249, 1, 70, 5, 11957, 884, 20, 55, 50, 13291

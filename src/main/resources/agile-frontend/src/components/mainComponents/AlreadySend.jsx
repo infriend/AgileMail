@@ -51,9 +51,12 @@ const AlreadySend = ({useraddr,setUseraddr,boxData,setBoxData}) => {
             title: '发送邮箱',
             dataIndex: 'fromEmailAccount',
             render: (text, record, index) => {
-                <div onClick={() => navigate('/main/readmail') }>
-                {text}
-            </div>
+                return(
+                    <div onClick={() => navigate('/main/readmail') }>
+                            {text}
+                    </div>
+                )
+                
             }
         },
     ];
@@ -85,7 +88,7 @@ const AlreadySend = ({useraddr,setUseraddr,boxData,setBoxData}) => {
                     padding: '16px',
                 }}
             >
-                <Table columns={columns} dataSource={data} rowSelection={rowSelection} pagination={pagination} />
+                <Table columns={columns} dataSource={data} rowSelection={rowSelection} pagination={pagination} rowKey="id" />
                 <Button type='primary' theme='solid' style={{ width: 100, marginTop: 12, marginRight: 30,marginLeft:30 }}
                 onClick={() => Toast.success('删除成功')}>删除记录</Button>
                 <Button style={{marginTop: 12,width:100}}>转发</Button>

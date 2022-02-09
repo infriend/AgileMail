@@ -27,7 +27,7 @@ const DraftBox = ({useraddr,setUseraddr,boxData,setBoxData}) => {
         {
             title: '主题',
             dataIndex: 'subject',
-            width:500,
+            width:450,
             render: (text, record, index) => {
                 return (
                     <div onClick={() => navigate('/main/readmail')}>
@@ -51,14 +51,14 @@ const DraftBox = ({useraddr,setUseraddr,boxData,setBoxData}) => {
             title: '发信邮箱',
             dataIndex: 'fromEmailAccount',
             render: (text, record, index) => {
-                <div onClick={() => navigate('/main/readmail') }>
-                {text}
-            </div>
+                return(
+                     <div onClick={() => navigate('/main/readmail') }>
+                        {text}
+                </div>
+                )  
             }
         },
     ];
-    if(boxData == undefined)
-        api.getDraftList(useraddr,boxData,setBoxData)
     const data = boxData
     const rowSelection = {
         onSelect: (record, selected) => {
@@ -87,7 +87,7 @@ const DraftBox = ({useraddr,setUseraddr,boxData,setBoxData}) => {
                     padding: '16px',
                 }}
             >
-                <Table columns={columns} dataSource={data} rowSelection={rowSelection} pagination={pagination} />
+                <Table columns={columns} dataSource={data} rowSelection={rowSelection} pagination={pagination} rowKey="id" />
                 <Button type='primary' theme='solid' style={{ width: 100, marginTop: 12, marginRight: 30,marginLeft:30 }}
                 onClick={() => Toast.success('删除成功')}>删除草稿</Button>
                 <Button style={{marginTop: 12,width:100}}>转发</Button>

@@ -50,9 +50,12 @@ const DeletedBox = ({useraddr,setUseraddr,boxData,setBoxData}) => {
             title: '收件邮箱',
             dataIndex: 'fromEmailAccount',
             render: (text, record, index) => {
-                <div onClick={() => navigate('/main/readmail') }>
-                {text}
-            </div>
+                return(
+                    <div onClick={() => navigate('/main/readmail') }>
+                        {text}
+                    </div>
+                )
+                
             }
         },
     ];
@@ -87,7 +90,7 @@ const DeletedBox = ({useraddr,setUseraddr,boxData,setBoxData}) => {
                     padding: '16px',
                 }}
             >
-                <Table columns={columns} dataSource={data} rowSelection={rowSelection} pagination={pagination} />
+                <Table columns={columns} dataSource={data} rowSelection={rowSelection} pagination={pagination} rowKey="id"/>
                 <Popconfirm
                     title="确定是否要彻底删除？"
                     content="此修改将不可逆"
