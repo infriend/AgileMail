@@ -21,7 +21,18 @@ const DraftBox = ({useraddr,setUseraddr,boxData,setBoxData}) => {
                         {text}
                     </div>
                 );
-            }
+            },
+            filters: [
+                {
+                    text: 'GMail',
+                    value: '@gmail.com',
+                },
+                {
+                    text: '163mail',
+                    value: '@163.com',
+                },
+            ],
+            onFilter: (value, record) => record.to.includes(value)
 
         },
         {
@@ -56,10 +67,22 @@ const DraftBox = ({useraddr,setUseraddr,boxData,setBoxData}) => {
                         {text}
                 </div>
                 )  
-            }
+            },
+            filters: [
+                {
+                    text: 'GMail',
+                    value: '@gmail.com',
+                },
+                {
+                    text: '163mail',
+                    value: '@163.com',
+                },
+            ],
+            onFilter: (value, record) => record.fromEmailAccount.includes(value)
         },
     ];
     const data = boxData
+    var selectedobj = {}
     const rowSelection = {
         onSelect: (record, selected) => {
             console.log(`select row: ${selected}`, record);
@@ -69,9 +92,24 @@ const DraftBox = ({useraddr,setUseraddr,boxData,setBoxData}) => {
         },
         onChange: (selectedRowKeys, selectedRows) => {
             console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
+            selectedobj = selectedRows
         },
     };
-
+    const deleteOnclick = ()=> {
+        var issuccess = true//test
+        if(issuccess){
+            console.log(selectedobj);
+            for(var i = 0; i < selectedobj.length; i++){
+                api.deletedDraftListPost(useraddr,selectedobj[i])
+            }
+            Toast.success('删除成功')
+            api.getDraftList(useraddr,boxData,setBoxData)
+            navigate('/main/draft')
+        }
+            
+        else
+            Toast.error('删除失败')
+    }
     const pagination = useMemo(() => ({
         pageSize: 7
     }), []);
@@ -89,7 +127,7 @@ const DraftBox = ({useraddr,setUseraddr,boxData,setBoxData}) => {
             >
                 <Table columns={columns} dataSource={data} rowSelection={rowSelection} pagination={pagination} rowKey="id" />
                 <Button type='primary' theme='solid' style={{ width: 100, marginTop: 12, marginRight: 30,marginLeft:30 }}
-                onClick={() => Toast.success('删除成功')}>删除草稿</Button>
+                onClick={deleteOnclick}>删除草稿</Button>
                 <Button style={{marginTop: 12,width:100}}>转发</Button>
             </div></>
     )

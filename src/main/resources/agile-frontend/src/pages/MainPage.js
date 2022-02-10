@@ -9,7 +9,8 @@ const MainPage = ({useraddr,setUseraddr}) =>{
     const { Header, Footer, Sider, Content } = Layout;
     const [boxData,setBoxData] = useState();
     const [addrData, setAddrData] = useState();
-    console.log("main:"+useraddr.name)
+    const [detailData,setDetailData] = useState();
+    //console.log("main:"+useraddr.name)
     return (
         <Layout className="mainPage" style={{ border: '1px solid var(--semi-color-border)',height: '100%',weight:'100%',position:'absolute'}}>
             <Header style={{ backgroundColor: 'var(--semi-color-bg-1)' }}>
@@ -26,7 +27,7 @@ const MainPage = ({useraddr,setUseraddr}) =>{
                     backgroundColor: 'var(--semi-color-bg-0)',
                 }}>
                     <ContentMain useraddr = {useraddr} setUseraddr = {setUseraddr} addrData={addrData} setAddrData={setAddrData}
-                    boxData={boxData} setBoxData={setBoxData}/>
+                    boxData={boxData} setBoxData={setBoxData} detailData={detailData} setDetailData={setDetailData}/>
                 </Content>
             </Layout>
             <Footer style={{

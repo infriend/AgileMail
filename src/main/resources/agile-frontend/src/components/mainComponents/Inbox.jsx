@@ -1,8 +1,9 @@
-import React ,{useMemo}from 'react';
-import { Col, Layout, Row,Table, Button,Toast} from '@douyinfe/semi-ui';
+import React ,{useMemo,useRef,useEffect}from 'react';
+import { Col, Layout, Row,Table, Button,Toast,Dropdown} from '@douyinfe/semi-ui';
 import api from '../../api/api'
 import { useNavigate } from 'react-router-dom';
-const Inbox = ({useraddr,setUseraddr,boxData,setBoxData}) => {
+import * as dateFns from 'date-fns';
+const Inbox = ({useraddr,setUseraddr,boxData,setBoxData,detailData,setDetailData}) => {
     const navigate = useNavigate()
     var all
     if(boxData == undefined){
@@ -12,9 +13,10 @@ const Inbox = ({useraddr,setUseraddr,boxData,setBoxData}) => {
     else all = boxData.length
     var notRead = 5
     const mailOnclick = (id) => {
-        console.log(id)
-        console.log(data[id-1])
-        //navigate('/main/readmail')
+        var url = '/main/readmail?id='+id
+        api.getInboxList(useraddr,boxData,setBoxData)
+        api.getDetailOfMail(useraddr,id,data[id-1].to,data[id-1].subject,setDetailData)
+        navigate(url)
     }
     const columns = [
         {
@@ -28,7 +30,18 @@ const Inbox = ({useraddr,setUseraddr,boxData,setBoxData}) => {
                         {text}
                     </div>
                 );
-            }
+            },
+            filters: [
+                {
+                    text: 'GMail',
+                    value: '@gmail.com',
+                },
+                {
+                    text: '163mail',
+                    value: '@163.com',
+                },
+            ],
+            onFilter: (value, record) => record.from.includes(value)
 
         },
         {
@@ -59,6 +72,7 @@ const Inbox = ({useraddr,setUseraddr,boxData,setBoxData}) => {
         {
             title: '收信邮箱',
             dataIndex: 'fromEmailAccount',
+            width: 'auto',
             render: (text, record, index) => {
                 var id = record.id
                 return(
@@ -70,18 +84,19 @@ const Inbox = ({useraddr,setUseraddr,boxData,setBoxData}) => {
             filters: [
                 {
                     text: 'GMail',
-                    value: 'GMail',
+                    value: '@gmail.com',
                 },
                 {
                     text: '163mail',
-                    value: '163mail',
+                    value: '@163.com',
                 },
             ],
-            onFilter: (value,text, record) => {record.mailType.includes(value)},
+            onFilter: (value, record) => record.fromEmailAccount.includes(value),
             
         },
     ];
     const data = boxData
+    var selectedobj = {}
     const rowSelection = {
         onSelect: (record, selected) => {
             console.log(`select row: ${selected}`, record);
@@ -91,11 +106,31 @@ const Inbox = ({useraddr,setUseraddr,boxData,setBoxData}) => {
         },
         onChange: (selectedRowKeys, selectedRows) => {
             console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
+            selectedobj = selectedRows
+            //console.log(selectedobj)
         },
     };
     const pagination = useMemo(() => ({
         pageSize: 7
     }), []);
+    const deleteOnclick = ()=> {
+        var issuccess = true//test
+        let newdata = boxData
+        if(issuccess){
+            console.log(selectedobj);
+            for(var i = 0; i < selectedobj.length; i++){
+                api.deletedInboxListPost(useraddr,selectedobj[i])
+                //newdata.splice(i)
+            }
+            //setBoxData(newdata)
+            Toast.success('删除成功')
+            api.getInboxList(useraddr,boxData,setBoxData)
+            navigate('/main/inbox')
+        }
+            
+        else
+            Toast.error('删除失败')
+    }
     return(
         <><div>
             <h4>收件箱，一共{all}封，未读{notRead}封</h4>
@@ -110,7 +145,7 @@ const Inbox = ({useraddr,setUseraddr,boxData,setBoxData}) => {
             >
                 <Table columns={columns} dataSource={data} rowSelection={rowSelection} pagination={pagination} rowKey="id"/>
                 <Button type='primary' theme='solid' style={{ width: 100, marginTop: 12, marginRight: 30,marginLeft:30 }}
-                onClick={() => Toast.success('删除成功')}>删除邮件</Button>
+                onClick={deleteOnclick}>删除邮件</Button>
                 <Button style={{marginTop: 12,width:100}}>转发</Button>
             </div></>
     )

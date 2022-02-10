@@ -11,7 +11,7 @@ const SiderMain = ({useraddr,setUseraddr,addrData,setAddrData,boxData,setBoxData
             api.getAddrBook(useraddr,addrData,setAddrData)
         }else if(data.itemKey == 'inbox'){
             api.getInboxList(useraddr,boxData,setBoxData)
-            console.log("siderinbox:"+boxData[0].subject)
+            //console.log("siderinbox:"+boxData[0].subject)
         }else if(data.itemKey == 'draft'){
             api.getDraftList(useraddr,boxData,setBoxData)
         }else if(data.itemKey == 'alreadySent'){

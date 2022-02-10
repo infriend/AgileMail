@@ -1,20 +1,32 @@
 import React from 'react';
 import { Col, Form, Row, Button,Typography,Card} from '@douyinfe/semi-ui';
-import Icon, { IconUpload} from '@douyinfe/semi-icons'
-const Readmail = ({useraddr,setUseraddr}) =>{
+import api from '../../api/api'
+import { useSearchParams } from 'react-router-dom';
+const Readmail = ({useraddr,setUseraddr,boxData,setBoxData,detailData,setDetailData}) =>{
     const { Section, Input } = Form;
     const {Text,Paragraph} = Typography
-    const data =  {
-            title:"邮件标题test1",
-            fromName : 'user1',
-            address : 'uqwewqewq@agilemail.com',
-            time:'2022-01-27 05:31',
-            toName:'agileuser123',
-            toAddress:'AgileUser123@agilemail.com',
-            content:"React 是一个用于构建用户界面的 JAVASCRIPT 库。React 主要用于构建 UI，很多人认为 React 是 MVC 中的 V（视图）。React 起源于 Facebook 的内部项目，用来架设 Instagram 的网站，并于 2013 年 5 月开源。React 拥有较高的性能，代码逻辑非常简单，越来越多的人已开始关注和使用它React 是一个用于构建用户界面的 JAVASCRIPT 库。React 主要用于构建 UI，很多人认为 React 是 MVC 中的 V（视图）。React 起源于 Facebook 的内部项目，用来架设 Instagram 的网站，并于 2013 年 5 月开源。React 拥有较高的性能，代码逻辑非常简单，越来越多的人已开始关注和使用它React 是一个用于构建用户界面的 JAVASCRIPT 库。React 主要用于构建 UI，很多人认为 React 是 MVC 中的 V（视图）。React 起源于 Facebook 的内部项目，用来架设 Instagram 的网站，并于 2013 年 5 月开源。React 拥有较高的性能，代码逻辑非常简单，越来越多的人已开始关注和使用它React 是一个用于构建用户界面的 JAVASCRIPT 库。React 主要用于构建 UI，很多人认为 React 是 MVC 中的 V（视图）。React 起源于 Facebook 的内部项目，用来架设 Instagram 的网站，并于 2013 年 5 月开源。React 拥有较高的性能，代码逻辑非常简单，越来越多的人已开始关注和使用它React 是一个用于构建用户界面的 JAVASCRIPT 库。React 主要用于构建 UI，很多人认为 React 是 MVC 中的 V（视图）。React 起源于 Facebook 的内部项目，用来架设 Instagram 的网站，并于 2013 年 5 月开源。React 拥有较高的性能，代码逻辑非常简单，越来越多的人已开始关注和使用它React 是一个用于构建用户界面的 JAVASCRIPT 库。React 主要用于构建 UI，很多人认为 React 是 MVC 中的 V（视图）。React 起源于 Facebook 的内部项目，用来架设 Instagram 的网站，并于 2013 年 5 月开源。React 拥有较高的性能，代码逻辑非常简单，越来越多的人已开始关注和使用它"
+    const [params] = useSearchParams()
+    if(boxData === undefined){
+        api.getInboxList(useraddr,boxData,setBoxData)
     }
+    if(detailData===undefined){
+        if(boxData === undefined){
+            api.getInboxList(useraddr,boxData,setBoxData)//get，此时boxdata还未刷新
+        }else{
+            var id = params.get('id')-1//通过
+            if(id < 0)
+                id = 0
+            const to = boxData[0].to
+            const subject = boxData[0].subject
+            api.getDetailOfMail(useraddr,id+1,to,subject,setDetailData)
+        }
 
-    console.log(data.title)
+    }
+    var data =  {
+            
+    }
+    if(detailData !== undefined)
+        data = detailData
     return(
         <>
             <div
@@ -30,25 +42,25 @@ const Readmail = ({useraddr,setUseraddr}) =>{
                         <Form 
                         labelPosition='top'
                         labelWidth = 'auto'>
-                            <Section text={data.title}>
+                            <Section text={data.subject}>
                                 <Row gutter={16}>
                                     <Col span={8}>
                                         <Text strong>发件人：</Text>
-                                        <Text style={{color:'rgba(var(--semi-green-6), 1)'}} strong>{data.fromName}</Text>
-                                        <Text> {`<`}{data.address}{`>`}</Text>
+                                        <Text style={{color:'rgba(var(--semi-green-6), 1)'}} strong>{data.from}</Text>
+                                        <Text> {`<`}{data.from}{`>`}</Text>
                                     </Col>
                                 </Row>
                                 <Row gutter={16}>
                                     <Col span={8}>
                                     <Text strong>时间：</Text>
-                                    <Text>{data.time}</Text>
+                                    <Text>{data.datetime}</Text>
                                     </Col>
                                 </Row>
                                 <Row gutter={16}>
                                     <Col span={8}>
                                         <Text strong>收件人：</Text>
-                                        <Text style={{color:'rgba(var(--semi-purple-7), 1)'}} strong>{data.toName}</Text>
-                                        <Text> {`<`}{data.toAddress}{`>`}</Text>
+                                        <Text style={{color:'rgba(var(--semi-purple-7), 1)'}} strong>{data.to}</Text>
+                                        <Text> {`<`}{data.to}{`>`}</Text>
                                     </Col>
                                 </Row>
                                 
@@ -64,15 +76,18 @@ const Readmail = ({useraddr,setUseraddr}) =>{
                             <div>
                                 <br />
                                 <Button type="primary"
-                                        style={{ padding: '6px 24px',marginRight: 25,color:'rgba(var(--semi-light-green-5), 1)' }}>
+                                        style={{ padding: '6px 24px',marginRight: 25,color:'rgba(var(--semi-light-green-5), 1)' }}
+                                        onClick={()=>console.log(boxData[0])}>
                                         回复
                                 </Button>
                                 <Button type="danger"  
-                                        style={{ padding: '6px 24px',marginRight: 25 }}>
+                                        style={{ padding: '6px 24px',marginRight: 25 }}
+                                        onClick={()=>console.log(params.get('id'))}>
                                         删除
                                 </Button>
                                 <Button type="primary"  
-                                        style={{ padding: '6px 24px' }}>
+                                        style={{ padding: '6px 24px' }}
+                                        onClick={()=>console.log(detailData)}>
                                         转发
                                 </Button>
                             </div>

@@ -21,13 +21,24 @@ const AlreadySend = ({useraddr,setUseraddr,boxData,setBoxData}) => {
                         {text}
                     </div>
                 );
-            }
+            },
+            filters: [
+                {
+                    text: 'GMail',
+                    value: '@gmail.com',
+                },
+                {
+                    text: '163mail',
+                    value: '@163.com',
+                },
+            ],
+            onFilter: (value, record) => record.to.includes(value)
 
         },
         {
             title: '主题',
             dataIndex: 'subject',
-            width:500,
+            width:450,
             render: (text, record, index) => {
                 return (
                     <div onClick={() => navigate('/main/readmail')}>
@@ -57,10 +68,22 @@ const AlreadySend = ({useraddr,setUseraddr,boxData,setBoxData}) => {
                     </div>
                 )
                 
-            }
+            },
+            filters: [
+                {
+                    text: 'GMail',
+                    value: '@gmail.com',
+                },
+                {
+                    text: '163mail',
+                    value: '@163.com',
+                },
+            ],
+            onFilter: (value, record) => record.fromEmailAccount.includes(value)
         },
     ];
     const data = boxData
+    var selectedobj = {}
     const rowSelection = {
         onSelect: (record, selected) => {
             console.log(`select row: ${selected}`, record);
@@ -70,9 +93,27 @@ const AlreadySend = ({useraddr,setUseraddr,boxData,setBoxData}) => {
         },
         onChange: (selectedRowKeys, selectedRows) => {
             console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
+            selectedobj = selectedRows
         },
     };
-
+    const deleteOnclick = ()=> {
+        var issuccess = true//test
+        //let newdata = boxData
+        if(issuccess){
+            console.log(selectedobj);
+            for(var i = 0; i < selectedobj.length; i++){
+                api.deletedSentListPost(useraddr,selectedobj[i])
+                //newdata.splice(i)
+            }
+            //setBoxData(newdata)
+            Toast.success('删除成功')
+            api.getSentList(useraddr,boxData,setBoxData)
+            navigate('/main/alreadySent')
+        }
+            
+        else
+            Toast.error('删除失败')
+    }
     const pagination = useMemo(() => ({
         pageSize: 7
     }), []);
@@ -90,7 +131,7 @@ const AlreadySend = ({useraddr,setUseraddr,boxData,setBoxData}) => {
             >
                 <Table columns={columns} dataSource={data} rowSelection={rowSelection} pagination={pagination} rowKey="id" />
                 <Button type='primary' theme='solid' style={{ width: 100, marginTop: 12, marginRight: 30,marginLeft:30 }}
-                onClick={() => Toast.success('删除成功')}>删除记录</Button>
+                onClick={deleteOnclick}>删除记录</Button>
                 <Button style={{marginTop: 12,width:100}}>转发</Button>
             </div></>
     )

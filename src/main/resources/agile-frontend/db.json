@@ -41,55 +41,82 @@
       "id": 1,
       "from": "inbox123@gmail.com",
       "to": "432@qq.com",
-      "datetime":"2020-01-26 11:01",
+      "datetime": "2020-01-26 11:01",
       "subject": "qwdqdw",
       "content": "asdddddddddddddddddddddddddddd",
-      "fromEmailAccount":"inboxtest1@gmail.com"
+      "fromEmailAccount": "inboxtest1@gmail.com"
     },
     {
       "from": "default@agilemail",
       "to": "qwe",
-      "datetime":"2020-01-26 11:01",
+      "datetime": "2020-01-26 11:01",
       "subject": "qwe",
       "content": "qwe",
       "id": 2,
-      "fromEmailAccount":"inboxtest1@gmail.com"
-    },
-    {
-      "from": "default@agilemail",
-      "to": "qwe",
-      "datetime":"2020-01-26 11:01",
-      "subject": "qwe",
-      "content": "qwe",
-      "id": 3,
-      "fromEmailAccount":"inboxtest1@gmail.com"
-    },
-    {
-      "from": "default@agilemail",
-      "to": "123",
-      "datetime":"2020-01-26 11:01",
-      "subject": "123",
-      "content": "123123123",
-      "fromEmailAccount":"inboxtest1@gmail.com",
-      "id": 4
+      "fromEmailAccount": "inboxtest1@gmail.com"
     },
     {
       "from": "mf21320237@gmail.com",
       "to": "",
-      "datetime":"2020-01-26 11:01",
+      "datetime": "2020-01-26 11:01",
       "subject": "",
       "content": "",
-      "fromEmailAccount":"inboxtest1@gmail.com",
+      "fromEmailAccount": "inboxtest3@163.com",
       "id": 5
     },
     {
       "from": "mf21320237@gmail.com",
       "to": "sda@qq.com",
-      "datetime":"2020-01-26 11:01",
+      "datetime": "2020-01-26 11:01",
       "subject": "asdasd",
       "content": "asdasd",
-      "fromEmailAccount":"inboxtest1@gmail.com",
+      "fromEmailAccount": "inboxtest1@gmail.com",
       "id": 6
+    },
+    {
+      "from": "mf21320237@gmail.com",
+      "to": "sda@qq.com",
+      "datetime": "2020-01-26 11:01",
+      "subject": "asdasd",
+      "content": "asdasd",
+      "fromEmailAccount": "inboxtest3@163.com",
+      "id": 7
+    },
+    {
+      "from": "mf21320237@gmail.com",
+      "to": "sda@qq.com",
+      "datetime": "2020-01-26 11:01",
+      "subject": "asdasd",
+      "content": "asdasd",
+      "fromEmailAccount": "inboxtest3@163.com",
+      "id": 8
+    },
+    {
+      "from": "mf21320237@gmail.com",
+      "to": "sda@qq.com",
+      "datetime": "2020-01-26 11:01",
+      "subject": "asdasd",
+      "content": "asdasd",
+      "fromEmailAccount": "inboxtest3@163.com",
+      "id": 9
+    },
+    {
+      "from": "default@agilemail",
+      "to": "",
+      "subject": "",
+      "content": "",
+      "id": 10
+    },
+    {
+      "from": "default@agilemail",
+      "to": "",
+      "subject": "",
+      "content": "",
+      "id": 11
+    },
+    {
+      "from": "default@agilemail",
+      "id": 12
     }
   ],
   "alreadySent": [
@@ -97,81 +124,73 @@
       "id": 1,
       "from": "alreadysent@gmail.com",
       "to": "alreadysent432@qq.com",
-      "datetime":"2020-01-26 11:01",
+      "datetime": "2020-01-26 11:01",
       "subject": "qwdqdw",
       "content": "asdddddddddddddddddddddddddddd",
-      "fromEmailAccount":"alreadysenttest1@gmail.com"
+      "fromEmailAccount": "alreadysenttest1@gmail.com"
     },
     {
       "from": "default@agilemail",
       "to": "qwe",
-      "datetime":"2020-01-26 11:01",
+      "datetime": "2020-01-26 11:01",
       "subject": "qwe",
       "content": "qwe",
-      "fromEmailAccount":"alreadysenttest1@gmail.com",
+      "fromEmailAccount": "alreadysenttest1@gmail.com",
       "id": 2
     },
     {
       "from": "default@agilemail",
       "to": "qwe",
-      "datetime":"2020-01-26 11:01",
+      "datetime": "2020-01-26 11:01",
       "subject": "qwe",
       "content": "qwe",
-      "fromEmailAccount":"alreadysenttest1@gmail.com",
+      "fromEmailAccount": "alreadysenttest1@gmail.com",
       "id": 3
     },
     {
       "from": "default@agilemail",
       "to": "123",
-      "datetime":"2020-01-26 11:01",
+      "datetime": "2020-01-26 11:01",
       "subject": "123",
       "content": "123123123",
-      "fromEmailAccount":"alreadysenttest1@gmail.com",
+      "fromEmailAccount": "alreadysenttest1@gmail.com",
       "id": 4
     },
     {
       "from": "mf21320237@gmail.com",
       "to": "",
-      "datetime":"2020-01-26 11:01",
+      "datetime": "2020-01-26 11:01",
       "subject": "",
       "content": "",
-      "fromEmailAccount":"alreadysenttest1@gmail.com",
+      "fromEmailAccount": "alreadysenttest1@gmail.com",
       "id": 5
     },
     {
       "from": "mf21320237@gmail.com",
       "to": "sda@qq.com",
-      "datetime":"2020-01-26 11:01",
+      "datetime": "2020-01-26 11:01",
       "subject": "asdasd",
       "content": "asdasd",
-      "fromEmailAccount":"alreadysenttest1@gmail.com",
+      "fromEmailAccount": "alreadysenttest1@gmail.com",
       "id": 6
     }
   ],
   "draft": [
     {
       "fromEmailAccount": "draftbox@agilemail",
-      "to": "draftbox123123",
+      "to": "draftbox123123@gmail.com",
       "subject": "123123",
-      "datetime":"2020-01-26 11:01",
+      "datetime": "2020-01-26 11:01",
       "content": "",
       "id": 1
     },
     {
       "fromEmailAccount": "default@agilemail",
-      "to": "123",
-      "datetime":"2020-01-26 11:01",
+      "to": "123@163.com",
+      "datetime": "2020-01-26 11:01",
       "subject": "123",
       "content": "123123123",
       "id": 2
-    },
-    {
-      "fromEmailAccount": "default@agilemail",
-      "to": "123",
-      "datetime":"2020-01-26 11:01",
-      "subject": "123",
-      "content": "123123123",
-      "id": 3
     }
   ],
   "deleted": [
@@ -179,19 +198,50 @@
       "from": "deletedbox@agilemail",
       "to": "123123",
       "subject": "123123",
-      "datetime":"2020-01-26 11:01",
+      "datetime": "2020-01-26 11:01",
       "content": "",
-      "fromEmailAccount":"deletedtest1@gmail.com",
+      "fromEmailAccount": "deletedtest1@gmail.com",
       "id": 1
     },
     {
       "from": "default2@agilemail",
       "to": "123",
-      "datetime":"2020-01-26 11:01",
+      "datetime": "2020-01-26 11:01",
       "subject": "123",
       "content": "123123123",
-      "fromEmailAccount":"deletedtest1@gmail.com",
+      "fromEmailAccount": "deletedtest1@gmail.com",
       "id": 2
+    },
+    {
+      "from": "inbox123@gmail.com",
+      "subject": "qwdqdw",
+      "datetime": "2020-01-26 11:01",
+      "fromEmailAccount": "inboxtest1@gmail.com",
+      "state": "0",
+      "id": 3
+    },
+    {
+      "from": "default@agilemail",
+      "subject": "qwe",
+      "datetime": "2020-01-26 11:01",
+      "fromEmailAccount": "inboxtest1@gmail.com",
+      "state": "0",
+      "id": 4
+    },
+    {
+      "from": "default@agilemail",
+      "subject": "123",
+      "datetime": "2020-01-26 11:01",
+      "fromEmailAccount": "inboxtest1@gmail.com",
+      "state": "0",
+      "id": 5
+    },
+    {
+      "subject": "123",
+      "datetime": "2020-01-26 11:01",
+      "fromEmailAccount": "default@agilemail",
+      "state": "0",
+      "id": 6
     }
   ],
   "addData": [
@@ -212,6 +262,32 @@
       "emailAddress": "1234dzs@agile.com",
       "name": "Zoey Edwards",
       "fromEmailAccount": "asdasd@163.com"
+    }
+  ],
+  "detail": [
+    {
+      "id": 1,
+      "from": "detailtestFrom@gmail.com",
+      "to": "detailtestTo@163.com",
+      "datetime": "2020-01-26 11:01",
+      "subject": "Mail-Detail-Test-1",
+      "content": "React 是一个用于构建用户界面的 JAVASCRIPT 库。React 主要用于构建 UI，很多人认为 React 是 MVC 中的 V（视图）。React 起源于 Facebook 的内部项目，用来架设 Instagram 的网站，并于 2013 年 5 月开源。React 拥有较高的性能，代码逻辑非常简单，越来越多的人已开始关注和使用它React 是一个用于构建用户界面的 JAVASCRIPT 库。React 主要用于构建 UI，很多人认为 React 是 MVC 中的 V（视图）。React 起源于 Facebook 的内部项目，用来架设 Instagram 的网站，并于 2013 年 5 月开源。React 拥有较高的性能，代码逻辑非常简单，越来越多的人已开始关注和使用它React 是一个用于构建用户界面的 JAVASCRIPT 库。React 主要用于构建 UI，很多人认为 React 是 MVC 中的 V（视图）。React 起源于 Facebook 的内部项目，用来架设 Instagram 的网站，并于 2013 年 5 月开源。React 拥有较高的性能，代码逻辑非常简单，越来越多的人已开始关注和使用它React 是一个用于构建用户界面的 JAVASCRIPT 库。React 主要用于构建 UI，很多人认为 React 是 MVC 中的 V（视图）。React 起源于 Facebook 的内部项目，用来架设 Instagram 的网站，并于 2013 年 5 月开源。React 拥有较高的性能，代码逻辑非常简单，越来越多的人已开始关注和使用它React 是一个用于构建用户界面的 JAVASCRIPT 库。React 主要用于构建 UI，很多人认为 React 是 MVC 中的 V（视图）。React 起源于 Facebook 的内部项目，用来架设 Instagram 的网站，并于 2013 年 5 月开源。React 拥有较高的性能，代码逻辑非常简单，越来越多的人已开始关注和使用它React 是一个用于构建用户界面的 JAVASCRIPT 库。React 主要用于构建 UI，很多人认为 React 是 MVC 中的 V（视图）。React 起源于 Facebook 的内部项目，用来架设 Instagram 的网站，并于 2013 年 5 月开源。React 拥有较高的性能，代码逻辑非常简单，越来越多的人已开始关注和使用它"
+    },
+    {
+      "id": 2,
+      "from": "detailtestFrom@gmail.com",
+      "to": "detailtestTo@163.com",
+      "datetime": "2020-01-26 11:01",
+      "subject": "Mail-Detail-Test-2",
+      "content": "React 是一个用于构建用户界面的 JAVASCRIPT 库。React 主要用于构建 UI，很多人认为 React 是 MVC 中的 V（视图）。React 起源于 Facebook 的内部项目，用来架设 Instagram 的网站，并于 2013 年 5 月开源。React 拥有较高的性能，代码逻辑非常简单，越来越多的人已开始关注和使用它React 是一个用于构建用户界面的 JAVASCRIPT 库。React 主要用于构建 UI，很多人认为 React 是 MVC 中的 V（视图）。React 起源于 Facebook 的内部项目，用来架设 Instagram 的网站，并于 2013 年 5 月开源。React 拥有较高的性能，代码逻辑非常简单，越来越多的人已开始关注和使用它React 是一个用于构建用户界面的 JAVASCRIPT 库。React 主要用于构建 UI，很多人认为 React 是 MVC 中的 V（视图）。React 起源于 Facebook 的内部项目，用来架设 Instagram 的网站，并于 2013 年 5 月开源。React 拥有较高的性能，代码逻辑非常简单，越来越多的人已开始关注和使用它React 是一个用于构建用户界面的 JAVASCRIPT 库。React 主要用于构建 UI，很多人认为 React 是 MVC 中的 V（视图）。React 起源于 Facebook 的内部项目，用来架设 Instagram 的网站，并于 2013 年 5 月开源。React 拥有较高的性能，代码逻辑非常简单，越来越多的人已开始关注和使用它React 是一个用于构建用户界面的 JAVASCRIPT 库。React 主要用于构建 UI，很多人认为 React 是 MVC 中的 V（视图）。React 起源于 Facebook 的内部项目，用来架设 Instagram 的网站，并于 2013 年 5 月开源。React 拥有较高的性能，代码逻辑非常简单，越来越多的人已开始关注和使用它React 是一个用于构建用户界面的 JAVASCRIPT 库。React 主要用于构建 UI，很多人认为 React 是 MVC 中的 V（视图）。React 起源于 Facebook 的内部项目，用来架设 Instagram 的网站，并于 2013 年 5 月开源。React 拥有较高的性能，代码逻辑非常简单，越来越多的人已开始关注和使用它"
+    },
+    {
+      "id": 3,
+      "from": "detailtestFrom@gmail.com",
+      "to": "detailtestTo@163.com",
+      "datetime": "2020-01-26 11:01",
+      "subject": "Mail-Detail-Test-3",
+      "content": "React 是一个用于构建用户界面的 JAVASCRIPT 库。React 主要用于构建 UI，很多人认为 React 是 MVC 中的 V（视图）。React 起源于 Facebook 的内部项目，用来架设 Instagram 的网站，并于 2013 年 5 月开源。React 拥有较高的性能，代码逻辑非常简单，越来越多的人已开始关注和使用它React 是一个用于构建用户界面的 JAVASCRIPT 库。React 主要用于构建 UI，很多人认为 React 是 MVC 中的 V（视图）。React 起源于 Facebook 的内部项目，用来架设 Instagram 的网站，并于 2013 年 5 月开源。React 拥有较高的性能，代码逻辑非常简单，越来越多的人已开始关注和使用它React 是一个用于构建用户界面的 JAVASCRIPT 库。React 主要用于构建 UI，很多人认为 React 是 MVC 中的 V（视图）。React 起源于 Facebook 的内部项目，用来架设 Instagram 的网站，并于 2013 年 5 月开源。React 拥有较高的性能，代码逻辑非常简单，越来越多的人已开始关注和使用它React 是一个用于构建用户界面的 JAVASCRIPT 库。React 主要用于构建 UI，很多人认为 React 是 MVC 中的 V（视图）。React 起源于 Facebook 的内部项目，用来架设 Instagram 的网站，并于 2013 年 5 月开源。React 拥有较高的性能，代码逻辑非常简单，越来越多的人已开始关注和使用它React 是一个用于构建用户界面的 JAVASCRIPT 库。React 主要用于构建 UI，很多人认为 React 是 MVC 中的 V（视图）。React 起源于 Facebook 的内部项目，用来架设 Instagram 的网站，并于 2013 年 5 月开源。React 拥有较高的性能，代码逻辑非常简单，越来越多的人已开始关注和使用它React 是一个用于构建用户界面的 JAVASCRIPT 库。React 主要用于构建 UI，很多人认为 React 是 MVC 中的 V（视图）。React 起源于 Facebook 的内部项目，用来架设 Instagram 的网站，并于 2013 年 5 月开源。React 拥有较高的性能，代码逻辑非常简单，越来越多的人已开始关注和使用它"
     }
   ]
 }

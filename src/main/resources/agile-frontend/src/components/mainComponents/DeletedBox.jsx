@@ -21,7 +21,18 @@ const DeletedBox = ({useraddr,setUseraddr,boxData,setBoxData}) => {
                         {text}
                     </div>
                 );
-            }
+            },
+            filters: [
+                {
+                    text: 'GMail',
+                    value: '@gmail.com',
+                },
+                {
+                    text: '163mail',
+                    value: '@163.com',
+                },
+            ],
+            onFilter: (value, record) => record.from.includes(value)
         },
         {
             title: '主题',
@@ -56,10 +67,22 @@ const DeletedBox = ({useraddr,setUseraddr,boxData,setBoxData}) => {
                     </div>
                 )
                 
-            }
+            },
+            filters: [
+                {
+                    text: 'GMail',
+                    value: '@gmail.com',
+                },
+                {
+                    text: '163mail',
+                    value: '@163.com',
+                },
+            ],
+            onFilter: (value, record) => record.fromEmailAccount.includes(value)
         },
     ];
     const data = boxData
+    var selectedobj = {}
     const rowSelection = {
         onSelect: (record, selected) => {
             console.log(`select row: ${selected}`, record);
@@ -69,6 +92,7 @@ const DeletedBox = ({useraddr,setUseraddr,boxData,setBoxData}) => {
         },
         onChange: (selectedRowKeys, selectedRows) => {
             console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
+            selectedobj = selectedRows
         },
     };
 
@@ -76,7 +100,19 @@ const DeletedBox = ({useraddr,setUseraddr,boxData,setBoxData}) => {
         pageSize: 7
     }), []);
     const onconfirm = () => {
-        Toast.success('确认删除！')
+        var issuccess = true//test
+        if(issuccess){
+            console.log(selectedobj);
+            for(var i = 0; i < selectedobj.length; i++){
+                api.deletedTotoallyListPost(useraddr,selectedobj[i])
+            }
+            Toast.success('彻底删除')
+            api.getDeleteList(useraddr,boxData,setBoxData)
+            navigate('/main/deleted')
+        }
+            
+        else
+            Toast.error('删除失败')
     }
     return(
         <><div>
