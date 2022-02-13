@@ -21,8 +21,14 @@
 package edu.agiledev.agilemail.exception;
 
 import edu.agiledev.agilemail.pojo.ReturnCode;
-import org.springframework.http.HttpStatus;
 
+/**
+ * 认证错误类
+ *
+ * @author Nosolution
+ * @version 1.0
+ * @since 2022/2/9
+ */
 public class AuthenticationException extends BaseException {
 
     public enum Type {
@@ -30,7 +36,7 @@ public class AuthenticationException extends BaseException {
     }
 
     public AuthenticationException(Type type) {
-        this(type.name());
+        this(String.format("Authentication Error: %s", type.name()));
     }
 
     public AuthenticationException(String message) {

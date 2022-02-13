@@ -15,4 +15,14 @@ public class EmailAccount {
     private String username;
     private String password;
     private String domain;
+
+    public EmailAccount() {
+
+    }
+
+    public EmailAccount(String username, String password, String domain) {
+        setUsername(username);
+        setPassword(password);
+        setDomain(domain);
+    }
 }

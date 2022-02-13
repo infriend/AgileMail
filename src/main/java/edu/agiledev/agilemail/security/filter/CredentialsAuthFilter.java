@@ -21,7 +21,7 @@
 package edu.agiledev.agilemail.security.filter;
 
 import edu.agiledev.agilemail.security.model.Credentials;
-import edu.agiledev.agilemail.security.service.AuthenticationService;
+import edu.agiledev.agilemail.security.service.CredentialsAuthService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -40,16 +40,16 @@ import java.io.IOException;
 /**
  * 鉴权过滤器，负责提取证书并验证
  */
-public class AuthenticationFilter extends GenericFilterBean {
+public class CredentialsAuthFilter extends GenericFilterBean {
 
-    private static final Logger log = LoggerFactory.getLogger(AuthenticationFilter.class);
+    private static final Logger log = LoggerFactory.getLogger(CredentialsAuthFilter.class);
 
-    private final AuthenticationService authenticationService;
+    private final CredentialsAuthService credentialsAuthService;
     private final RequestMatcher requestMatcher;
 
-    public AuthenticationFilter(RequestMatcher requestMatcher, AuthenticationService authenticationService) {
+    public CredentialsAuthFilter(RequestMatcher requestMatcher, CredentialsAuthService credentialsAuthService) {
         this.requestMatcher = requestMatcher;
-        this.authenticationService = authenticationService;
+        this.credentialsAuthService = credentialsAuthService;
     }
 
     @Override
@@ -71,7 +71,7 @@ public class AuthenticationFilter extends GenericFilterBean {
 
     private boolean authenticate(HttpServletRequest httpServletRequest) {
         try {
-            final Credentials credentials = authenticationService.fromRequest(httpServletRequest);
+            final Credentials credentials = credentialsAuthService.fromRequest(httpServletRequest);
             SecurityContextHolder.getContext().setAuthentication(credentials);
             return true;
         } catch (Exception ex) {

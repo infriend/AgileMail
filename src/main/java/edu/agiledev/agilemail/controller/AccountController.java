@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.mail.internet.MimeMessage;
+
 /**
  * Account controller
  *
@@ -21,9 +23,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class AccountController extends RBaseController {
 
-    private AccountService accountService;
+    private final AccountService accountService;
 
-    private TokenProvider tokenProvider;
+    private final TokenProvider tokenProvider;
 
     @Autowired
     public AccountController(AccountService accountService, TokenProvider tokenProvider) {
@@ -39,10 +41,10 @@ public class AccountController extends RBaseController {
     }
 
     private Credentials authenticate(EmailAccount account) {
-        Credentials credentials = accountService.checkAccount(account);
+        accountService.checkAccount(account);
+        Credentials credentials = accountService.registerUser(account);
         if (credentials != null) {
             SecurityContextHolder.getContext().setAuthentication(credentials);
-            accountService.registerUser(account);
         }
         return credentials;
     }

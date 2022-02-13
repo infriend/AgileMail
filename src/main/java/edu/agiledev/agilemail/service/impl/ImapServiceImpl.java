@@ -7,12 +7,14 @@ import edu.agiledev.agilemail.pojo.EmailAccount;
 import edu.agiledev.agilemail.service.ImapService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.integration.mail.ImapIdleChannelAdapter;
 import org.springframework.integration.mail.ImapMailReceiver;
 import org.springframework.integration.mail.MailReceiver;
 import org.springframework.stereotype.Service;
 
 import javax.mail.MessagingException;
 import javax.mail.Session;
+import javax.mail.internet.MimeMessage;
 import java.util.Properties;
 
 import static edu.agiledev.agilemail.exception.AuthenticationException.Type.IMAP;
@@ -56,7 +58,7 @@ public class ImapServiceImpl implements ImapService {
             imapStore = (IMAPStore) session.getStore("imap");
             imapStore.connect(
                     "imap." + account.getDomain(),
-                    143,
+                    993,
                     account.getUsername(),
                     account.getPassword());
             log.debug("Opened new ImapStore session");
@@ -66,7 +68,7 @@ public class ImapServiceImpl implements ImapService {
 
     private static Properties initMailProperties(MailSSLSocketFactory mailSSLSocketFactory) {
         final Properties prop = new Properties();
-        prop.put("mail.imap.ssl.enable", false);
+        prop.put("mail.imap.ssl.enable", true);
         prop.put("mail.imap.connectiontimeout", 5000);
         prop.put("mail.imap.connectionpooltimeout", 5000);
         prop.put("mail.imap.ssl.socketFactory", mailSSLSocketFactory);

@@ -12,8 +12,8 @@ import edu.agiledev.agilemail.pojo.EmailAccount;
  */
 public interface AccountService {
     //检查账户并且生成证书
-    Credentials checkAccount(EmailAccount account);
+    void checkAccount(EmailAccount account);
 
     //向数据库中注册新用户
-    void registerUser(EmailAccount account);
+    Credentials registerUser(EmailAccount account);
 }
