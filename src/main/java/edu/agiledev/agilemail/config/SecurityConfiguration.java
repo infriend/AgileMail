@@ -26,6 +26,7 @@ import edu.agiledev.agilemail.security.filter.CredentialsRefreshFilter;
 import edu.agiledev.agilemail.security.service.CredentialsAuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -42,7 +43,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     private static final String ACTUATOR_REGEX = "(/api)?/actuator/health";
     private static final String CONFIGURATION_REGEX = "(/api)?/v1/application/configuration";
-    private static final String LOGIN_REGEX = "(/api)?/v1/application/login";
+    private static final String LOGIN_REGEX = "(/api)?/login";
     private final CredentialsAuthService authenticationService;
     private final TokenProvider tokenProvider;
 
@@ -73,7 +74,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .permitAll()
                 .and()
                 .addFilterAfter(new CredentialsAuthFilter(
-                        negatedPublicMatchers, authenticationService), BasicAuthenticationFilter.class)
+                        negatedPublicMatchers, tokenProvider), BasicAuthenticationFilter.class)
                 .addFilterAfter(new CredentialsRefreshFilter(tokenProvider), CredentialsAuthFilter.class);
     }
 }

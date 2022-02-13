@@ -53,25 +53,25 @@ public class CredentialsAuthService {
         this.tokenProvider = tokenProvider;
     }
 
-    /**
-     * Parses {@link HttpServletRequest} for isotope credentials to decode them and return
-     * a valid {@link Credentials} object.
-     *
-     * @param httpServletRequest from which to extract Isotope Credentials HttpHeaders
-     * @return Credentials obtained and validated from httpServletRequest headers
-     */
-    public Credentials fromRequest(HttpServletRequest httpServletRequest) {
-        final String token = httpServletRequest.getHeader(HttpHeaders.AUTHENTICATION);
-        if (StringUtils.hasText(token)) {
-            throw new AuthenticationException("AgileMail credentials headers missing");
-        }
-        if(!tokenProvider.validateToken(token)){
-            throw new AuthenticationException("Authentication error");
-        }
-        Authentication authentication = tokenProvider.getAuthentication(token);
-        return (Credentials) authentication;
-
-    }
+//    /**
+//     * Parses {@link HttpServletRequest} for isotope credentials to decode them and return
+//     * a valid {@link Credentials} object.
+//     *
+//     * @param httpServletRequest from which to extract Isotope Credentials HttpHeaders
+//     * @return Credentials obtained and validated from httpServletRequest headers
+//     */
+//    public Credentials fromRequest(HttpServletRequest httpServletRequest) {
+//        final String token = httpServletRequest.getHeader(HttpHeaders.AUTHENTICATION);
+//        if (StringUtils.hasText(token)) {
+//            throw new AuthenticationException("AgileMail credentials headers missing");
+//        }
+//        if(!tokenProvider.validateToken(token)){
+//            throw new AuthenticationException("Authentication error");
+//        }
+//        Authentication authentication = tokenProvider.getAuthentication(token);
+//        return (Credentials) authentication;
+//
+//    }
 
 
     public void refreshCredentials(Credentials oldCredentials, HttpServletResponse response) {

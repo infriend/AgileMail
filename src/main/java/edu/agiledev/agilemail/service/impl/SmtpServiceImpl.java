@@ -43,6 +43,7 @@ public class SmtpServiceImpl implements SmtpService {
         try {
             getSmtpTransport(account);
         } catch (MessagingException e) {
+            e.printStackTrace();
             throw new AuthenticationException(SMTP);
         }
     }

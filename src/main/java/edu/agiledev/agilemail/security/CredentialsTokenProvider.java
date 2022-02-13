@@ -4,6 +4,7 @@ import edu.agiledev.agilemail.security.model.Credentials;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import lombok.NonNull;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -24,9 +25,10 @@ import java.util.stream.Collectors;
 /**
  * jwt Token功能单元，用于生成和验证token
  */
-public class CredentialsTokenProvider implements TokenProvider {
+@Slf4j
+public class CredentialsTokenProvider implements TokenProvider, Serializable {
 
-    private final Logger log = LoggerFactory.getLogger(CredentialsTokenProvider.class);
+    private static final long serialVersionUID = -3301605591108950415L;
 
     private static final String AUTHORITIES_KEY = "auth";
 
