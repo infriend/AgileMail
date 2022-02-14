@@ -2,13 +2,19 @@ import React ,{useMemo}from 'react';
 import { Col, Layout, Row,Table, Popconfirm, Button, Toast} from '@douyinfe/semi-ui';
 import { useNavigate } from 'react-router-dom';
 import api from '../../api/api'
-const DeletedBox = ({useraddr,setUseraddr,boxData,setBoxData}) => {
+const DeletedBox = ({useraddr,setUseraddr,boxData,setBoxData,detailData,setDetailData}) => {
     var all
     if(boxData == undefined){
         all = 0
         api.getDeleteList(useraddr,boxData,setBoxData)
     }
     else all = boxData.length
+    const mailOnclick = (id) => {
+        var url = '/main/readmail?id='+id
+        api.getDeleteList(useraddr,boxData,setBoxData)
+        api.getDetailOfMail(useraddr,id,data[id-1].to,data[id-1].subject,setDetailData)
+        navigate(url)
+    }
     const navigate = useNavigate()
     const columns = [
         {
@@ -16,8 +22,9 @@ const DeletedBox = ({useraddr,setUseraddr,boxData,setBoxData}) => {
             dataIndex: 'from',
             width: 'auto',
             render: (text, record, index) => {
+                var id = record.id
                 return (
-                    <div onClick={() => navigate('/main/readmail')}>
+                    <div onClick={()=>mailOnclick(id)}>
                         {text}
                     </div>
                 );
@@ -39,8 +46,9 @@ const DeletedBox = ({useraddr,setUseraddr,boxData,setBoxData}) => {
             dataIndex: 'subject',
             width:500,
             render: (text, record, index) => {
+                var id = record.id
                 return (
-                    <div onClick={() => navigate('/main/readmail')}>
+                    <div onClick={()=>mailOnclick(id)}>
                         {text}
                     </div>
                 );
@@ -50,8 +58,9 @@ const DeletedBox = ({useraddr,setUseraddr,boxData,setBoxData}) => {
             title: '更新日期',
             dataIndex: 'datetime',
             render: (text, record, index) => {
+                var id = record.id
                 return (
-                    <div onClick={() => navigate('/main/readmail')}>
+                    <div onClick={()=>mailOnclick(id)}>
                         {text}
                     </div>
                 );
@@ -61,8 +70,9 @@ const DeletedBox = ({useraddr,setUseraddr,boxData,setBoxData}) => {
             title: '收件邮箱',
             dataIndex: 'fromEmailAccount',
             render: (text, record, index) => {
+                var id = record.id
                 return(
-                    <div onClick={() => navigate('/main/readmail') }>
+                    <div onClick={()=>mailOnclick(id)}>
                         {text}
                     </div>
                 )

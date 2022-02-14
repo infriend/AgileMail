@@ -3,7 +3,7 @@ import { Col, Layout, Row,Table, Button,Toast,Dropdown} from '@douyinfe/semi-ui'
 import api from '../../api/api'
 import { useNavigate } from 'react-router-dom';
 import * as dateFns from 'date-fns';
-const Inbox = ({useraddr,setUseraddr,boxData,setBoxData,detailData,setDetailData}) => {
+const Inbox = ({useraddr,setUseraddr,boxData,setBoxData,detailData,setDetailData,boxType,setBoxType}) => {
     const navigate = useNavigate()
     var all
     if(boxData == undefined){
@@ -15,6 +15,7 @@ const Inbox = ({useraddr,setUseraddr,boxData,setBoxData,detailData,setDetailData
     const mailOnclick = (id) => {
         var url = '/main/readmail?id='+id
         api.getInboxList(useraddr,boxData,setBoxData)
+        setBoxType("inbox")
         api.getDetailOfMail(useraddr,id,data[id-1].to,data[id-1].subject,setDetailData)
         navigate(url)
     }
@@ -117,17 +118,14 @@ const Inbox = ({useraddr,setUseraddr,boxData,setBoxData,detailData,setDetailData
         var issuccess = true//test
         let newdata = boxData
         if(issuccess){
-            console.log(selectedobj);
+            
             for(var i = 0; i < selectedobj.length; i++){
                 api.deletedInboxListPost(useraddr,selectedobj[i])
-                //newdata.splice(i)
             }
-            //setBoxData(newdata)
             Toast.success('删除成功')
-            api.getInboxList(useraddr,boxData,setBoxData)
+            //api.getInboxList(useraddr,boxData,setBoxData)
             navigate('/main/inbox')
         }
-            
         else
             Toast.error('删除失败')
     }

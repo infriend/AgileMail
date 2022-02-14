@@ -1,40 +1,38 @@
-import React from 'react';
-import { Col, Form, Row, Button, Upload,Toast} from '@douyinfe/semi-ui';
+import React, {useState} from 'react';
+import { Col, Form, Row, Button, Upload,Toast, useFormState} from '@douyinfe/semi-ui';
 import api from '../../api/api'
 import Icon, { IconUpload} from '@douyinfe/semi-icons'
 const ContentWrite = ({useraddr,setUseraddr}) => {
     var username = useraddr.name
-    var tempNote = {
-        from:useraddr.name+useraddr.addr,
-        to:'',
-        subject:'',
-        content:''
-    }
+    const [submitstate, setsubmitstate] = useState();
     const mailSubmmit = (values) =>{
-        console.log(values)
+        const tempNote ={}
+        tempNote.from = useraddr.name+'@'+useraddr.addr
         tempNote.to = values.to
         tempNote.subject = values.title
         tempNote.content = values.content
-        console.log(tempNote)
+        //console.log(values)
+        //console.log(tempNote)
+        var issuccess = true;//test
+        if (submitstate == "send"){
+            api.emailPost(tempNote.from,tempNote.to,tempNote.subject,tempNote.content)
+            if(issuccess)
+                Toast.success('发送成功')
+            else
+                Toast.error('发送失败')
+        }else if(submitstate == "draft"){
+            api.draftPut(tempNote.from,tempNote.to,tempNote.subject,tempNote.content)
+            if(issuccess)
+                Toast.success('保存成功')
+            else
+                Toast.error('发送失败')
+        }
     }
     const sendOnclick = () => {
-        var issuccess = true;//test
-        api.emailPost(tempNote.from,tempNote.to,tempNote.subject,tempNote.content)
-        console.log(tempNote)
-        if(issuccess)
-            Toast.success('发送成功')
-        else
-            Toast.error('发送失败')
+        setsubmitstate("send")
     }
     const draftOnclick = () => {
-        var issuccess = true;//test
-        api.draftPost(tempNote.from,tempNote.to,tempNote.subject,tempNote.content)
-        console.log(tempNote)
-        if(issuccess)
-            Toast.success('保存成功')
-        else
-            Toast.error('发送失败')
-
+        setsubmitstate("draft")
     }
     return(
         <><div>

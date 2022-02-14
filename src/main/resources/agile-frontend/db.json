@@ -1,123 +1,165 @@
 {
-  "user": [
+  "login": [
     {
-      "id": 1,
-      "emailaddress": "qwer1234@gmail.com",
-      "password": "qaz123"
+      "emailAddress": "kaworu",
+      "password": "asdad",
+      "domain": "gmail.com",
+      "id": 1
     },
     {
-      "id": 2,
-      "emailaddress": "asdf1234@163.com",
-      "password": "asd123"
+      "emailAddress": "kaworu9876",
+      "password": "asdasdasd",
+      "domain": "gmail.com",
+      "id": 2
+    }
+  ],
+  "email": [
+    {
+      "from": "default@agilemail",
+      "to": "",
+      "subject": "",
+      "content": "",
+      "id": 1
     },
     {
-      "emailaddress": "qwer12345678@gmail.com",
-      "password": "qaz123",
+      "from": "default@agilemail",
+      "to": "asdasd",
+      "subject": "asdasd",
+      "content": "asdasd",
+      "id": 2
+    },
+    {
+      "from": "default@agilemail",
+      "to": "",
+      "subject": "",
+      "content": "",
       "id": 3
     },
     {
-      "emailaddress": "qwe@gmail.com",
-      "password": "qweq",
+      "from": "default@agilemail",
+      "to": "asdasd",
+      "subject": "asdasd",
+      "content": "asdasd",
       "id": 4
     },
     {
-      "emailaddress": "qwe@gmail.com",
-      "password": "qweq",
+      "from": "default@agilemail",
+      "to": "",
+      "subject": "",
+      "content": "",
       "id": 5
     },
     {
-      "emailaddress": "aasd@gmail.com",
-      "password": "asdasd",
+      "from": "asdqq.com",
+      "to": "asdasd123123",
+      "subject": "asdasda",
+      "content": "asssssssssss",
       "id": 6
     },
     {
-      "emailaddress": "q123@gmail.com",
-      "password": "123",
+      "from": "default@@agilemail",
+      "to": "zzzz",
+      "subject": "zzz",
+      "content": "zxzxc",
       "id": 7
+    },
+    {
+      "from": "default@@agilemail",
+      "to": "a",
+      "subject": "a",
+      "content": "a",
+      "id": 8
     }
   ],
   "inbox": [
     {
-      "id": 1,
-      "from": "inbox123@gmail.com",
-      "to": "432@qq.com",
-      "datetime": "2020-01-26 11:01",
-      "subject": "qwdqdw",
-      "content": "asdddddddddddddddddddddddddddd",
-      "fromEmailAccount": "inboxtest1@gmail.com"
-    },
-    {
-      "from": "default@agilemail",
-      "to": "qwe",
-      "datetime": "2020-01-26 11:01",
-      "subject": "qwe",
-      "content": "qwe",
-      "id": 2,
-      "fromEmailAccount": "inboxtest1@gmail.com"
-    },
-    {
-      "from": "mf21320237@gmail.com",
-      "to": "",
-      "datetime": "2020-01-26 11:01",
-      "subject": "",
-      "content": "",
-      "fromEmailAccount": "inboxtest3@163.com",
-      "id": 5
-    },
-    {
-      "from": "mf21320237@gmail.com",
-      "to": "sda@qq.com",
-      "datetime": "2020-01-26 11:01",
-      "subject": "asdasd",
-      "content": "asdasd",
-      "fromEmailAccount": "inboxtest1@gmail.com",
-      "id": 6
-    },
-    {
-      "from": "mf21320237@gmail.com",
-      "to": "sda@qq.com",
-      "datetime": "2020-01-26 11:01",
-      "subject": "asdasd",
-      "content": "asdasd",
-      "fromEmailAccount": "inboxtest3@163.com",
-      "id": 7
-    },
-    {
-      "from": "mf21320237@gmail.com",
-      "to": "sda@qq.com",
-      "datetime": "2020-01-26 11:01",
-      "subject": "asdasd",
-      "content": "asdasd",
-      "fromEmailAccount": "inboxtest3@163.com",
-      "id": 8
-    },
-    {
-      "from": "mf21320237@gmail.com",
-      "to": "sda@qq.com",
-      "datetime": "2020-01-26 11:01",
-      "subject": "asdasd",
-      "content": "asdasd",
-      "fromEmailAccount": "inboxtest3@163.com",
-      "id": 9
-    },
-    {
-      "from": "default@agilemail",
-      "to": "",
-      "subject": "",
-      "content": "",
-      "id": 10
-    },
-    {
-      "from": "default@agilemail",
-      "to": "",
-      "subject": "",
-      "content": "",
-      "id": 11
-    },
-    {
-      "from": "default@agilemail",
-      "id": 12
-    }
+    "list":[
+      {
+        "id": 1,
+        "from": "inbox123@gmail.com",
+        "to": "432@qq.com",
+        "datetime": "2020-01-26 11:01",
+        "subject": "qwdqdw",
+        "content": "asdddddddddddddddddddddddddddd",
+        "fromEmailAccount": "inboxtest1@gmail.com"
+      },
+      {
+        "from": "default@agilemail",
+        "to": "qwe",
+        "datetime": "2020-01-26 11:01",
+        "subject": "qwe",
+        "content": "qwe",
+        "id": 2,
+        "fromEmailAccount": "inboxtest1@gmail.com"
+      },
+      {
+        "from": "mf21320237@gmail.com",
+        "to": "",
+        "datetime": "2020-01-26 11:01",
+        "subject": "",
+        "content": "",
+        "fromEmailAccount": "inboxtest3@163.com",
+        "id": 5
+      },
+      {
+        "from": "mf21320237@gmail.com",
+        "to": "sda@qq.com",
+        "datetime": "2020-01-26 11:01",
+        "subject": "asdasd",
+        "content": "asdasd",
+        "fromEmailAccount": "inboxtest1@gmail.com",
+        "id": 6
+      },
+      {
+        "from": "mf21320237@gmail.com",
+        "to": "sda@qq.com",
+        "datetime": "2020-01-26 11:01",
+        "subject": "asdasd",
+        "content": "asdasd",
+        "fromEmailAccount": "inboxtest3@163.com",
+        "id": 7
+      },
+      {
+        "from": "mf21320237@gmail.com",
+        "to": "sda@qq.com",
+        "datetime": "2020-01-26 11:01",
+        "subject": "asdasd",
+        "content": "asdasd",
+        "fromEmailAccount": "inboxtest3@163.com",
+        "id": 8
+      },
+      {
+        "from": "mf21320237@gmail.com",
+        "to": "sda@qq.com",
+        "datetime": "2020-01-26 11:01",
+        "subject": "asdasd",
+        "content": "asdasd",
+        "fromEmailAccount": "inboxtest3@163.com",
+        "id": 9
+      },
+      {
+        "from": "default@agilemail",
+        "to": "",
+        "subject": "",
+        "content": "",
+        "id": 10
+      },
+      {
+        "from": "default@agilemail",
+        "to": "",
+        "subject": "",
+        "content": "",
+        "id": 11
+      },
+      {
+        "from": "default@agilemail",
+        "id": 12
+      }
+    ],
+    "detail":[
+      
+    ]
+  }
   ],
   "alreadySent": [
     {
@@ -191,6 +233,13 @@
       "subject": "123",
       "content": "123123123",
       "id": 2
+    },
+    {
+      "from": "default@@agilemail",
+      "to": "a",
+      "subject": "a",
+      "content": "as",
+      "id": 3
     }
   ],
   "deleted": [

@@ -9,7 +9,6 @@ import {
   Routes, Route, Link
 } from "react-router-dom"
 const App = () =>{
-  var isSuccess = false
   const [useraddr,setUseraddr] = useState({
     name:"default",addr:'@agilemail'})
   //console.log("app:"+useraddr.name+" "+useraddr.addr)

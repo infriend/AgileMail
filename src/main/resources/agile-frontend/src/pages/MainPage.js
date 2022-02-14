@@ -8,7 +8,10 @@ import ContentMain from '../components/ContentMain';
 const MainPage = ({useraddr,setUseraddr}) =>{
     const { Header, Footer, Sider, Content } = Layout;
     const [boxData,setBoxData] = useState();
-    const [addrData, setAddrData] = useState();
+    const [addrData, setAddrData] = useState({
+        total:'',
+        contactList:[]
+    });
     const [detailData,setDetailData] = useState();
     //console.log("main:"+useraddr.name)
     return (
@@ -27,7 +30,8 @@ const MainPage = ({useraddr,setUseraddr}) =>{
                     backgroundColor: 'var(--semi-color-bg-0)',
                 }}>
                     <ContentMain useraddr = {useraddr} setUseraddr = {setUseraddr} addrData={addrData} setAddrData={setAddrData}
-                    boxData={boxData} setBoxData={setBoxData} detailData={detailData} setDetailData={setDetailData}/>
+                    boxData={boxData} setBoxData={setBoxData} detailData={detailData} setDetailData={setDetailData}
+                    />
                 </Content>
             </Layout>
             <Footer style={{

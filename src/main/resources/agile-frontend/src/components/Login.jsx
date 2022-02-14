@@ -33,9 +33,9 @@ const Login = ({useraddr,setUseraddr}) => {
             Notification.info({ ...opts2, position: 'top' })  
             return; 
         }else{
-            var address = values.username+values.mail
-            console.log(address)
-            //api.loginPost(address,values.passwd)
+            //var address = values.username+values.mail
+            //console.log(address)
+            api.loginPost(values.username,values.mail,values.passwd)
             success = true;
             if(success){
                 setUseraddr({name:values.username,addr:values.mail})
@@ -79,9 +79,9 @@ const Login = ({useraddr,setUseraddr}) => {
                         <Form.InputGroup  label={{ text: (<span>用户名</span>), required: true }} labelPosition='top'>
                             <Form.Input  field='username'  placeholder='请输入用户名' style={{width:300}} showClear/>
                             <Form.Select field='mail'  defaultValue='@gmail.com'style={{width:170}}>
-                                <Select.Option value='@gmail.com'>@gmail.com</Select.Option>
-                                <Select.Option value='@163.com'>@163.com</Select.Option>
-                                <Select.Option value='@qq.com'>@qq.com</Select.Option>
+                                <Select.Option value='gmail.com'>@gmail.com</Select.Option>
+                                <Select.Option value='163.com'>@163.com</Select.Option>
+                                <Select.Option value='qq.com'>@qq.com</Select.Option>
                             </Form.Select>
                         </Form.InputGroup>
                     

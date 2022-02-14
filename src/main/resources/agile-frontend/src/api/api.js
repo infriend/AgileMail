@@ -1,22 +1,39 @@
 //import * as AxiosLogger from 'axios-logger'
 import axios from 'axios'
-const defaultUrl = 'http://localhost:3001'
-const loginPost = (address,passwd) => {
+const baseUrl = 'http://localhost:3001'
+const setAuthToken = token => {
+    if (token) {
+      // headers 每个请求都需要用到的
+      axios.defaults.headers.common["Authorization"] = token;
+    } else {
+      delete axios.defaults.headers.common["Authorization"];
+    }
+  }
+
+const loginPost = (address,domain,passwd) => {
     axios({
         method:'POST',
-        url : 'http://localhost:3001/user',
+        url : `${baseUrl}/login`,
         data :{
-            emailaddress: address,
-	        password: passwd
+            emailAddress: address,
+	        password: passwd,
+            domain: domain
         }
     }).then(response => {
-        console.log(response)
+        const {token} = response.data
+        localStorage.setItem("loginToken",token)
+        setAuthToken(token)
+    }).catch(err=>{
+        dispatch({
+            type:GET_ERRORS,
+            payload:err.response.data
+        }) 
     })
 }
 const emailPost = (fromaddr,toaddr,subjectStr,contentStr) => {
     axios({
         method:'POST',
-        url : 'http://localhost:3001/inbox',
+        url : `${baseUrl}/email`,
         data : {
             from:fromaddr,
             to:toaddr,
@@ -27,10 +44,10 @@ const emailPost = (fromaddr,toaddr,subjectStr,contentStr) => {
         console.log(response)
     })
 }
-const draftPost = (fromaddr,toaddr,subjectStr,contentStr) => {
+const draftPut = (fromaddr,toaddr,subjectStr,contentStr) => {
     axios({
-        method:'POST',
-        url : 'http://localhost:3001/draft',
+        method:'PUT',
+        url : `${baseUrl}/draft`,
         data : {
             from:fromaddr,
             to:toaddr,
@@ -44,19 +61,16 @@ const draftPost = (fromaddr,toaddr,subjectStr,contentStr) => {
 const deletedInboxListPost = (useraddr,mail) => {
     axios({
         method:'POST',
-        url : 'http://localhost:3001/deleted',
+        url : `${baseUrl}/garbage`,
         data: {
             from:mail.from,
             subject:mail.subject,
-            datetime:'2020-01-26 11:01',
-            fromEmailAccount:mail.fromEmailAccount,
-            state:'0'
-
+            to:mail.fromEmailAccount,
         }
     }).then(response=>{
         console.log(response)
     })
-    var newurl = 'http://localhost:3001/inbox/'+mail.id
+    var newurl = `${baseUrl}/inbox`+mail.id
     axios({
         method:'DELETE',
         url :newurl
@@ -65,7 +79,7 @@ const deletedInboxListPost = (useraddr,mail) => {
     })
 }
 const deleteAddrListPost = (useraddr,addr) => {
-    var newurl = 'http://localhost:3001/addData/'+addr.id
+    var newurl = `${baseUrl}/addData/`+addr.id
     axios({
         method:'DELETE',
         url :newurl
@@ -76,7 +90,7 @@ const deleteAddrListPost = (useraddr,addr) => {
 const deletedDraftListPost = (useraddr,mail) => {
     axios({
         method:'POST',
-        url : 'http://localhost:3001/deleted',
+        url : `${baseUrl}/deleted`,
         data: {
             from:mail.from,
             subject:mail.subject,
@@ -88,7 +102,7 @@ const deletedDraftListPost = (useraddr,mail) => {
     }).then(response=>{
         console.log(response)
     })
-    var newurl = 'http://localhost:3001/draft/'+mail.id
+    var newurl = `${baseUrl}/draft/`+mail.id
     axios({
         method:'DELETE',
         url :newurl
@@ -99,7 +113,7 @@ const deletedDraftListPost = (useraddr,mail) => {
 const deletedSentListPost = (useraddr,mail) => {
     axios({
         method:'POST',
-        url : 'http://localhost:3001/deleted',
+        url : `${baseUrl}/deleted`,
         data: {
             from:mail.from,
             subject:mail.subject,
@@ -111,7 +125,7 @@ const deletedSentListPost = (useraddr,mail) => {
     }).then(response=>{
         console.log(response)
     })
-    var newurl = 'http://localhost:3001/alreadySent/'+mail.id
+    var newurl = `${baseUrl}/alreadySent/${mail.id}`
     axios({
         method:'DELETE',
         url :newurl
@@ -120,10 +134,15 @@ const deletedSentListPost = (useraddr,mail) => {
     })
 }
 const deletedTotoallyListPost = (useraddr,mail) => {
-    var newurl = 'http://localhost:3001/deleted/'+mail.id
+    var newurl = `${baseUrl}/deleted/${mail.id}`
     axios({
         method:'DELETE',
-        url :newurl
+        url :newurl,
+        params : {
+            from: mail.from,
+            to: mail.fromEmailAccount,
+            subject: mail.subject
+        }
     }).then(response=>{
         console.log(response)
     })
@@ -132,9 +151,11 @@ const getAddrBook = (useraddr,addrdata,setAddrData) => {
     var data
      axios({
         method:'GET',
-        url : 'http://localhost:3001/addData',
+        url : `${baseUrl}/addData`,
+        params : {
+            emailAddress : useraddr.name+"@"+useraddr.addr
+        }
     }).then(response=>{
-        console.log(response)
         data = response.data
         setAddrData(data)
     })
@@ -144,20 +165,23 @@ const getInboxList = (useraddr,boxData,setBoxData) => {
     var data
     axios({
         method:'GET',
-        url : 'http://localhost:3001/inbox',
+        url : `${baseUrl}/inbox/list/`,
+        params : {
+            emailAddress : useraddr.name+"@"+useraddr.addr
+        }
     }).then(response=>{
-        //console.log(response)
         data = response.data
         setBoxData(data)
-        //console.log("inbox:")
-        //console.log(data)
     })
 }
 const getDraftList = (useraddr,boxData,setBoxData) => {
     var data
     axios({
         method:'GET',
-        url : 'http://localhost:3001/draft',
+        url : `${baseUrl}/draft/list`,
+        params:{
+            emailAddress : useraddr.name+"@"+useraddr.addr
+        }
     }).then(response=>{
         data = response.data
         setBoxData(data)
@@ -167,7 +191,7 @@ const getSentList = (useraddr,boxData,setBoxData) => {
     var data
     axios({
         method:'GET',
-        url : 'http://localhost:3001/alreadySent',
+        url : `${baseUrl}/alreadySent`,
     }).then(response=>{
         data = response.data
         setBoxData(data)
@@ -177,7 +201,10 @@ const getDeleteList = (useraddr,boxData,setBoxData) => {
     var data
     axios({
         method:'GET',
-        url : 'http://localhost:3001/deleted',
+        url : `${baseUrl}/garbage/list`,
+        params : {
+            emailAddress: useraddr.name+"@"+useraddr.addr
+        }
     }).then(response=>{
         data = response.data
         setBoxData(data)
@@ -185,22 +212,39 @@ const getDeleteList = (useraddr,boxData,setBoxData) => {
 }
 const getDetailOfMail = (useraddr,id,emailAddress,subject,setDetailData) => {
     var data
-    var newurl = 'http://localhost:3001/detail/'+id
-    //console.log(newurl)
+    var newurl = `${baseUrl}/detail/${id}`
     axios({
         method:'GET',
         url : newurl,
+        params : {
+            emailAddress: emailAddress,
+            subject : subject
+        }
     }).then(response=>{
         data = response.data            
-        //console.log("api:")
-       // console.log(data)
+        setDetailData(data)
+    })
+
+}
+const getDetailOfDraft = (useraddr,id,emailAddress,subject,setDetailData) => {
+    var data
+    var newurl = `${baseUrl}/draft/detail`
+    axios({
+        method:'GET',
+        url : newurl,
+        params : {
+            emailAddress: emailAddress,
+            subject : subject
+        }
+    }).then(response=>{
+        data = response.data            
         setDetailData(data)
     })
 
 }
 export default {loginPost,
                 emailPost,
-                draftPost,
+                draftPut,
                 deletedInboxListPost,
                 deleteAddrListPost,
                 deletedDraftListPost,
@@ -211,4 +255,6 @@ export default {loginPost,
                 getDraftList,
                 getSentList,
                 getDeleteList,
-                getDetailOfMail}
+                getDetailOfMail,
+                getDetailOfDraft,
+                setAuthToken}

@@ -39,7 +39,8 @@ const AddressBook= ({useraddr,setUseraddr,addrData,setAddrData}) => {
             onFilter: (value, record) => record.fromEmailAccount.includes(value)
         },
     ];
-    const data = addrData
+    const data = addrData.contactList
+    console.log(data)
     var selectedobj = {}
     const rowSelection = {
         onSelect: (record, selected) => {

@@ -2,7 +2,7 @@ import React from 'react';
 import { Col, Form, Row, Button,Typography,Card} from '@douyinfe/semi-ui';
 import api from '../../api/api'
 import { useSearchParams } from 'react-router-dom';
-const Readmail = ({useraddr,setUseraddr,boxData,setBoxData,detailData,setDetailData}) =>{
+const Readmail = ({useraddr,setUseraddr,boxData,setBoxData,detailData,setDetailData,boxType,setBoxType}) =>{
     const { Section, Input } = Form;
     const {Text,Paragraph} = Typography
     const [params] = useSearchParams()
