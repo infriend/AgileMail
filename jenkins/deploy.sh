@@ -17,7 +17,7 @@ echo " "
 echo "Build Frontend"
 cd $WORKSPACE/$frontendPath
 npm run build
-cp build/** ../public
+cp -r build/** ../public
 
 echo " "
 echo "Build Backend"
