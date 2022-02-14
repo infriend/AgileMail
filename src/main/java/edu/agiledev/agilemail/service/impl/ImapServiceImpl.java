@@ -43,6 +43,7 @@ public class ImapServiceImpl implements ImapService {
         try {
             getImapStore(account).getDefaultFolder();
         } catch (MessagingException e) {
+            e.printStackTrace();
             throw new AuthenticationException(IMAP);
         }
     }

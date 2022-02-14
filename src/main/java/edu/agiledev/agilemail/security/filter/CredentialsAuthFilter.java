@@ -20,13 +20,17 @@
  */
 package edu.agiledev.agilemail.security.filter;
 
+import edu.agiledev.agilemail.exception.AuthenticationException;
+import edu.agiledev.agilemail.http.HttpHeaders;
+import edu.agiledev.agilemail.security.TokenProvider;
 import edu.agiledev.agilemail.security.model.Credentials;
-import edu.agiledev.agilemail.security.service.CredentialsAuthService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.util.matcher.RequestMatcher;
+import org.springframework.util.StringUtils;
 import org.springframework.web.filter.GenericFilterBean;
 
 import javax.servlet.FilterChain;
@@ -44,12 +48,12 @@ public class CredentialsAuthFilter extends GenericFilterBean {
 
     private static final Logger log = LoggerFactory.getLogger(CredentialsAuthFilter.class);
 
-    private final CredentialsAuthService credentialsAuthService;
+    private final TokenProvider tokenProvider;
     private final RequestMatcher requestMatcher;
 
-    public CredentialsAuthFilter(RequestMatcher requestMatcher, CredentialsAuthService credentialsAuthService) {
+    public CredentialsAuthFilter(RequestMatcher requestMatcher, TokenProvider tokenProvider) {
         this.requestMatcher = requestMatcher;
-        this.credentialsAuthService = credentialsAuthService;
+        this.tokenProvider = tokenProvider;
     }
 
     @Override
@@ -71,13 +75,26 @@ public class CredentialsAuthFilter extends GenericFilterBean {
 
     private boolean authenticate(HttpServletRequest httpServletRequest) {
         try {
-            final Credentials credentials = credentialsAuthService.fromRequest(httpServletRequest);
+            final Credentials credentials = fetchCredentials(httpServletRequest);
             SecurityContextHolder.getContext().setAuthentication(credentials);
             return true;
         } catch (Exception ex) {
             log.info("Couldn't authenticate request");
         }
         return false;
+    }
+
+    private Credentials fetchCredentials(HttpServletRequest httpServletRequest) {
+        final String token = httpServletRequest.getHeader(HttpHeaders.AUTHENTICATION);
+        if (StringUtils.hasText(token)) {
+            throw new AuthenticationException("AgileMail credentials headers missing");
+        }
+        if (!tokenProvider.validateToken(token)) {
+            throw new AuthenticationException("Authentication error");
+        }
+        Authentication authentication = tokenProvider.getAuthentication(token);
+        return (Credentials) authentication;
+
     }
 
 }
