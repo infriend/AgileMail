@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { Button,Avatar,Nav } from '@douyinfe/semi-ui';
 import Icon, { IconUndo, IconSemiLogo, IconHelpCircle} from '@douyinfe/semi-icons'
 const HeaderMain = ({useraddr,setUseraddr}) => {
+    useraddr = JSON.parse(localStorage.getItem("userdata"))
+    console.log(useraddr)
     var username = useraddr.name
     var addr = useraddr.addr
     const navigate = useNavigate()

@@ -3,6 +3,9 @@ import {Layout} from '@douyinfe/semi-ui'
 import Login from '../components/Login'
 import '../css/loginpage.css'
 const LoginPage = ({useraddr,setUseraddr}) => {
+    if (useraddr === undefined){
+        useraddr = localStorage.getItem("userdata")
+    }
     const { Content } = Layout;
     useraddr = useraddr
     return(

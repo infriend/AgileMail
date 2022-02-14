@@ -38,8 +38,10 @@ const Login = ({useraddr,setUseraddr}) => {
             api.loginPost(values.username,values.mail,values.passwd)
             success = true;
             if(success){
-                setUseraddr({name:values.username,addr:values.mail})
-                console.log(useraddr.name+" & "+useraddr.addr)
+                const userdata = {name:values.username,addr:values.mail}
+                localStorage.setItem("userdata",JSON.stringify(userdata))
+                setUseraddr(userdata)
+                //console.log(useraddr.name+" & "+useraddr.addr)
                 navigate('/main/')
             }
              else   

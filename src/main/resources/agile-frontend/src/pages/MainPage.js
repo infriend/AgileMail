@@ -14,6 +14,7 @@ const MainPage = ({useraddr,setUseraddr}) =>{
     });
     const [detailData,setDetailData] = useState();
     //console.log("main:"+useraddr.name)
+    useraddr = JSON.parse(localStorage.getItem("userdata"))
     return (
         <Layout className="mainPage" style={{ border: '1px solid var(--semi-color-border)',height: '100%',weight:'100%',position:'absolute'}}>
             <Header style={{ backgroundColor: 'var(--semi-color-bg-1)' }}>

@@ -10,7 +10,7 @@ import {
 } from "react-router-dom"
 const App = () =>{
   const [useraddr,setUseraddr] = useState({
-    name:"default",addr:'@agilemail'})
+    name:'',addr:''})
   //console.log("app:"+useraddr.name+" "+useraddr.addr)
   return(
     <><>

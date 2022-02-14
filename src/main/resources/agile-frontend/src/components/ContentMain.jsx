@@ -11,7 +11,9 @@ import ReadMail from './mainComponents/ReadMail';
 import { Routes, Route,Outlet } from "react-router-dom"
 const ContentMain = ({useraddr,setUseraddr,addrData,setAddrData,boxData,setBoxData,
     detailData,setDetailData}) => {
-    var username = useraddr.name
+    if (useraddr === undefined){
+        useraddr = localStorage.getItem("userdata")
+        }
     return(
         <>
         <Routes>

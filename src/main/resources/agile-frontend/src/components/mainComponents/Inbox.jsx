@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import * as dateFns from 'date-fns';
 const Inbox = ({useraddr,setUseraddr,boxData,setBoxData,detailData,setDetailData,boxType,setBoxType}) => {
     const navigate = useNavigate()
+    useraddr = JSON.parse(localStorage.getItem("userdata"))
     var all
     if(boxData == undefined){
         all = 0

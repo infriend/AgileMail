@@ -1,6 +1,7 @@
 //import * as AxiosLogger from 'axios-logger'
 import axios from 'axios'
-const baseUrl = 'http://localhost:8081'
+//const baseUrl = 'http://localhost:8081'
+const baseUrl = '172.19.240.244:8081'
 const setAuthToken = token => {
     if (token) {
       // headers 每个请求都需要用到的
@@ -9,7 +10,18 @@ const setAuthToken = token => {
       delete axios.defaults.headers.common["Authorization"];
     }
   }
-
+/* 请求拦截 */
+axios.interceptors.request.use(
+    config => {
+      if (localStorage.getItem("token") != null) {
+        config.headers["token"] = JSON.parse(localStorage.getItem("token"));
+      }
+  
+      return config;
+    },
+    err => Promise.reject(err)
+  );
+  
 const loginPost = (address,domain,passwd) => {
     axios({
         method:'POST',
@@ -21,7 +33,8 @@ const loginPost = (address,domain,passwd) => {
         }
     }).then(response => {
         const {token} = response.data
-        localStorage.setItem("loginToken",token)
+        localStorage.setItem("loginToken",JSON.stringify(token))
+        console.log(localStorage)
         setAuthToken(token)
     })
 }
@@ -167,6 +180,7 @@ const getInboxList = (useraddr,boxData,setBoxData) => {
     }).then(response=>{
         data = response.data
         setBoxData(data)
+        localStorage.setItem("listinf",JSON.stringify(data))
     })
 }
 const getDraftList = (useraddr,boxData,setBoxData) => {
@@ -180,6 +194,7 @@ const getDraftList = (useraddr,boxData,setBoxData) => {
     }).then(response=>{
         data = response.data
         setBoxData(data)
+        localStorage.setItem("listinf",data)
     })
 }
 const getSentList = (useraddr,boxData,setBoxData) => {
@@ -190,6 +205,7 @@ const getSentList = (useraddr,boxData,setBoxData) => {
     }).then(response=>{
         data = response.data
         setBoxData(data)
+        localStorage.setItem("listinf",data)
     })
 }
 const getDeleteList = (useraddr,boxData,setBoxData) => {
@@ -203,6 +219,7 @@ const getDeleteList = (useraddr,boxData,setBoxData) => {
     }).then(response=>{
         data = response.data
         setBoxData(data)
+        localStorage.setItem("listinf",data)
     })
 }
 const getDetailOfMail = (useraddr,id,emailAddress,subject,setDetailData) => {

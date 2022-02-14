@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import api from '../api/api'
 const SiderMain = ({useraddr,setUseraddr,addrData,setAddrData,boxData,setBoxData}) => {
     const navigate = useNavigate()
+    useraddr = JSON.parse(localStorage.getItem("userdata"))
     const siderOnSelect = (data) =>{
         if(data.itemKey == 'addressbook'){
             api.getAddrBook(useraddr,addrData,setAddrData)
