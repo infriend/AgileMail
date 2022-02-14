@@ -7,6 +7,7 @@ import edu.agiledev.agilemail.exception.AuthenticationException;
 import edu.agiledev.agilemail.exception.BaseException;
 import edu.agiledev.agilemail.pojo.EmailAccount;
 import edu.agiledev.agilemail.pojo.vo.CheckMessageVo;
+import edu.agiledev.agilemail.pojo.vo.DetailMessageVo;
 import edu.agiledev.agilemail.service.ImapService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -156,6 +157,15 @@ public class ImapServiceImpl implements ImapService {
         return Arrays.asList(messages);
     }
 
+    String getFromAddress(MimeMessage m) throws MessagingException, UnsupportedEncodingException {
+        Address[] froms = m.getFrom();
+        InternetAddress address = (InternetAddress) froms[0];
+        String personal = address.getPersonal();
+        String from = personal == null ? address.getAddress() : (MimeUtility.decodeText(personal) + " <" + address.getAddress() + ">");
+
+        return from;
+    }
+
     @Override
     public List<CheckMessageVo> getDefaultFolderMessages(EmailAccount account, String folderName) throws MessagingException, UnsupportedEncodingException {
         IMAPStore store = getImapStore(account);
@@ -185,10 +195,8 @@ public class ImapServiceImpl implements ImapService {
 
         for (Message message: messages){
             MimeMessage m = (MimeMessage) message;
-            Address[] froms = m.getFrom();
-            InternetAddress address = (InternetAddress) froms[0];
-            String personal = address.getPersonal();
-            String from = personal == null ? address.getAddress() : (MimeUtility.decodeText(personal) + " <" + address.getAddress() + ">");
+
+            String from = getFromAddress(m);
             String subject = m.getSubject();
             String fromEmailAccount = account.getUsername();
             int state = 0;
@@ -212,12 +220,28 @@ public class ImapServiceImpl implements ImapService {
     }
 
     @Override
-    public Message getMessageInFolder(EmailAccount account, int msgNum, String folderName) throws MessagingException {
+    public DetailMessageVo getMessageInFolder(EmailAccount account, int msgNum, String folderName) throws MessagingException, IOException {
         IMAPStore store = getImapStore(account);
         IMAPFolder folder = (IMAPFolder) store.getFolder(folderName);
         folder.open(Folder.READ_ONLY);
-        Message m = folder.getMessage(msgNum);
-        return m;
+        MimeMessage m = (MimeMessage) folder.getMessage(msgNum);
+
+        String from = getFromAddress(m);
+        String subject = m.getSubject();
+        String to = account.getUsername();
+        Date datetime = m.getSentDate();
+        String content = getBody(m);
+
+        DetailMessageVo detailMessageVo = new DetailMessageVo();
+        detailMessageVo.setFrom(from);
+        detailMessageVo.setSubject(subject);
+        detailMessageVo.setTo(to);
+        detailMessageVo.setDatetime(datetime);
+        detailMessageVo.setContent(content);
+
+        folder.close();
+
+        return detailMessageVo;
     }
 
     @Override
