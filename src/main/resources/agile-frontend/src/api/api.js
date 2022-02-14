@@ -14,7 +14,7 @@ const setAuthToken = token => {
 axios.interceptors.request.use(
     config => {
       if (localStorage.getItem("token") != null) {
-        config.headers["token"] = JSON.parse(localStorage.getItem("token"));
+        config.headers["token"] = localStorage.getItem("token");
       }
   
       return config;
@@ -33,7 +33,7 @@ const loginPost = (address,domain,passwd) => {
         }
     }).then(response => {
         const {token} = response.data
-        localStorage.setItem("loginToken",JSON.stringify(token))
+        localStorage.setItem("loginToken",token)
         console.log(localStorage)
         setAuthToken(token)
     })
