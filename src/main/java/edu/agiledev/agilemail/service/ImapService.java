@@ -26,7 +26,22 @@ public interface ImapService {
      * Get messages from the email inbox.
      * @param account
      * @return
+     * @throws MessagingException,UnsupportedEncodingException
+     */
+    List<CheckMessageVo> getDefaultFolderMessages(EmailAccount account, String folderName)
+            throws MessagingException, UnsupportedEncodingException;
+
+    /**
+     * Get certain specific message from the selected folder.
+     * TODO: add attachment, pictures.
+     * @param account
+     * @param msgNum
+     * @param folderName
+     * @return
      * @throws MessagingException
      */
-    List<CheckMessageVo> getInboxMessages(EmailAccount account) throws MessagingException, UnsupportedEncodingException;
+    Message getMessageInFolder(EmailAccount account, int msgNum, String folderName) throws MessagingException;
+
+
+
 }

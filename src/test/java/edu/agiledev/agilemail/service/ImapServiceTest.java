@@ -43,7 +43,7 @@ class ImapServiceTest {
     @Test
     void getMessagesInFolder() throws MessagingException, IOException {
         EmailAccount testAccount = testConfig.getTestEmailAccount();
-        List<CheckMessageVo> messages = imapService.getInboxMessages(testAccount);
+        List<CheckMessageVo> messages = imapService.getDefaultFolderMessages(testAccount, "inbox");
         for (int i = 0, n = messages.size(); i < n; i++) {
             System.out.println(messages.get(i).getFrom());
         }

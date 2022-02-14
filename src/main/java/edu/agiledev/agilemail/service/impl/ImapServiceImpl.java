@@ -157,10 +157,28 @@ public class ImapServiceImpl implements ImapService {
     }
 
     @Override
-    public List<CheckMessageVo> getInboxMessages(EmailAccount account) throws MessagingException, UnsupportedEncodingException {
+    public List<CheckMessageVo> getDefaultFolderMessages(EmailAccount account, String folderName) throws MessagingException, UnsupportedEncodingException {
         IMAPStore store = getImapStore(account);
         Map domainInfo = (Map) domainMap.get(account.getDomain());
-        IMAPFolder folder = (IMAPFolder) store.getFolder((String) domainInfo.get("inbox"));
+        IMAPFolder folder;
+        switch (folderName){
+            case "inbox":
+                folder = (IMAPFolder) store.getFolder((String) domainInfo.get("inbox"));
+                break;
+            case "draft":
+                folder = (IMAPFolder) store.getFolder((String) domainInfo.get("draft"));
+                break;
+            case "sent":
+                folder = (IMAPFolder) store.getFolder((String) domainInfo.get("sent"));
+                break;
+            case "deleted":
+                folder = (IMAPFolder) store.getFolder((String) domainInfo.get("deleted"));
+                break;
+
+            default:
+                throw new BaseException("非默认文件夹!");
+        }
+
         List<Message> messages = getAllMessagesInFolder(folder);
 
         List<CheckMessageVo> checkMessageVos = new ArrayList<>();
@@ -191,6 +209,14 @@ public class ImapServiceImpl implements ImapService {
         store.close();
 
         return checkMessageVos;
+    }
+
+    @Override
+    public Message getMessageInFolder(EmailAccount account, int msgNum, String folderName) throws MessagingException {
+        IMAPStore store = getImapStore(account);
+        IMAPFolder folder = (IMAPFolder) store.getFolder(folderName);
+
+        return folder.getMessage(msgNum);
     }
 
 
