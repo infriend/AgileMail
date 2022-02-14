@@ -27,13 +27,12 @@ import edu.agiledev.agilemail.security.TokenProvider;
 import edu.agiledev.agilemail.security.model.Credentials;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.time.ZoneOffset;
-import java.time.ZonedDateTime;
 
 
 /**
@@ -41,7 +40,7 @@ import java.time.ZonedDateTime;
  */
 @Service
 @Slf4j
-public class AuthenticationService {
+public class CredentialsAuthService {
 
 
     private final ApplicationConfiguration appConfig;
@@ -49,30 +48,30 @@ public class AuthenticationService {
     private final TokenProvider tokenProvider;
 
     @Autowired
-    public AuthenticationService(ApplicationConfiguration appConfig, TokenProvider tokenProvider) {
+    public CredentialsAuthService(ApplicationConfiguration appConfig, TokenProvider tokenProvider) {
         this.appConfig = appConfig;
         this.tokenProvider = tokenProvider;
     }
 
-    /**
-     * Parses {@link HttpServletRequest} for isotope credentials to decode them and return
-     * a valid {@link Credentials} object.
-     *
-     * @param httpServletRequest from which to extract Isotope Credentials HttpHeaders
-     * @return Credentials obtained and validated from httpServletRequest headers
-     */
-    public Credentials fromRequest(HttpServletRequest httpServletRequest) {
-        final String token = httpServletRequest.getHeader(HttpHeaders.AUTHENTICATION);
-        if (StringUtils.hasText(token)) {
-            throw new AuthenticationException("Isotope credentials headers missing");
-        }
-        final Credentials credentials = tokenProvider.getCredentials(token);
-        if (credentials.getExpiryDate().compareTo(ZonedDateTime.now(ZoneOffset.UTC)) < 0) {
-            throw new AuthenticationException("Expired credentials");
-        }
-//            credentials.setAuthenticated(true);
-        return credentials;
-    }
+//    /**
+//     * Parses {@link HttpServletRequest} for isotope credentials to decode them and return
+//     * a valid {@link Credentials} object.
+//     *
+//     * @param httpServletRequest from which to extract Isotope Credentials HttpHeaders
+//     * @return Credentials obtained and validated from httpServletRequest headers
+//     */
+//    public Credentials fromRequest(HttpServletRequest httpServletRequest) {
+//        final String token = httpServletRequest.getHeader(HttpHeaders.AUTHENTICATION);
+//        if (StringUtils.hasText(token)) {
+//            throw new AuthenticationException("AgileMail credentials headers missing");
+//        }
+//        if(!tokenProvider.validateToken(token)){
+//            throw new AuthenticationException("Authentication error");
+//        }
+//        Authentication authentication = tokenProvider.getAuthentication(token);
+//        return (Credentials) authentication;
+//
+//    }
 
 
     public void refreshCredentials(Credentials oldCredentials, HttpServletResponse response) {

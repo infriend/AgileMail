@@ -43,6 +43,7 @@ public class SmtpServiceImpl implements SmtpService {
         try {
             getSmtpTransport(account);
         } catch (MessagingException e) {
+            e.printStackTrace();
             throw new AuthenticationException(SMTP);
         }
     }
@@ -53,7 +54,7 @@ public class SmtpServiceImpl implements SmtpService {
             final String smtpHost = "smtp." + account.getDomain();
             smtpTransport.connect(
                     smtpHost,
-                    587,
+                    465,
                     account.getUsername(),
                     account.getPassword());
             log.debug("Opened new SMTP transport");
@@ -70,7 +71,7 @@ public class SmtpServiceImpl implements SmtpService {
 
     private static Properties initMailProperties(MailSSLSocketFactory socketFactory) {
         final Properties ret = new Properties();
-        ret.put("mail.smtp.ssl.enable", false);
+        ret.put("mail.smtp.ssl.enable", true);
         ret.put("mail.smtp.connectiontimeout", 5000);
         ret.put("mail.smtp.ssl.socketFactory", socketFactory);
         ret.put("mail.smtp.starttls.enable", true);

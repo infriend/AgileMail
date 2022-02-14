@@ -1,5 +1,8 @@
 package edu.agiledev.agilemail.utils;
 
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
+
 /**
  * Twitter的SnowFlake算法,使用SnowFlake算法生成一个整数，然后转化为62进制变成一个短地址URL
  * https://github.com/beyondfengyu/SnowFlake

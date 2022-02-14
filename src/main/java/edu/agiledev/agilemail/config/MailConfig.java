@@ -8,7 +8,7 @@ import org.springframework.mail.javamail.JavaMailSenderImpl;
 import java.util.Properties;
 
 /**
- * Description of class
+ * Configuration of mail setteings
  *
  * @author Nosolution
  * @version 1.0

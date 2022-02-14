@@ -5,8 +5,12 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
+import java.time.Duration;
+import java.util.ArrayList;
+import java.util.List;
+
 /**
- * Description of class
+ * Configuration of global variables
  *
  * @author Nosolution
  * @version 1.0
@@ -22,8 +26,10 @@ public class ApplicationConfiguration {
 
     private String encryptionPassword;
 
-    private int credentialsDurationMinutes;
-    private int credentialsRefreshBeforeDurationMinutes;
+    private long credentialsDuration;
+    private long credentialsRefreshBeforeDuration;
+
+    private List<String> hostBlackList = new ArrayList<>();
 
 
     @Value("${config.connect.timeout}")
@@ -32,19 +38,23 @@ public class ApplicationConfiguration {
     }
 
 
-    @Value("${dev.security.encryption}")
-    public void setEncryptionPassword(String password) {
+    @Value("${dev.security.key}")
+    public void setEncryptionKey(String password) {
         encryptionPassword = password;
     }
 
-    @Value("${dev.security.credentials.duration}")
-    public void setCredentialsDurationMinutes(int minutes) {
-        credentialsDurationMinutes = minutes;
+    @Value("${config.security.credentials.expiration}")
+    public void setCredentialsExpiration(int duration) {
+        credentialsDuration = duration;
     }
 
-    @Value("${dev.security.credentials.refresh}")
-    public void setCredentialsRefreshBeforeDurationMinutes(int minutes) {
-        credentialsRefreshBeforeDurationMinutes = minutes;
+    @Value("${config.security.credentials.refresh}")
+    public void setCredentialsRefreshBeforeDuration(int refresh) {
+        credentialsRefreshBeforeDuration = refresh;
+    }
+
+    public void setHostBlackList(List<String> hostBlackList) {
+        this.hostBlackList = hostBlackList;
     }
 
     public int getConnectTimeout() {
@@ -55,12 +65,15 @@ public class ApplicationConfiguration {
         return encryptionPassword;
     }
 
-    public int getCredentialsDurationMinutes() {
-        return credentialsDurationMinutes;
+    public Duration getCredentialsDuration() {
+        return Duration.ofMillis(credentialsDuration);
     }
 
-    public int getCredentialsRefreshBeforeDurationMinutes() {
-        return credentialsRefreshBeforeDurationMinutes;
+    public Duration getCredentialsRefreshBeforeDuration() {
+        return Duration.ofMillis(credentialsRefreshBeforeDuration);
     }
 
+    public List<String> getHostBlackList() {
+        return hostBlackList;
+    }
 }

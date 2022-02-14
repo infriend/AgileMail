@@ -20,12 +20,16 @@
  */
 package edu.agiledev.agilemail.config;
 
-import edu.agiledev.agilemail.security.filter.AuthenticationFilter;
-import edu.agiledev.agilemail.security.filter.RefreshFilter;
-import edu.agiledev.agilemail.security.service.AuthenticationService;
+import edu.agiledev.agilemail.security.TokenProvider;
+import edu.agiledev.agilemail.security.filter.CredentialsAuthFilter;
+import edu.agiledev.agilemail.security.filter.CredentialsRefreshFilter;
+import edu.agiledev.agilemail.security.service.CredentialsAuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -41,17 +45,40 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     private static final String ACTUATOR_REGEX = "(/api)?/actuator/health";
     private static final String CONFIGURATION_REGEX = "(/api)?/v1/application/configuration";
-    private static final String LOGIN_REGEX = "(/api)?/v1/application/login";
-    private final AuthenticationService authenticationService;
+    private static final String LOGIN_REGEX = "(/api)?/login";
+    private final CredentialsAuthService authenticationService;
+    private final TokenProvider tokenProvider;
 
     @Autowired
-    public SecurityConfiguration(AuthenticationService authenticationService) {
+    public SecurityConfiguration(CredentialsAuthService authenticationService, TokenProvider tokenProvider) {
         this.authenticationService = authenticationService;
+        this.tokenProvider = tokenProvider;
+    }
+
+    //配置Spring Security忽略的路径
+
+    @Override
+    public void configure(WebSecurity web) {
+        web.ignoring()
+                .antMatchers(HttpMethod.OPTIONS, "/**")
+
+                // allow anonymous resource requests
+                .antMatchers(
+                        "/",
+                        "/*.html",
+                        "/favicon.ico",
+                        "/**/*.html",
+                        "/**/*.css",
+                        "/**/*.js",
+                        "/**/*.jpg",
+                        "/**/*.png",
+                        "/**/*.json"
+                );
     }
 
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
-        final RequestMatcher negatedPublicMatchers =  new NegatedRequestMatcher(new OrRequestMatcher(
+        final RequestMatcher negatedPublicMatchers = new NegatedRequestMatcher(new OrRequestMatcher(
                 new RegexRequestMatcher(ACTUATOR_REGEX, "GET"),
                 new RegexRequestMatcher(CONFIGURATION_REGEX, "GET"),
                 new RegexRequestMatcher(LOGIN_REGEX, "POST")
@@ -59,18 +86,18 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         httpSecurity
                 .csrf().disable()
                 .sessionManagement()
-                    .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                    .and()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
                 .authorizeRequests()
-                      .requestMatchers(negatedPublicMatchers).authenticated()
-                    .and()
+                .requestMatchers(negatedPublicMatchers).authenticated()
+                .and()
                 .cors()
-                    .and()
+                .and()
                 .logout()
-                    .permitAll()
-                    .and()
-                .addFilterAfter(new AuthenticationFilter(
-                        negatedPublicMatchers, authenticationService), BasicAuthenticationFilter.class)
-                .addFilterAfter(new RefreshFilter(authenticationService), AuthenticationFilter.class);
+                .permitAll()
+                .and()
+                .addFilterAfter(new CredentialsAuthFilter(
+                        negatedPublicMatchers, tokenProvider), BasicAuthenticationFilter.class)
+                .addFilterAfter(new CredentialsRefreshFilter(tokenProvider), CredentialsAuthFilter.class);
     }
 }
