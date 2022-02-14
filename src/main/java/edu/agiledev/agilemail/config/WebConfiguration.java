@@ -75,7 +75,7 @@ public class WebConfiguration implements WebMvcConfigurer, AsyncConfigurer {
     public CorsConfigurationSource corsConfigurationSource() {
         final UrlBasedCorsConfigurationSource corsConfigurationSource = new UrlBasedCorsConfigurationSource();
         if (Stream.of(this.environment.getActiveProfiles()).anyMatch(DEVELOPMENT_PROFILE::equals)) {
-            corsConfigurationSource.registerCorsConfiguration("/v1/**",
+            corsConfigurationSource.registerCorsConfiguration("/**",
                     new CorsConfiguration().applyPermitDefaultValues());
         }
         return corsConfigurationSource;

@@ -10,7 +10,7 @@ config:
     timeout: 5000
   security:
     credentials:
-      expiration: 900 # 15min
-      refresh: 600 # 10min
+      expiration: 86400 # 24h
+      refresh: 43200 # 12h
 mybatis:
   mapperLocations: classpath:daoImpl/*Mapper.xml

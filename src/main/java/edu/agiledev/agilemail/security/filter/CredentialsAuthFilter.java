@@ -76,6 +76,7 @@ public class CredentialsAuthFilter extends GenericFilterBean {
     private boolean authenticate(HttpServletRequest httpServletRequest) {
         try {
             final Credentials credentials = fetchCredentials(httpServletRequest);
+            credentials.setAuthenticated(true);
             SecurityContextHolder.getContext().setAuthentication(credentials);
             return true;
         } catch (Exception ex) {
@@ -86,7 +87,7 @@ public class CredentialsAuthFilter extends GenericFilterBean {
 
     private Credentials fetchCredentials(HttpServletRequest httpServletRequest) {
         final String token = httpServletRequest.getHeader(HttpHeaders.AUTHENTICATION);
-        if (StringUtils.hasText(token)) {
+        if (!StringUtils.hasText(token)) {
             throw new AuthenticationException("AgileMail credentials headers missing");
         }
         if (!tokenProvider.validateToken(token)) {
