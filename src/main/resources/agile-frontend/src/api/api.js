@@ -23,11 +23,6 @@ const loginPost = (address,domain,passwd) => {
         const {token} = response.data
         localStorage.setItem("loginToken",token)
         setAuthToken(token)
-    }).catch(err=>{
-        dispatch({
-            type:GET_ERRORS,
-            payload:err.response.data
-        }) 
     })
 }
 const emailPost = (fromaddr,toaddr,subjectStr,contentStr) => {

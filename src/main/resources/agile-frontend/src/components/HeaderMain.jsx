@@ -27,7 +27,7 @@ const HeaderMain = ({useraddr,setUseraddr}) => {
                 >
                     邮箱首页
                 </span>
-                <span style={{ marginRight: '24px' }}>{username}{addr}</span>
+                <span style={{ marginRight: '24px' }}>{username}@{addr}</span>
                
             </span>
             <Nav.Footer>
