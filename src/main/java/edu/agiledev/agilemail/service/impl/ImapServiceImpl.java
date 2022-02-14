@@ -215,9 +215,14 @@ public class ImapServiceImpl implements ImapService {
     public Message getMessageInFolder(EmailAccount account, int msgNum, String folderName) throws MessagingException {
         IMAPStore store = getImapStore(account);
         IMAPFolder folder = (IMAPFolder) store.getFolder(folderName);
-
-        return folder.getMessage(msgNum);
+        folder.open(Folder.READ_ONLY);
+        Message m = folder.getMessage(msgNum);
+        return m;
     }
 
+    @Override
+    public void deleteMessage(int msgNum, String folderName) {
+
+    }
 
 }

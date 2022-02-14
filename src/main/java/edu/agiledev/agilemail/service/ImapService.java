@@ -42,6 +42,6 @@ public interface ImapService {
      */
     Message getMessageInFolder(EmailAccount account, int msgNum, String folderName) throws MessagingException;
 
-
+    void deleteMessage(int msgNum, String folderName);
 
 }

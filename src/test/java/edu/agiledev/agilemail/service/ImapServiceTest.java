@@ -48,4 +48,11 @@ class ImapServiceTest {
             System.out.println(messages.get(i).getFrom());
         }
     }
+
+    @Test
+    void getMessage() throws MessagingException {
+        EmailAccount testAccount = testConfig.getTestEmailAccount();
+        Message m = imapService.getMessageInFolder(testAccount, 1, "INBOX");
+        System.out.println(m.getFrom());
+    }
 }
