@@ -20,5 +20,14 @@
         VALUES (#{userId}, #{accountId});
     </insert>
 
+    <select id="getUserEmailAccount" resultType="edu.agiledev.agilemail.pojo.EmailAccount">
+        SELECT se.id, se.username, se.password, se.domain
+        FROM sys_user_email sue,
+             sys_email_account se
+        WHERE sue.email_id = se.id
+          AND sue.user_id = #{userId}
+        LIMIT 1
+    </select>
+
 
 </mapper>

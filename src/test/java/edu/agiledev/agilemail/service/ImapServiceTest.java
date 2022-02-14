@@ -3,6 +3,7 @@ package edu.agiledev.agilemail.service;
 import edu.agiledev.agilemail.config.TestConfiguration;
 import edu.agiledev.agilemail.pojo.EmailAccount;
 import edu.agiledev.agilemail.pojo.vo.CheckMessageVo;
+import edu.agiledev.agilemail.pojo.vo.DetailMessageVo;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -43,9 +44,16 @@ class ImapServiceTest {
     @Test
     void getMessagesInFolder() throws MessagingException, IOException {
         EmailAccount testAccount = testConfig.getTestEmailAccount();
-        List<CheckMessageVo> messages = imapService.getInboxMessages(testAccount);
+        List<CheckMessageVo> messages = imapService.getDefaultFolderMessages(testAccount, "inbox");
         for (int i = 0, n = messages.size(); i < n; i++) {
             System.out.println(messages.get(i).getFrom());
         }
+    }
+
+    @Test
+    void getMessage() throws MessagingException, IOException {
+        EmailAccount testAccount = testConfig.getTestEmailAccount();
+        DetailMessageVo m = imapService.getMessageInFolder(testAccount, 1, "INBOX");
+        System.out.println(m.getFrom());
     }
 }

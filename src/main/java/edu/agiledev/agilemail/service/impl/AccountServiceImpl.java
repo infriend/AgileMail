@@ -2,17 +2,25 @@ package edu.agiledev.agilemail.service.impl;
 
 import edu.agiledev.agilemail.config.ApplicationConfiguration;
 import edu.agiledev.agilemail.exception.AuthenticationException;
+import edu.agiledev.agilemail.exception.BaseException;
 import edu.agiledev.agilemail.mappers.AccountMapper;
 import edu.agiledev.agilemail.pojo.EmailAccount;
+import edu.agiledev.agilemail.pojo.ReturnCode;
 import edu.agiledev.agilemail.security.model.Credentials;
 import edu.agiledev.agilemail.service.AccountService;
 import edu.agiledev.agilemail.service.ImapService;
 import edu.agiledev.agilemail.service.SmtpService;
 import edu.agiledev.agilemail.utils.EncryptionUtil;
 import edu.agiledev.agilemail.utils.SnowFlakeIdGenerator;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 import static edu.agiledev.agilemail.exception.AuthenticationException.Type.BLACKLISTED;
 
@@ -24,6 +32,7 @@ import static edu.agiledev.agilemail.exception.AuthenticationException.Type.BLAC
  * @since 2022/2/7
  */
 @Service
+@Slf4j
 public class AccountServiceImpl implements AccountService {
 
     private final ImapService imapService;
@@ -32,6 +41,7 @@ public class AccountServiceImpl implements AccountService {
     private final AccountMapper accountMapper;
     private final SnowFlakeIdGenerator idGenerator;
     private final EncryptionUtil encryptionUtil;
+    private final ExecutorService checkExecutor;
 
 
     @Autowired
@@ -47,16 +57,28 @@ public class AccountServiceImpl implements AccountService {
         this.accountMapper = accountMapper;
         this.idGenerator = idGenerator;
         this.encryptionUtil = encryptionUtil;
+        this.checkExecutor = Executors.newFixedThreadPool(2);
     }
 
 
     public void checkAccount(EmailAccount account) {
+        Runnable imapCheckR = () -> imapService.checkAccount(account);
+        Future imapCheckF = checkExecutor.submit(imapCheckR);
+        Runnable smtpCheckR = () -> smtpService.checkAccount(account);
+        Future smtpCheckF = checkExecutor.submit(smtpCheckR);
+
+
         try {
             checkHost(account);
-            imapService.checkAccount(account);
-            smtpService.checkAccount(account);
+//            imapService.checkAccount(account);
+//            smtpService.checkAccount(account);
+            imapCheckF.get();
+            smtpCheckF.get();
         } catch (AuthenticationException e) {
             throw e;
+        } catch (ExecutionException | InterruptedException e) {
+            e.printStackTrace();
+            throw new BaseException(ReturnCode.CHECKING_ERROR, "发生运行错误");
         }
     }
 

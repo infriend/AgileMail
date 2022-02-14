@@ -22,7 +22,7 @@ cp -r build/** ../public
 echo " "
 echo "Build Backend"
 cd $WORKSPACE
-mvn clean package
+mvn clean package -DskipTests
 
 echo " "
 # stop port
