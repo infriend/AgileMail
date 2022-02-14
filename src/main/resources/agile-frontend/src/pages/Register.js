@@ -1,4 +1,5 @@
 import React, { useRef, useState } from 'react'
+//import '../css/Register.css'
 const Register = () =>{
     return(
         <div class="rg_layout">

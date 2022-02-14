@@ -4,7 +4,7 @@
     box-sizing: border-box;
 }
 body{
-    background: url("src\images\backgroundImage2.jpg") no-repeat center;
+    background: url("../images/backgroundImage2.jpg") no-repeat center;
 }
 .rg_layout{
     width: 900px;
