@@ -11,7 +11,10 @@ public enum ReturnCode {
 
 
     SUCCESS(1, "操作成功"),
-    ERROR(0, "操作失败");
+    ERROR(0, "操作失败"),
+
+    INTERNAL_ERROR(3000, "系统错误"),
+    CHECKING_ERROR(3001, "检查时发生错误");
     //TODO：定义其他操作代码
 
 
