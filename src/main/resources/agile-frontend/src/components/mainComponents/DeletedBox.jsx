@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import api from '../../api/api'
 const DeletedBox = ({useraddr,setUseraddr,boxData,setBoxData,detailData,setDetailData}) => {
     var all
+    useraddr = JSON.parse(localStorage.getItem("userdata"))
     if(boxData == undefined){
         all = 0
         api.getDeleteList(useraddr,boxData,setBoxData)

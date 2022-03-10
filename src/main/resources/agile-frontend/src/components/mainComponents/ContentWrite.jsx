@@ -5,6 +5,7 @@ import Icon, { IconUpload} from '@douyinfe/semi-icons'
 const ContentWrite = ({useraddr,setUseraddr}) => {
     var username = useraddr.name
     const [submitstate, setsubmitstate] = useState();
+    useraddr = JSON.parse(localStorage.getItem("userdata"))
     const mailSubmmit = (values) =>{
         const tempNote ={}
         tempNote.from = useraddr.name+'@'+useraddr.addr

@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import api from '../../api/api'
 const AlreadySend = ({useraddr,setUseraddr,boxData,setBoxData}) => {
     const navigate = useNavigate()
+    useraddr = JSON.parse(localStorage.getItem("userdata"))
     var all = 0
     if(boxData == undefined){
         all = 0

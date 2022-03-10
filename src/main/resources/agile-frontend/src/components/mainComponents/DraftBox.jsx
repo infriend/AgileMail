@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import api from '../../api/api'
 const DraftBox = ({useraddr,setUseraddr,boxData,setBoxData,detailData,setDetailData}) => {
     const navigate = useNavigate()
+    useraddr = JSON.parse(localStorage.getItem("userdata"))
     var all
     if(boxData == undefined){
         all = 0

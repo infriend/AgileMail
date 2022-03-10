@@ -14,9 +14,8 @@ const LoginPage = ({useraddr,setUseraddr}) => {
             backgroundImage:"url("+ require("../images/backgroundImage.jpg")+")",backgroundSize:"cover"}   
         } 
     >  
-        <Content>
-            <br /><br /><br /><br /><br />
-            <Login className="mainCard" useraddr={useraddr} setUseraddr={setUseraddr}/>
+        <Content >
+            <Login className="middle" useraddr={useraddr} setUseraddr={setUseraddr}/>
         </Content>
     </Layout>
     )

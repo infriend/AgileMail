@@ -78,7 +78,7 @@ const deletedInboxListPost = (useraddr,mail) => {
     }).then(response=>{
         console.log(response)
     })
-    var newurl = `${baseUrl}/inbox`+mail.id
+    var newurl = `${baseUrl}/inbox/`+mail.id
     axios({
         method:'DELETE',
         url :newurl

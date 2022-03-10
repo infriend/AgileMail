@@ -2,7 +2,7 @@ import React ,{useMemo,useState}from 'react';
 import { Col, Layout, Row,Table, Button,Toast,Modal} from '@douyinfe/semi-ui';
 import api from '../../api/api'
 const AddressBook= ({useraddr,setUseraddr,addrData,setAddrData}) => {
-    
+    useraddr = JSON.parse(localStorage.getItem("userdata"))
     var all
     if(addrData == undefined) {
         all = 0

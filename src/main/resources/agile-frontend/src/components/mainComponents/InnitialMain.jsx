@@ -3,6 +3,7 @@ import { Col, Layout, Row,Button,Empty} from '@douyinfe/semi-ui';
 import { IllustrationSuccess, IllustrationSuccessDark } from '@douyinfe/semi-illustrations';
 import { useNavigate } from 'react-router-dom';
 const InitialMain = ({useraddr,setUseraddr}) => {
+    useraddr = JSON.parse(localStorage.getItem("userdata"))
     var username = useraddr.name
     const navigate = useNavigate()
     return(
