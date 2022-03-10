@@ -208,7 +208,7 @@ const getDraftList = (useraddr,boxData,setBoxData) => {
     }).then(response=>{
         data = response.data
         setBoxData(data)
-        localStorage.setItem("listinf",data)
+        localStorage.setItem("listinf",JSON.stringify(data))
     })
 }
 const getSentList = (useraddr,boxData,setBoxData) => {

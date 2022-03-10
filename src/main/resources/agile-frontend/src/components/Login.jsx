@@ -40,6 +40,8 @@ const Login = ({useraddr,setUseraddr}) => {
             if(success){
                 const userdata = {name:values.username,addr:values.mail}
                 localStorage.setItem("userdata",JSON.stringify(userdata))
+                //localStorage.setItem("testToken","asEFSDFSDF")//TEST
+                //api.setAuthToken("asEFSDFSDF")
                 setUseraddr(userdata)
                 navigate('/main/')
             }
