@@ -6,9 +6,23 @@ const InitialMain = ({useraddr,setUseraddr}) => {
     useraddr = JSON.parse(localStorage.getItem("userdata"))
     var username = useraddr.name
     const navigate = useNavigate()
+    var d = new Date()
+    const time = () =>{
+        var time = d.getHours()
+        if(time>=6 && time < 12)
+            return "早上好"
+        else if (time >=12 && time < 14)
+            return "中午好"
+        else if (time >= 14 && time < 18)
+            return "下午好"
+        else if (time >= 18 && time < 23)
+            return "晚上好"
+        else
+            return "深夜了"
+    }
     return(
         <><div>
-            <h4>早上好，{username}</h4>
+            <h4>{time()}，{username}</h4>
         </div>
             <div
                 style={{

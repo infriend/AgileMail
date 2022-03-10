@@ -4,6 +4,7 @@ import api from '../api/api'
 import { Button, Card ,Row, Col,
     Notification, Form,Avatar,Select,Typography} from '@douyinfe/semi-ui'
 const Login = ({useraddr,setUseraddr}) => {
+    const [code,setCode] = useState()
     let opts = {
         duration: 3,
         position: 'topRight',
@@ -33,15 +34,13 @@ const Login = ({useraddr,setUseraddr}) => {
             Notification.info({ ...opts2, position: 'top' })  
             return; 
         }else{
-            //var address = values.username+values.mail
-            //console.log(address)
-            api.loginPost(values.username,values.mail,values.passwd)
+            api.loginPost(values.username,values.mail,values.passwd,setCode)
+            //if(code == ) success = true else success = false
             success = true;
             if(success){
                 const userdata = {name:values.username,addr:values.mail}
                 localStorage.setItem("userdata",JSON.stringify(userdata))
                 setUseraddr(userdata)
-                //console.log(useraddr.name+" & "+useraddr.addr)
                 navigate('/main/')
             }
              else   

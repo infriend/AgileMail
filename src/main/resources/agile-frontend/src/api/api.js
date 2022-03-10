@@ -22,7 +22,7 @@ axios.interceptors.request.use(
     err => Promise.reject(err)
   );
   
-const loginPost = (address,domain,passwd) => {
+const loginPost = (address,domain,passwd,setCode) => {
     axios({
         method:'POST',
         url : `${baseUrl}/login`,
@@ -33,6 +33,8 @@ const loginPost = (address,domain,passwd) => {
         }
     }).then(response => {
         const {token} = response.data
+        const code = response.code
+        setCode(code)
         localStorage.setItem("loginToken",token)
         console.log(localStorage)
         setAuthToken(token)
