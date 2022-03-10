@@ -157,6 +157,19 @@ const deletedTotoallyListPost = (useraddr,mail) => {
         console.log(response)
     })
 }
+const getMailData = (useraddr,setMailData) => {
+    var data
+    axios({
+        method:'GET',
+        url : `${baseUrl}/email/stat/`,
+        params : {
+            emailAddress : useraddr.name+"@"+useraddr.addr
+        }
+    }).then(response=>{
+        data = response.data.inbox
+        setMailData(data)
+    })
+}
 const getAddrBook = (useraddr,addrdata,setAddrData) => {
     var data
      axios({
@@ -169,7 +182,6 @@ const getAddrBook = (useraddr,addrdata,setAddrData) => {
         data = response.data
         setAddrData(data)
     })
-    return data
 }
 const getInboxList = (useraddr,boxData,setBoxData) => {
     var data
@@ -264,6 +276,7 @@ export default {loginPost,
                 deletedDraftListPost,
                 deletedSentListPost,
                 deletedTotoallyListPost,
+                getMailData,
                 getAddrBook,
                 getInboxList,
                 getDraftList,

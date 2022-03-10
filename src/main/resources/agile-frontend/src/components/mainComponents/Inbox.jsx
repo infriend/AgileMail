@@ -3,16 +3,21 @@ import { Col, Layout, Row,Table, Button,Toast,Dropdown} from '@douyinfe/semi-ui'
 import api from '../../api/api'
 import { useNavigate } from 'react-router-dom';
 import * as dateFns from 'date-fns';
+import { useState } from 'react';
 const Inbox = ({useraddr,setUseraddr,boxData,setBoxData,detailData,setDetailData,boxType,setBoxType}) => {
     const navigate = useNavigate()
     useraddr = JSON.parse(localStorage.getItem("userdata"))
-    var all
+    const [mailData,setMailData] = useState()
+    var all = 0,notRead = 0
     if(boxData == undefined){
-        all = 0
         api.getInboxList(useraddr,boxData,setBoxData)
+        api.getMailData(useraddr,setMailData)//不知道对不对啊
     }
-    else all = boxData.length
-    var notRead = 5
+    else {
+        all = boxData.length
+        //api.getMailData(useraddr,setMailData)
+        notRead = mailData.unread
+    }
     const mailOnclick = (id) => {
         var url = '/main/readmail?id='+id
         api.getInboxList(useraddr,boxData,setBoxData)
