@@ -3,9 +3,11 @@ package edu.agiledev.agilemail.service.impl;
 import com.sun.mail.imap.IMAPFolder;
 import com.sun.mail.imap.IMAPStore;
 import com.sun.mail.util.MailSSLSocketFactory;
+import edu.agiledev.agilemail.config.DefaultFolder;
 import edu.agiledev.agilemail.exception.AuthenticationException;
 import edu.agiledev.agilemail.exception.BaseException;
 import edu.agiledev.agilemail.pojo.EmailAccount;
+import edu.agiledev.agilemail.pojo.SupportDomain;
 import edu.agiledev.agilemail.pojo.vo.CheckMessageVo;
 import edu.agiledev.agilemail.pojo.vo.DetailMessageVo;
 import edu.agiledev.agilemail.service.ImapService;
@@ -22,6 +24,7 @@ import javax.mail.internet.MimeUtility;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.*;
+import java.util.stream.Stream;
 
 import static edu.agiledev.agilemail.exception.AuthenticationException.Type.IMAP;
 
@@ -40,14 +43,11 @@ public class ImapServiceImpl implements ImapService {
     private IMAPStore imapStore;
     private final MailSSLSocketFactory mailSSLSocketFactory;
 
-    private static Map domainMap= new HashMap();
+    private static Map<String, SupportDomain> domainMap = new HashMap();
+
     static {
-        Map temp = new HashMap();
-        temp.put("inbox", "INBOX");
-        temp.put("draft", "草稿箱");
-        temp.put("sent", "已发送");
-        temp.put("deleted", "已删除");
-        domainMap.put("163.com", temp);
+        SupportDomain _163 = new SupportDomain("INBOX", "已发送", "草稿箱", "已删除");
+        domainMap.put("163.com", _163);
     }
 
     @Autowired
@@ -55,6 +55,7 @@ public class ImapServiceImpl implements ImapService {
         this.mailSSLSocketFactory = mailSSLSocketFactory;
     }
 
+    @Override
     public void checkAccount(EmailAccount account) {
         try {
             getImapStore(account).getDefaultFolder();
@@ -62,6 +63,100 @@ public class ImapServiceImpl implements ImapService {
             e.printStackTrace();
             throw new AuthenticationException(IMAP);
         }
+    }
+
+    @Override
+    public List<Folder> getFolders(EmailAccount account) throws MessagingException {
+        IMAPStore store = getImapStore(account);
+        Folder[] f = store.getDefaultFolder().list();
+        List<Folder> res = Arrays.asList(f);
+
+        return res;
+    }
+
+    @Override
+    public List<CheckMessageVo> getDefaultFolderMessages(EmailAccount account, DefaultFolder folderName) throws MessagingException, UnsupportedEncodingException {
+        IMAPStore store = getImapStore(account);
+        SupportDomain domainInfo = domainMap.get(account.getDomain());
+        IMAPFolder folder;
+        switch (folderName) {
+            case INBOX:
+                folder = (IMAPFolder) store.getFolder(domainInfo.getInbox());
+                break;
+            case OUTBOX:
+                folder = (IMAPFolder) store.getFolder(domainInfo.getOutbox());
+                break;
+            case DRAFT:
+                folder = (IMAPFolder) store.getFolder(domainInfo.getDraft());
+                break;
+            case GARBAGE:
+                folder = (IMAPFolder) store.getFolder(domainInfo.getGarbage());
+                break;
+
+            default:
+                throw new BaseException("非默认文件夹!");
+        }
+
+        List<Message> messages = getAllMessagesInFolder(folder);
+
+        List<CheckMessageVo> checkMessageVos = new ArrayList<>();
+
+        for (Message message : messages) {
+            MimeMessage m = (MimeMessage) message;
+
+            String from = getFromAddress(m);
+            String subject = m.getSubject();
+            String fromEmailAccount = account.getUsername();
+            int state = 0;
+            if (message.getFlags().contains(Flags.Flag.SEEN)) {
+                state = 1;
+            }
+            Date datetime = message.getSentDate();
+
+            CheckMessageVo messageVo = new CheckMessageVo();
+            messageVo.setFrom(from);
+            messageVo.setSubject(subject);
+            messageVo.setDatetime(datetime);
+            messageVo.setFromEmailAccount(fromEmailAccount);
+            messageVo.setState(state);
+            checkMessageVos.add(messageVo);
+        }
+        folder.close();
+        store.close();
+
+        return checkMessageVos;
+    }
+
+
+    @Override
+    public DetailMessageVo getMessageInFolder(EmailAccount account, int msgNum, String folderName) throws MessagingException, IOException {
+        IMAPStore store = getImapStore(account);
+        IMAPFolder folder = (IMAPFolder) store.getFolder(folderName);
+
+        folder.open(Folder.READ_ONLY);
+        MimeMessage m = (MimeMessage) folder.getMessage(msgNum);
+
+        String from = getFromAddress(m);
+        String subject = m.getSubject();
+        String to = account.getUsername();
+        Date datetime = m.getSentDate();
+        String content = getBody(m);
+
+        DetailMessageVo detailMessageVo = new DetailMessageVo();
+        detailMessageVo.setFrom(from);
+        detailMessageVo.setSubject(subject);
+        detailMessageVo.setTo(to);
+        detailMessageVo.setDatetime(datetime);
+        detailMessageVo.setContent(content);
+
+        folder.close();
+
+        return detailMessageVo;
+    }
+
+    @Override
+    public void deleteMessage(int msgNum, String folderName) {
+
     }
 
 
@@ -77,9 +172,9 @@ public class ImapServiceImpl implements ImapService {
 
             HashMap IAM = new HashMap();
             //带上IMAP ID信息，由key和value组成，例如name，version，vendor，support-email等。
-            IAM.put("name","myname");
-            IAM.put("version","1.0.0");
-            IAM.put("vendor","myclient");
+            IAM.put("name", "myname");
+            IAM.put("version", "1.0.0");
+            IAM.put("vendor", "myclient");
             imapStore.id(IAM);
 
             log.debug("Opened new ImapStore session");
@@ -90,12 +185,10 @@ public class ImapServiceImpl implements ImapService {
     String getBody(Part part) throws MessagingException, IOException {
 
         if (part.isMimeType("text/*")) {
-
             // Part是文本:
             return part.getContent().toString();
         }
         if (part.isMimeType("multipart/*")) {
-
             // Part是一个Multipart对象:
             Multipart multipart = (Multipart) part.getContent();
             // 循环解析每个子Part:
@@ -112,9 +205,27 @@ public class ImapServiceImpl implements ImapService {
         return "";
     }
 
+
+    List<Message> getAllMessagesInFolder(IMAPFolder folder) throws MessagingException {
+        folder.open(Folder.READ_ONLY);
+        Integer end = folder.getMessageCount();
+        Message[] messages = folder.getMessages(1, end);
+
+        return Arrays.asList(messages);
+    }
+
+    String getFromAddress(MimeMessage m) throws MessagingException, UnsupportedEncodingException {
+        Address[] froms = m.getFrom();
+        InternetAddress address = (InternetAddress) froms[0];
+        String personal = address.getPersonal();
+        String from = personal == null ? address.getAddress() : (MimeUtility.decodeText(personal) + " <" + address.getAddress() + ">");
+
+        return from;
+    }
+
     private static Properties initMailProperties(MailSSLSocketFactory mailSSLSocketFactory, String domain) {
         final Properties prop = new Properties();
-        switch (domain){
+        switch (domain) {
             case "gmail.com":
                 prop.put("mail.imap.ssl.enable", true);
                 prop.put("mail.imap.connectiontimeout", 5000);
@@ -141,112 +252,5 @@ public class ImapServiceImpl implements ImapService {
         return prop;
     }
 
-    public List<Folder> getFolders(EmailAccount account) throws MessagingException {
-        IMAPStore store = getImapStore(account);
-        Folder[] f = store.getDefaultFolder().list();
-        List<Folder> res = Arrays.asList(f);
-
-        return res;
-    }
-
-    List<Message> getAllMessagesInFolder(IMAPFolder folder) throws MessagingException {
-        folder.open(Folder.READ_ONLY);
-        Integer end = folder.getMessageCount();
-        Message[] messages = folder.getMessages(1, end);
-
-        return Arrays.asList(messages);
-    }
-
-    String getFromAddress(MimeMessage m) throws MessagingException, UnsupportedEncodingException {
-        Address[] froms = m.getFrom();
-        InternetAddress address = (InternetAddress) froms[0];
-        String personal = address.getPersonal();
-        String from = personal == null ? address.getAddress() : (MimeUtility.decodeText(personal) + " <" + address.getAddress() + ">");
-
-        return from;
-    }
-
-    @Override
-    public List<CheckMessageVo> getDefaultFolderMessages(EmailAccount account, String folderName) throws MessagingException, UnsupportedEncodingException {
-        IMAPStore store = getImapStore(account);
-        Map domainInfo = (Map) domainMap.get(account.getDomain());
-        IMAPFolder folder;
-        switch (folderName){
-            case "inbox":
-                folder = (IMAPFolder) store.getFolder((String) domainInfo.get("inbox"));
-                break;
-            case "draft":
-                folder = (IMAPFolder) store.getFolder((String) domainInfo.get("draft"));
-                break;
-            case "sent":
-                folder = (IMAPFolder) store.getFolder((String) domainInfo.get("sent"));
-                break;
-            case "deleted":
-                folder = (IMAPFolder) store.getFolder((String) domainInfo.get("deleted"));
-                break;
-
-            default:
-                throw new BaseException("非默认文件夹!");
-        }
-
-        List<Message> messages = getAllMessagesInFolder(folder);
-
-        List<CheckMessageVo> checkMessageVos = new ArrayList<>();
-
-        for (Message message: messages){
-            MimeMessage m = (MimeMessage) message;
-
-            String from = getFromAddress(m);
-            String subject = m.getSubject();
-            String fromEmailAccount = account.getUsername();
-            int state = 0;
-            if (message.getFlags().contains(Flags.Flag.SEEN)){
-                state = 1;
-            }
-            Date datetime = message.getSentDate();
-
-            CheckMessageVo temp = new CheckMessageVo();
-            temp.setFrom(from);
-            temp.setSubject(subject);
-            temp.setDatetime(datetime);
-            temp.setFromEmailAccount(fromEmailAccount);
-            temp.setState(state);
-            checkMessageVos.add(temp);
-        }
-        folder.close();
-        store.close();
-
-        return checkMessageVos;
-    }
-
-    @Override
-    public DetailMessageVo getMessageInFolder(EmailAccount account, int msgNum, String folderName) throws MessagingException, IOException {
-        IMAPStore store = getImapStore(account);
-        IMAPFolder folder = (IMAPFolder) store.getFolder(folderName);
-        folder.open(Folder.READ_ONLY);
-        MimeMessage m = (MimeMessage) folder.getMessage(msgNum);
-
-        String from = getFromAddress(m);
-        String subject = m.getSubject();
-        String to = account.getUsername();
-        Date datetime = m.getSentDate();
-        String content = getBody(m);
-
-        DetailMessageVo detailMessageVo = new DetailMessageVo();
-        detailMessageVo.setFrom(from);
-        detailMessageVo.setSubject(subject);
-        detailMessageVo.setTo(to);
-        detailMessageVo.setDatetime(datetime);
-        detailMessageVo.setContent(content);
-
-        folder.close();
-
-        return detailMessageVo;
-    }
-
-    @Override
-    public void deleteMessage(int msgNum, String folderName) {
-
-    }
 
 }

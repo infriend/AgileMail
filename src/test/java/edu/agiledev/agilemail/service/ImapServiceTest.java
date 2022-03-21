@@ -1,5 +1,6 @@
 package edu.agiledev.agilemail.service;
 
+import edu.agiledev.agilemail.config.DefaultFolder;
 import edu.agiledev.agilemail.config.TestConfiguration;
 import edu.agiledev.agilemail.pojo.EmailAccount;
 import edu.agiledev.agilemail.pojo.vo.CheckMessageVo;
@@ -44,7 +45,7 @@ class ImapServiceTest {
     @Test
     void getMessagesInFolder() throws MessagingException, IOException {
         EmailAccount testAccount = testConfig.getTestEmailAccount();
-        List<CheckMessageVo> messages = imapService.getDefaultFolderMessages(testAccount, "inbox");
+        List<CheckMessageVo> messages = imapService.getDefaultFolderMessages(testAccount, DefaultFolder.INBOX);
         for (int i = 0, n = messages.size(); i < n; i++) {
             System.out.println(messages.get(i).getFrom());
         }

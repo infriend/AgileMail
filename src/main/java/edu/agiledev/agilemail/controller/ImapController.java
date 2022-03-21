@@ -1,5 +1,6 @@
 package edu.agiledev.agilemail.controller;
 
+import edu.agiledev.agilemail.config.DefaultFolder;
 import edu.agiledev.agilemail.mappers.AccountMapper;
 import edu.agiledev.agilemail.pojo.EmailAccount;
 import edu.agiledev.agilemail.pojo.R;
@@ -21,7 +22,7 @@ import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 @RestController
-public class ImapController extends RBaseController{
+public class ImapController extends RBaseController {
     @Autowired
     ImapService imapService;
 
@@ -33,8 +34,9 @@ public class ImapController extends RBaseController{
             throws MessagingException, UnsupportedEncodingException {
         Credentials credentials = (Credentials) SecurityContextHolder.getContext().getAuthentication();
         String userId = credentials.getUserId();
-        EmailAccount account = accountMapper.getUserEmailAccount(userId);
-        return success(imapService.getDefaultFolderMessages(account, "inbox"));
+        String emailAddress = emailAddressDto.getEmailAddress();
+        EmailAccount account = accountMapper.getUserEmailAccount(userId, emailAddress);
+        return success(imapService.getDefaultFolderMessages(account, DefaultFolder.INBOX));
     }
 
     @GetMapping("/inbox/detail")
@@ -42,12 +44,13 @@ public class ImapController extends RBaseController{
             throws MessagingException, IOException {
         Credentials credentials = (Credentials) SecurityContextHolder.getContext().getAuthentication();
         String userId = credentials.getUserId();
-        EmailAccount account = accountMapper.getUserEmailAccount(userId);
+        String emailAddress = detailedInboxMessageDto.getEmailAddress();
+        EmailAccount account = accountMapper.getUserEmailAccount(userId, emailAddress);
 
-        String folder = detailedInboxMessageDto.getFolder();
+        String inboxName = detailedInboxMessageDto.getInboxName();
         int msgNum = detailedInboxMessageDto.getMsgNum();
 
-        return success(imapService.getMessageInFolder(account, msgNum, folder));
+        return success(imapService.getMessageInFolder(account, msgNum, inboxName));
     }
 
 }

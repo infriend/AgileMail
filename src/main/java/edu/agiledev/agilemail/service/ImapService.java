@@ -1,6 +1,7 @@
 package edu.agiledev.agilemail.service;
 
 import com.sun.mail.imap.IMAPFolder;
+import edu.agiledev.agilemail.config.DefaultFolder;
 import edu.agiledev.agilemail.pojo.EmailAccount;
 import edu.agiledev.agilemail.pojo.vo.CheckMessageVo;
 import edu.agiledev.agilemail.pojo.vo.DetailMessageVo;
@@ -30,7 +31,7 @@ public interface ImapService {
      * @return
      * @throws MessagingException,UnsupportedEncodingException
      */
-    List<CheckMessageVo> getDefaultFolderMessages(EmailAccount account, String folderName)
+    List<CheckMessageVo> getDefaultFolderMessages(EmailAccount account, DefaultFolder folderName)
             throws MessagingException, UnsupportedEncodingException;
 
     /**

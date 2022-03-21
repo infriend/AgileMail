@@ -6,5 +6,5 @@ import lombok.Data;
 public class DetailedInboxMessageDto {
     private String emailAddress;
     private int msgNum;
-    private String folder;
+    private String inboxName;
 }

@@ -41,7 +41,7 @@ class AccountMapperTest {
         EmailAccount expected = new EmailAccount("sqltest1@test.com", "sqltest", "test.com");
         expected.setId("1529078053739827201");
 
-        EmailAccount res = accountMapper.getUserEmailAccount(userId);
+        EmailAccount res = accountMapper.getUserEmailAccount(userId, "sqltest1@test.com");
         assertThat(res).isEqualTo(expected);
     }
 }

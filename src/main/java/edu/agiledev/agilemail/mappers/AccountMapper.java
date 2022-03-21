@@ -25,7 +25,9 @@ public interface AccountMapper {
 
     int relateAccount(@Param("userId") String userId, @Param("accountId") String accountId);
 
-    EmailAccount getUserEmailAccount(@Param("userId") String userId);
+    EmailAccount getUserFirstEmailAccount(@Param("userId") String userId);
+
+    EmailAccount getUserEmailAccount(@Param("userId") String userId, @Param("emailAddress") String emailAddress);
 
 
 }
