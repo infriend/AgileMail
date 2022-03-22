@@ -1,6 +1,6 @@
 package edu.agiledev.agilemail.mappers;
 
-import edu.agiledev.agilemail.pojo.EmailAccount;
+import edu.agiledev.agilemail.pojo.model.EmailAccount;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

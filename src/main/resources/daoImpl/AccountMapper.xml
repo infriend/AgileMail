@@ -20,7 +20,7 @@
         VALUES (#{userId}, #{accountId});
     </insert>
 
-    <select id="getUserFirstEmailAccount" resultType="edu.agiledev.agilemail.pojo.EmailAccount">
+    <select id="getUserFirstEmailAccount" resultType="edu.agiledev.agilemail.pojo.model.EmailAccount">
         SELECT se.id, se.username, se.password, se.domain
         FROM sys_user_email sue,
              sys_email_account se
@@ -28,7 +28,7 @@
           AND sue.user_id = #{userId} LIMIT 1
     </select>
 
-    <select id="getUserEmailAccount" resultType="edu.agiledev.agilemail.pojo.EmailAccount">
+    <select id="getUserEmailAccount" resultType="edu.agiledev.agilemail.pojo.model.EmailAccount">
         SELECT se.id, se.username, se.password, se.domain
         FROM sys_user_email sue,
              sys_email_account se

@@ -1,6 +1,6 @@
 package edu.agiledev.agilemail.config;
 
-import edu.agiledev.agilemail.pojo.EmailAccount;
+import edu.agiledev.agilemail.pojo.model.EmailAccount;
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;

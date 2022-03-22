@@ -1,6 +1,6 @@
 package edu.agiledev.agilemail.mappers;
 
-import edu.agiledev.agilemail.pojo.EmailAccount;
+import edu.agiledev.agilemail.pojo.model.EmailAccount;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;

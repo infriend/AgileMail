@@ -1,7 +1,7 @@
 package edu.agiledev.agilemail.service;
 
 import edu.agiledev.agilemail.config.TestConfiguration;
-import edu.agiledev.agilemail.pojo.EmailAccount;
+import edu.agiledev.agilemail.pojo.model.EmailAccount;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

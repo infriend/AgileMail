@@ -3,8 +3,8 @@ package edu.agiledev.agilemail.pojo.dto;
 import lombok.Data;
 
 @Data
-public class DetailedInboxMessageDto {
+public class DetailedInboxMessageDTO {
     private String emailAddress;
-    private int msgNum;
-    private String inboxName;
+    private Long msgUID;
+    private String folderId;
 }
