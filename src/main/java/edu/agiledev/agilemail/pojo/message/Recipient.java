@@ -19,7 +19,7 @@ public class Recipient implements Serializable {
 
     private static final long serialVersionUID = -1389623045340754035L;
 
-    private String type;
+    private String type; //To, Cc, Bcc
     private String address;
 
 

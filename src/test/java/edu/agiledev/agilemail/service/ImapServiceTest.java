@@ -1,20 +1,18 @@
 package edu.agiledev.agilemail.service;
 
-import edu.agiledev.agilemail.config.FolderCategory;
 import edu.agiledev.agilemail.config.TestConfiguration;
-import edu.agiledev.agilemail.pojo.message.AFolder;
 import edu.agiledev.agilemail.pojo.model.EmailAccount;
 import edu.agiledev.agilemail.pojo.vo.CheckMessageVo;
 import edu.agiledev.agilemail.pojo.vo.DetailMessageVo;
 import edu.agiledev.agilemail.pojo.vo.FolderVO;
+import edu.agiledev.agilemail.utils.EncodeUtil;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import javax.mail.MessagingException;
-
-import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.Map;
 
 @SpringBootTest
 class ImapServiceTest {
@@ -36,22 +34,36 @@ class ImapServiceTest {
         EmailAccount testAccount = testConfig.getTestEmailAccount();
         List<FolderVO> f = imapService.getFolders(testAccount);
         for (FolderVO fd : f)
-            System.out.println(">> " + fd.getName());
+            System.out.printf(">> %s %s %s %s %s\n", fd.getFolderId(), fd.getName(), fd.getCategory(), fd.getFullURL(), fd.getUid().toString());
     }
 
     @Test
     void getMessagesInFolder() {
         EmailAccount testAccount = testConfig.getTestEmailAccount();
-        List<CheckMessageVo> messages = imapService.getDefaultFolderMessages(testAccount, FolderCategory.INBOX);
-        for (int i = 0, n = messages.size(); i < n; i++) {
-            System.out.println(messages.get(i).getFrom());
+        Map<String, String> folderIdMap = testConfig.getAccountFolderIdMap(testAccount);
+        String inboxId = folderIdMap.get("INBOX");
+        List<CheckMessageVo> messages = imapService.fetchMessagesInFolder(testAccount, EncodeUtil.toUrl(inboxId));
+        for (CheckMessageVo m : messages) {
+            System.out.printf("sub:%s\tdate:%s\tfrom:%s\n", m.getSubject(), dateFormat().format(m.getDatetime()), m.getFrom().get(0));
         }
     }
 
     @Test
-    void getMessage() {
+    void getMessageInFolder() {
         EmailAccount testAccount = testConfig.getTestEmailAccount();
-//        DetailMessageVo m = imapService.getMessageInFolder(testAccount, 1, "INBOX");
-//        System.out.println(m.getFrom());
+        Map<String, String> folderIdMap = testConfig.getAccountFolderIdMap(testAccount);
+        String inboxId = folderIdMap.get("INBOX");
+        List<CheckMessageVo> messages = imapService.fetchMessagesInFolder(testAccount, EncodeUtil.toUrl(inboxId));
+        CheckMessageVo target = messages.get(0);
+        DetailMessageVo m = imapService.getMessageInFolder(testAccount, target.getUid(), EncodeUtil.toUrl(inboxId));
+        System.out.println(m.getContent());
     }
+
+
+    SimpleDateFormat dateFormat() {
+        String pattern = "yyyy-MM-dd HH:mm:ss";
+        return new SimpleDateFormat(pattern);
+    }
+
+
 }

@@ -108,104 +108,138 @@ public class ImapServiceImpl implements ImapService {
     }
 
     @Override
-    public List<CheckMessageVo> getDefaultFolderMessages(EmailAccount account, FolderCategory folderName) {
+    public List<CheckMessageVo> fetchMessagesInFolder(EmailAccount account, URLName folderId) {
+
         IMAPStore store = getImapStore(account);
-        SupportDomain domainInfo = domainMap.get(account.getDomain());
-        IMAPFolder folder;
-        try {
-            switch (folderName) {
-                case INBOX:
-                    folder = (IMAPFolder) store.getFolder(domainInfo.getInbox());
-                    break;
-                case SENT:
-                    folder = (IMAPFolder) store.getFolder(domainInfo.getSent());
-                    break;
-                case DRAFTS:
-                    folder = (IMAPFolder) store.getFolder(domainInfo.getDraft());
-                    break;
-                case TRASH:
-                    folder = (IMAPFolder) store.getFolder(domainInfo.getTrash());
-                    break;
-                case JUNK:
-                    folder = (IMAPFolder) store.getFolder(domainInfo.getJunk());
-                    break;
-
-                default:
-                    throw new BaseException("非默认文件夹!");
-            }
-        } catch (MessagingException e) {
-            throw new BaseException(ReturnCode.IMAP_FOLDER_ERROR, "imap: 文件夹读取失败", e);
-        }
-
-
         List<AMessage> messages;
-        try {
-            messages = getAllMessagesInFolder(folder);
+
+        try (IMAPFolder folder = getFolder(store, folderId)) {
+
+            folder.open(Folder.READ_ONLY);
+            try {
+                messages = getAllMessagesInFolder(folder);
+            } catch (MessagingException e) {
+                throw new BaseException(ReturnCode.IMAP_MESSAGE_ERROR, "imap: 读取邮件失败");
+            }
+
         } catch (MessagingException e) {
-            throw new BaseException(ReturnCode.IMAP_MESSAGE_ERROR, "imap: 邮件读取失败", e);
+            throw new BaseException(ReturnCode.IMAP_MESSAGE_ERROR, String.format("imap: 读取文件夹%s失败", folderId), e);
         }
 
         List<CheckMessageVo> checkMessageVos = new ArrayList<>();
 
         for (AMessage message : messages) {
-            Date datetime = Date.from(message.getReceivedDate().toInstant());
-
-            CheckMessageVo messageVo = new CheckMessageVo();
-            messageVo.setFrom(message.getFrom());
-            messageVo.setReplyTo(message.getReplyTo());
-            messageVo.setRecipients(message.getRecipients());
-            messageVo.setSubject(message.getSubject());
-
-            messageVo.setDatetime(datetime);
-
-            messageVo.setFlagged(message.getFlagged());
-            messageVo.setRecent(message.getRecent());
-            messageVo.setSeen(message.getSeen());
-            messageVo.setDeleted(message.getDeleted());
-
+            CheckMessageVo messageVo = CheckMessageVo.from(message);
             messageVo.setFromEmailAccount(account.getUsername());
             checkMessageVos.add(messageVo);
         }
 
-        try {
-            folder.close();
-            store.close();
-        } catch (MessagingException e) {
-            throw new BaseException(ReturnCode.IMAP_CONNECTION_ERROR, "imap: 连接错误", e);
-        }
-
         return checkMessageVos;
+
+
     }
 
-
     @Override
-    public DetailMessageVo getMessageInFolder(EmailAccount account, Long msgUID, URLName folderId) {
+    public DetailMessageVo getMessageInFolder(EmailAccount account, Long msgUid, URLName folderId) {
+        IMAPStore store = getImapStore(account);
 
-        try {
-            IMAPStore store = getImapStore(account);
-            IMAPFolder folder = (IMAPFolder) store.getFolder(folderId);
+        try (IMAPFolder folder = getFolder(store, folderId)) {
             folder.open(Folder.READ_ONLY);
-            IMAPMessage imapMessage = (IMAPMessage) folder.getMessageByUID(msgUID);
+            IMAPMessage imapMessage = (IMAPMessage) folder.getMessageByUID(msgUid);
 
             if (imapMessage == null) {
-                folder.close();
                 throw new BaseException(ReturnCode.IMAP_MESSAGE_ERROR, "找不到邮件");
             }
 
-            AMessage message = messageReadService.readMessageDetail(folder, imapMessage);
-            DetailMessageVo res = DetailMessageVo.from(message);
-            folder.close();
-            store.close();
-            return res;
-        } catch (MessagingException | IOException e) {
+            try {
+                AMessage message = messageReadService.readMessageDetail(folder, imapMessage);
+                DetailMessageVo res = DetailMessageVo.from(message);
+                return res;
+            } catch (MessagingException | IOException e) {
+                throw new BaseException(ReturnCode.IMAP_MESSAGE_ERROR, String.format("imap: 从文件夹%s中读取邮件失败", folderId));
+            }
+
+        } catch (MessagingException e) {
 //            log.error("Error loading messages for folder: " + folderId.getRef(), e);
-            throw new BaseException(ReturnCode.IMAP_CONNECTION_ERROR, String.format("从文件夹%s中读取邮件时产生错误", folderId), e);
+            throw new BaseException(ReturnCode.IMAP_MESSAGE_ERROR, String.format("imap: 读取文件夹%s失败", folderId), e);
         }
     }
 
-    @Override
-    public void deleteMessage(int msgNum, String folderName) {
+//    @Override
+//    public List<CheckMessageVo> getDefaultFolderMessages(EmailAccount account, FolderCategory folderName) {
+//        IMAPStore store = getImapStore(account);
+//        SupportDomain domainInfo = domainMap.get(account.getDomain());
+//        IMAPFolder folder;
+//        try {
+//            switch (folderName) {
+//                case INBOX:
+//                    folder = (IMAPFolder) store.getFolder(domainInfo.getInbox());
+//                    break;
+//                case SENT:
+//                    folder = (IMAPFolder) store.getFolder(domainInfo.getSent());
+//                    break;
+//                case DRAFTS:
+//                    folder = (IMAPFolder) store.getFolder(domainInfo.getDraft());
+//                    break;
+//                case TRASH:
+//                    folder = (IMAPFolder) store.getFolder(domainInfo.getTrash());
+//                    break;
+//                case JUNK:
+//                    folder = (IMAPFolder) store.getFolder(domainInfo.getJunk());
+//                    break;
+//
+//                default:
+//                    throw new BaseException("非默认文件夹!");
+//            }
+//        } catch (MessagingException e) {
+//            throw new BaseException(ReturnCode.IMAP_FOLDER_ERROR, "imap: 文件夹读取失败", e);
+//        }
+//
+//
+//        List<AMessage> messages;
+//        try {
+//            messages = getAllMessagesInFolder(folder);
+//        } catch (MessagingException e) {
+//            throw new BaseException(ReturnCode.IMAP_MESSAGE_ERROR, "imap: 邮件读取失败", e);
+//        }
+//
+//        List<CheckMessageVo> checkMessageVos = new ArrayList<>();
+//
+//        for (AMessage message : messages) {
+//            CheckMessageVo messageVo = CheckMessageVo.from(message);
+//            messageVo.setFromEmailAccount(account.getUsername());
+//            checkMessageVos.add(messageVo);
+//        }
+//
+//        try {
+//            folder.close();
+//            store.close();
+//        } catch (MessagingException e) {
+//            throw new BaseException(ReturnCode.IMAP_CONNECTION_ERROR, "imap: 连接错误", e);
+//        }
+//
+//        return checkMessageVos;
+//    }
 
+
+    @Override
+    public void deleteMessage(Long msgUid, URLName folderId) {
+
+    }
+
+    /**
+     * 返回存在并且关闭的folder
+     */
+    private IMAPFolder getFolder(IMAPStore store, URLName folderId) {
+        try {
+            IMAPFolder folder = (IMAPFolder) store.getFolder(folderId);
+            if (!folder.exists()) {
+                throw new BaseException(ReturnCode.IMAP_FOLDER_ERROR, "imap: 文件夹不存在");
+            }
+            return folder;
+        } catch (MessagingException e) {
+            throw new BaseException(ReturnCode.IMAP_FOLDER_ERROR, "imap: 文件夹读取失败", e);
+        }
     }
 
     List<AMessage> getAllMessagesInFolder(IMAPFolder folder) throws MessagingException {
@@ -248,7 +282,7 @@ public class ImapServiceImpl implements ImapService {
     }
 
     IMAPStore getImapStore(EmailAccount account) {
-        if (imapStore == null) {
+        if (imapStore == null || !imapStore.isConnected()) {
             try {
                 final Session session = Session.getInstance(initMailProperties(mailSSLSocketFactory, account.getDomain()), null);
                 imapStore = (IMAPStore) session.getStore("imap");

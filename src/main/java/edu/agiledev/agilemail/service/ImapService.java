@@ -18,17 +18,14 @@ public interface ImapService {
      */
     List<FolderVO> getFolders(EmailAccount account);
 
-    /**
-     * Get messages from the email inbox.
-     */
-    List<CheckMessageVo> getDefaultFolderMessages(EmailAccount account, FolderCategory folderName);
+    List<CheckMessageVo> fetchMessagesInFolder(EmailAccount account, URLName folderId);
 
     /**
      * Get certain specific message from the selected folder.
      * TODO: add attachment, pictures.
      */
-    DetailMessageVo getMessageInFolder(EmailAccount account, Long msgUID, URLName folderId);
+    DetailMessageVo getMessageInFolder(EmailAccount account, Long msgUid, URLName folderId);
 
-    void deleteMessage(int msgNum, String folderName);
+    void deleteMessage(Long msgUid, URLName folderId);
 
 }

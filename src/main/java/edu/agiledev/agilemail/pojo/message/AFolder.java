@@ -7,8 +7,6 @@ import edu.agiledev.agilemail.utils.EncodeUtil;
 import lombok.Data;
 
 import javax.mail.MessagingException;
-import javax.mail.URLName;
-import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.stream.Stream;
 
@@ -38,9 +36,9 @@ public class AFolder {
     private String fullURL;
     private Set<String> attributes;
     private int messageCount;
-    private int newMessageCount;
-    private int unreadMessageCount;
-    private int deletedMessageCount;
+    private int recentCount;
+    private int unreadCount;
+    private int deletedCount;
     private AFolder[] children;
 
 
@@ -78,11 +76,11 @@ public class AFolder {
                 if ((mailFolder.getType() & HOLDS_MESSAGES) != 0) {
                     res.setUIDValidity(mailFolder.getUIDValidity());
                     res.setMessageCount(mailFolder.getMessageCount());
-                    res.setNewMessageCount(mailFolder.getNewMessageCount());
-                    res.setUnreadMessageCount(mailFolder.getUnreadMessageCount());
-                    res.setDeletedMessageCount(mailFolder.getDeletedMessageCount());
-                    if (res.getDeletedMessageCount() < 0)
-                        res.setDeletedMessageCount(0);
+                    res.setRecentCount(mailFolder.getNewMessageCount());
+                    res.setUnreadCount(mailFolder.getUnreadMessageCount());
+                    res.setDeletedCount(mailFolder.getDeletedMessageCount());
+                    if (res.getDeletedCount() < 0)
+                        res.setDeletedCount(0);
                 }
                 if (loadChildren && !res.getAttributes().contains(ATTR_HAS_NO_CHILDREN)) {
                     res.setChildren(Stream.of(mailFolder.list())

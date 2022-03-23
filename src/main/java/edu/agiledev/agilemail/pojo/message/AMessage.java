@@ -122,7 +122,7 @@ public class AMessage implements Serializable {
                     if (address instanceof InternetAddress) {
                         final InternetAddress internetAddress = (InternetAddress) address;
                         return internetAddress.getPersonal() == null ? internetAddress.getAddress() :
-                                String.format("\"%s\" <%s>", internetAddress.getPersonal(), internetAddress.getAddress());
+                                String.format("\"%s\"<%s>", internetAddress.getPersonal(), internetAddress.getAddress());
                     } else {
                         return address.toString();
                     }

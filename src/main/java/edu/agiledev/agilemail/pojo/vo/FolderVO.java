@@ -1,14 +1,13 @@
 package edu.agiledev.agilemail.pojo.vo;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import edu.agiledev.agilemail.pojo.message.AFolder;
 import lombok.Data;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
  * 文件夹VO
@@ -26,13 +25,15 @@ public class FolderVO {
     private String category;
     private Long uid;
 
+    @JsonIgnore
     private String fullName;
+    @JsonIgnore
     private String fullURL;
 
-    private int messageCount;
-    private int newMessageCount;
-    private int unreadMessageCount;
-    private int deletedMessageCount;
+    private int total;
+    private int recent;
+    private int unread;
+    private int deleted;
     private List<FolderVO> children;
 
     public static FolderVO from(AFolder folder) {
@@ -44,10 +45,10 @@ public class FolderVO {
         res.setUid(folder.getUIDValidity());
         res.setFullName(folder.getFullName());
         res.setFullURL(folder.getFullURL());
-        res.setMessageCount(folder.getMessageCount());
-        res.setNewMessageCount(folder.getNewMessageCount());
-        res.setUnreadMessageCount(folder.getUnreadMessageCount());
-        res.setDeletedMessageCount(folder.getDeletedMessageCount());
+        res.setTotal(folder.getMessageCount());
+        res.setRecent(folder.getRecentCount());
+        res.setUnread(folder.getUnreadCount());
+        res.setDeleted(folder.getDeletedCount());
 
         res.children = Arrays.stream(folder.getChildren()).map(FolderVO::from).collect(Collectors.toList());
 
