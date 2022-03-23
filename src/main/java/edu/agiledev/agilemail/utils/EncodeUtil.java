@@ -5,7 +5,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 
 /**
- * Description of the class
+ * 编码帮助类
  *
  * @author Nosolution
  * @version 1.0
@@ -14,18 +14,18 @@ import java.util.Base64;
 public class EncodeUtil {
 
     public static String toBase64Id(URLName id) {
-        return encodeId(id.toString());
+        return encode(id.toString());
     }
 
-    public static URLName toId(String base64Id) {
-        return new URLName(decodeId(base64Id));
+    public static URLName toUrl(String base64Id) {
+        return new URLName(decode(base64Id));
     }
 
-    private static String encodeId(String id) {
+    private static String encode(String id) {
         return Base64.getUrlEncoder().encodeToString(id.getBytes(StandardCharsets.UTF_8));
     }
 
-    private static String decodeId(String encodedId) {
+    private static String decode(String encodedId) {
         return new String(Base64.getUrlDecoder().decode(encodedId), StandardCharsets.UTF_8);
     }
 }

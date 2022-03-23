@@ -2,13 +2,12 @@ package edu.agiledev.agilemail.controller;
 
 import edu.agiledev.agilemail.config.FolderCategory;
 import edu.agiledev.agilemail.mappers.AccountMapper;
-import edu.agiledev.agilemail.pojo.message.AFolder;
 import edu.agiledev.agilemail.pojo.model.EmailAccount;
 import edu.agiledev.agilemail.pojo.model.R;
 import edu.agiledev.agilemail.pojo.dto.DetailedInboxMessageDTO;
-import edu.agiledev.agilemail.pojo.dto.EmailAddressDTO;
 import edu.agiledev.agilemail.pojo.vo.CheckMessageVo;
 import edu.agiledev.agilemail.pojo.vo.DetailMessageVo;
+import edu.agiledev.agilemail.pojo.vo.FolderVO;
 import edu.agiledev.agilemail.security.model.Credentials;
 import edu.agiledev.agilemail.service.ImapService;
 import edu.agiledev.agilemail.utils.EncodeUtil;
@@ -19,9 +18,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.mail.MessagingException;
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 @RestController
@@ -31,6 +27,13 @@ public class ImapController extends RBaseController {
 
     @Autowired
     AccountMapper accountMapper;
+
+    @GetMapping("/folder")
+    public R<List<FolderVO>> getFolders(@RequestParam(value = "emailAddress") String emailAddress) {
+        EmailAccount account = getCurrentAccount(emailAddress);
+        List<FolderVO> res = imapService.getFolders(account);
+        return success(res);
+    }
 
     @GetMapping("/inbox/list")
     public R<List<CheckMessageVo>> getInboxList(@RequestParam(value = "emailAddress") String emailAddress) {
@@ -48,7 +51,7 @@ public class ImapController extends RBaseController {
         String folderId = detailedInboxMessageDto.getFolderId();
         Long msgUID = detailedInboxMessageDto.getMsgUID();
 
-        DetailMessageVo res = imapService.getMessageInFolder(account, msgUID, EncodeUtil.toId(folderId));
+        DetailMessageVo res = imapService.getMessageInFolder(account, msgUID, EncodeUtil.toUrl(folderId));
         return success(res);
     }
 

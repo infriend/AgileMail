@@ -15,6 +15,7 @@ import edu.agiledev.agilemail.pojo.model.ReturnCode;
 import edu.agiledev.agilemail.pojo.model.SupportDomain;
 import edu.agiledev.agilemail.pojo.vo.CheckMessageVo;
 import edu.agiledev.agilemail.pojo.vo.DetailMessageVo;
+import edu.agiledev.agilemail.pojo.vo.FolderVO;
 import edu.agiledev.agilemail.service.ImapService;
 import edu.agiledev.agilemail.service.MessageReadService;
 import edu.agiledev.agilemail.utils.MessageUtil;
@@ -86,7 +87,7 @@ public class ImapServiceImpl implements ImapService {
     }
 
     @Override
-    public List<AFolder> getFolders(EmailAccount account) {
+    public List<FolderVO> getFolders(EmailAccount account) {
         IMAPStore store = getImapStore(account);
         SupportDomain domainInfo = domainMap.get(account.getDomain());
         try {
@@ -98,7 +99,9 @@ public class ImapServiceImpl implements ImapService {
                     .collect(Collectors.toList());
             //找出INBOX
             folders.stream().filter(o -> o.getName().contains(domainInfo.getInbox())).forEach(f -> f.setCategory(FolderCategory.INBOX));
-            return folders;
+
+            return folders.stream().map(FolderVO::from).collect(Collectors.toList());
+//            return folders;
         } catch (MessagingException e) {
             throw new BaseException(ReturnCode.IMAP_FOLDER_ERROR, "imap: 读取文件夹失败", e);
         }

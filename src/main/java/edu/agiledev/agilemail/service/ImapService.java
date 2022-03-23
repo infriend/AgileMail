@@ -5,6 +5,7 @@ import edu.agiledev.agilemail.pojo.message.AFolder;
 import edu.agiledev.agilemail.pojo.model.EmailAccount;
 import edu.agiledev.agilemail.pojo.vo.CheckMessageVo;
 import edu.agiledev.agilemail.pojo.vo.DetailMessageVo;
+import edu.agiledev.agilemail.pojo.vo.FolderVO;
 
 import javax.mail.URLName;
 import java.util.List;
@@ -15,7 +16,7 @@ public interface ImapService {
     /**
      * Get all folders of the email account.
      */
-    List<AFolder> getFolders(EmailAccount account);
+    List<FolderVO> getFolders(EmailAccount account);
 
     /**
      * Get messages from the email inbox.
