@@ -1,5 +1,5 @@
 //import * as AxiosLogger from 'axios-logger'
-//只是一个备份文档
+//只是一个旧版api的备份文档
 import axios from 'axios'
 const baseUrl = 'http://localhost:8081'
 //const baseUrl = '172.19.240.244:8081'
