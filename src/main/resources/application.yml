@@ -12,6 +12,8 @@ config:
     credentials:
       expiration: 86400 # 24h
       refresh: 43200 # 12h
+  embedded:
+    imageSize: 51200
 mybatis:
   mapperLocations: classpath:daoImpl/*Mapper.xml
 server:

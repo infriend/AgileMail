@@ -1,6 +1,6 @@
 package edu.agiledev.agilemail.mappers;
 
-import edu.agiledev.agilemail.pojo.EmailAccount;
+import edu.agiledev.agilemail.pojo.model.EmailAccount;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
@@ -25,7 +25,9 @@ public interface AccountMapper {
 
     int relateAccount(@Param("userId") String userId, @Param("accountId") String accountId);
 
-    EmailAccount getUserEmailAccount(@Param("userId") String userId);
+    EmailAccount getUserFirstEmailAccount(@Param("userId") String userId);
+
+    EmailAccount getUserEmailAccount(@Param("userId") String userId, @Param("emailAddress") String emailAddress);
 
 
 }

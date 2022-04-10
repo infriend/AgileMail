@@ -1,6 +1,6 @@
 package edu.agiledev.agilemail.mappers;
 
-import edu.agiledev.agilemail.pojo.EmailAccount;
+import edu.agiledev.agilemail.pojo.model.EmailAccount;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -41,7 +41,7 @@ class AccountMapperTest {
         EmailAccount expected = new EmailAccount("sqltest1@test.com", "sqltest", "test.com");
         expected.setId("1529078053739827201");
 
-        EmailAccount res = accountMapper.getUserEmailAccount(userId);
+        EmailAccount res = accountMapper.getUserEmailAccount(userId, "sqltest1@test.com");
         assertThat(res).isEqualTo(expected);
     }
 }

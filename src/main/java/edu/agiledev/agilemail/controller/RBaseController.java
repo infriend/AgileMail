@@ -1,10 +1,8 @@
 package edu.agiledev.agilemail.controller;
 
 
-import edu.agiledev.agilemail.pojo.R;
-import edu.agiledev.agilemail.pojo.ReturnCode;
-
-import java.util.List;
+import edu.agiledev.agilemail.pojo.model.R;
+import edu.agiledev.agilemail.pojo.model.ReturnCode;
 
 /**
  * Controller base class

@@ -1,7 +1,7 @@
 package edu.agiledev.agilemail.controller;
 
-import edu.agiledev.agilemail.pojo.EmailAccount;
-import edu.agiledev.agilemail.pojo.R;
+import edu.agiledev.agilemail.pojo.model.EmailAccount;
+import edu.agiledev.agilemail.pojo.model.R;
 import edu.agiledev.agilemail.pojo.dto.EmailAccountDTO;
 import edu.agiledev.agilemail.security.TokenProvider;
 import edu.agiledev.agilemail.security.model.Credentials;

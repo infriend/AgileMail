@@ -1,7 +1,5 @@
 package edu.agiledev.agilemail.security;
 
-import edu.agiledev.agilemail.pojo.EmailAccount;
-import edu.agiledev.agilemail.security.model.Credentials;
 import org.springframework.security.core.Authentication;
 
 /**

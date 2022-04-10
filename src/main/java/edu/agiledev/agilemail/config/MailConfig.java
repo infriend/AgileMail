@@ -8,7 +8,7 @@ import org.springframework.mail.javamail.JavaMailSenderImpl;
 import java.util.Properties;
 
 /**
- * Configuration of mail setteings
+ * Configuration of mail settings
  *
  * @author Nosolution
  * @version 1.0
@@ -18,7 +18,7 @@ import java.util.Properties;
 public class MailConfig {
 
     @Bean
-    public JavaMailSender getJavaMailSender(){
+    public JavaMailSender getJavaMailSender() {
         JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
         mailSender.setPort(587);
 

@@ -1,8 +1,8 @@
 package edu.agiledev.agilemail.advice;
 
 import edu.agiledev.agilemail.exception.BaseException;
-import edu.agiledev.agilemail.pojo.R;
-import edu.agiledev.agilemail.pojo.ReturnCode;
+import edu.agiledev.agilemail.pojo.model.R;
+import edu.agiledev.agilemail.pojo.model.ReturnCode;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;

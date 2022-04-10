@@ -1,4 +1,4 @@
-package edu.agiledev.agilemail.pojo;
+package edu.agiledev.agilemail.pojo.model;
 
 /**
  * Return code definition
@@ -13,8 +13,14 @@ public enum ReturnCode {
     SUCCESS(1, "操作成功"),
     ERROR(0, "操作失败"),
 
+    IMAP_ERROR(2000, "imap错误"),
+    IMAP_CONNECTION_ERROR(2001, "imap连接错误"),
+    IMAP_FOLDER_ERROR(2002, "imap文件夹操作错误"),
+    IMAP_MESSAGE_ERROR(2003, "imap邮件操作错误"),
+
     INTERNAL_ERROR(3000, "系统错误"),
-    CHECKING_ERROR(3001, "检查时发生错误");
+    CHECKING_ERROR(3001, "检查时发生错误"),
+    ADDRESS_ERROR(3002, "解析地址时发生错误");
     //TODO：定义其他操作代码
 
 

@@ -1,4 +1,4 @@
-package edu.agiledev.agilemail.pojo;
+package edu.agiledev.agilemail.pojo.model;
 
 import lombok.Getter;
 import lombok.Setter;

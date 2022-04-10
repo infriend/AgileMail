@@ -2,7 +2,7 @@ package edu.agiledev.agilemail.service.impl;
 
 import com.sun.mail.util.MailSSLSocketFactory;
 import edu.agiledev.agilemail.exception.AuthenticationException;
-import edu.agiledev.agilemail.pojo.EmailAccount;
+import edu.agiledev.agilemail.pojo.model.EmailAccount;
 import edu.agiledev.agilemail.service.SmtpService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

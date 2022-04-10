@@ -1,7 +1,7 @@
 package edu.agiledev.agilemail.service;
 
 import edu.agiledev.agilemail.security.model.Credentials;
-import edu.agiledev.agilemail.pojo.EmailAccount;
+import edu.agiledev.agilemail.pojo.model.EmailAccount;
 
 /**
  * Description of interface
