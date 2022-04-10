@@ -10,10 +10,13 @@ import DeletedBox from './mainComponents/DeletedBox';
 import ReadMail from './mainComponents/ReadMail';
 import { Routes, Route,Outlet } from "react-router-dom"
 const ContentMain = ({useraddr,setUseraddr,addrData,setAddrData,boxData,setBoxData,
-    detailData,setDetailData}) => {
+    detailData,setDetailData,folderList,setFolderList}) => {
     if (useraddr === undefined){
         useraddr = localStorage.getItem("userdata")
         }
+    if (folderList === undefined){
+        folderList = localStorage.getItem("folderList")
+    }
     return(
         <>
         <Routes>
@@ -22,6 +25,7 @@ const ContentMain = ({useraddr,setUseraddr,addrData,setAddrData,boxData,setBoxDa
             <Route path='/inbox' element={<Inbox useraddr = {useraddr} setUseraddr = {setUseraddr}
                                                         boxData={boxData} setBoxData={setBoxData}
                                                         detailData={detailData} setDetailData={setDetailData}
+                                                        folderList={folderList} setFolderList = {setFolderList}
                                                          />} />
             <Route path='/addressbook' element={<AddressBook useraddr = {useraddr} setUseraddr = {setUseraddr} 
                                                         addrData={addrData} setAddrData={setAddrData}/>} />
@@ -37,6 +41,7 @@ const ContentMain = ({useraddr,setUseraddr,addrData,setAddrData,boxData,setBoxDa
             <Route path='/readmail' element={<ReadMail useraddr = {useraddr} setUseraddr = {setUseraddr}
                                                         boxData={boxData} setBoxData={setBoxData}
                                                         detailData={detailData} setDetailData={setDetailData}
+                                                        folderList={folderList} setFolderList = {setFolderList}
                                                         />} />
         </Routes>
 

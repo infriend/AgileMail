@@ -1,33 +1,63 @@
-import React from 'react';
+import {React,useCallback} from 'react';
 import { Col, Form, Row, Button,Typography,Card} from '@douyinfe/semi-ui';
 import api from '../../api/api'
-import { useSearchParams } from 'react-router-dom';
-const Readmail = ({useraddr,setUseraddr,boxData,setBoxData,detailData,setDetailData,boxType,setBoxType}) =>{
+import { useSearchParams} from 'react-router-dom';
+const Readmail = ({useraddr,setUseraddr,boxData,setBoxData,detailData,setDetailData,folderList,setFolderList}) =>{
     const { Section, Input } = Form;
     const {Text,Paragraph} = Typography
     useraddr = JSON.parse(localStorage.getItem("userdata"))
+    folderList = JSON.parse(localStorage.getItem("folderList"))
     const [params] = useSearchParams()
-    if(boxData === undefined){
-        api.getInboxList(useraddr,boxData,setBoxData)
+    var data = JSON.parse(localStorage.getItem("mailDetail"))
+    console.log("data"+data)
+    if(data.length === 0 && detailData == undefined){
+        console.log("gengxin")
+        console.log(data)
+        var idlist = params.get('id').split("_")
+        api.getMailDetail(idlist[0],useraddr,idlist[1],setDetailData)
+    }else{
+        console.log("bugengxin")
+        console.log(data)
+        console.log(detailData)
+        if (detailData != undefined)
+            data = detailData
     }
-    if(detailData===undefined){
-        if(boxData === undefined){
-            api.getInboxList(useraddr,boxData,setBoxData)//get，此时boxdata还未刷新
-        }else{
-            var id = params.get('id')-1//通过
-            if(id < 0)
-                id = 0
-            const to = boxData[0].to
-            const subject = boxData[0].subject
-            api.getDetailOfMail(useraddr,id+1,to,subject,setDetailData)
+    //var idlist = params.get('id').split("_")
+    //api.getMailDetail(idlist[0],useraddr,idlist[1],setDetailData)    
+    if(detailData !== undefined){
+        if(data !== detailData){
+            data = detailData
+        }        
+    }
+    console.log(data)
+    const FromText = () =>{
+        let fromlist = []
+        if(data !== undefined){
+            let list = data.from
+            if(list !== undefined){//防止因为异步调用而报错undefined
+                fromlist = list.map((item)=>{
+                    return <><Text><Text style={{ color: 'rgba(var(--semi-green-6), 1)' }} strong>{item}</Text> {`<`}{item}{`>`}</Text></>
+                })
+            }
         }
-
+        return (fromlist)
     }
-    var data =  {
+    const ReceiveText = () => {
+        let tolist = []
+        if(data !== undefined){
+            tolist.push(<><Text style={{ color: 'rgba(var(--semi-purple-7), 1)' }} strong>{data.fromEmailAccount}</Text><Text> {`<`}{data.fromEmailAccount}{`>`}</Text></>)
+            let list = data.recipients
+            if(list !== undefined){//防止因为异步调用而报错undefined
+                if(list !== null){
+                    tolist.push(list.map((item)=>{
+                        <><Text style={{ color: 'rgba(var(--semi-purple-7), 1)' }} strong>{item}</Text><Text> {`<`}{item}{`>`}</Text></>
+                    }))
+                }
+            }
             
+        }
+        return (tolist)
     }
-    if(detailData !== undefined)
-        data = detailData
     return(
         <>
             <div
@@ -45,10 +75,10 @@ const Readmail = ({useraddr,setUseraddr,boxData,setBoxData,detailData,setDetailD
                         labelWidth = 'auto'>
                             <Section text={data.subject}>
                                 <Row gutter={16}>
-                                    <Col span={8}>
+                                    <Col>
                                         <Text strong>发件人：</Text>
-                                        <Text style={{color:'rgba(var(--semi-green-6), 1)'}} strong>{data.from}</Text>
-                                        <Text> {`<`}{data.from}{`>`}</Text>
+                                        <FromText />
+
                                     </Col>
                                 </Row>
                                 <Row gutter={16}>
@@ -58,10 +88,11 @@ const Readmail = ({useraddr,setUseraddr,boxData,setBoxData,detailData,setDetailD
                                     </Col>
                                 </Row>
                                 <Row gutter={16}>
-                                    <Col span={8}>
+                                    <Col>
                                         <Text strong>收件人：</Text>
-                                        <Text style={{color:'rgba(var(--semi-purple-7), 1)'}} strong>{data.to}</Text>
-                                        <Text> {`<`}{data.to}{`>`}</Text>
+                                        {/*<Text style={{color:'rgba(var(--semi-purple-7), 1)'}} strong>{data.fromEmailAccount}</Text>
+                                        <Text> {`<`}{data.fromEmailAccount}{`>`}</Text>*/}
+                                        <ReceiveText/>
                                     </Col>
                                 </Row>
                                 

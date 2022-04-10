@@ -1,28 +1,25 @@
 import React ,{useMemo,useRef,useEffect}from 'react';
 import { Col, Layout, Row,Table, Button,Toast,Dropdown} from '@douyinfe/semi-ui';
 import api from '../../api/api'
-import { useNavigate } from 'react-router-dom';
-import * as dateFns from 'date-fns';
+import { useNavigate,useSearchParams } from 'react-router-dom';
 import { useState } from 'react';
-const Inbox = ({useraddr,setUseraddr,boxData,setBoxData,detailData,setDetailData,boxType,setBoxType}) => {
+const Inbox = ({useraddr,setUseraddr,boxData,setBoxData,detailData,setDetailData,folderList,setFolderList}) => {
     const navigate = useNavigate()
     useraddr = JSON.parse(localStorage.getItem("userdata"))
     const [mailData,setMailData] = useState()
     var all = 0,notRead = 0
+    var bidcurr
+    const [params] = useSearchParams()
     if(boxData == undefined){
-        api.getInboxList(useraddr,boxData,setBoxData)
-        api.getMailData(useraddr,setMailData)//不知道对不对啊
+        bidcurr = params.get('bid')
+        api.getMailList(bidcurr,useraddr,setBoxData)
     }
     else {
         all = boxData.length
-        //api.getMailData(useraddr,setMailData)
-        notRead = mailData.unread
     }
+    folderList = JSON.parse(localStorage.getItem("folderList"))
     const mailOnclick = (id) => {
-        var url = '/main/readmail?id='+id
-        api.getInboxList(useraddr,boxData,setBoxData)
-        setBoxType("inbox")
-        api.getDetailOfMail(useraddr,id,data[id-1].to,data[id-1].subject,setDetailData)
+        var url = '/main/readmail?id='+params.get('bid')+"_"+id
         navigate(url)
     }
     const columns = [
@@ -31,10 +28,10 @@ const Inbox = ({useraddr,setUseraddr,boxData,setBoxData,detailData,setDetailData
             dataIndex: 'from',
             width: 'auto',
             render: (text, record, index) => {
-                var id = record.id
+                var id = record.uid
                 return (
                     <div onClick={()=>mailOnclick(id)}>
-                        {text}
+                        {text[0]}
                     </div>
                 );
             },
@@ -56,7 +53,7 @@ const Inbox = ({useraddr,setUseraddr,boxData,setBoxData,detailData,setDetailData
             dataIndex: 'subject',
             width:450,
             render: (text, record, index) => {
-                var id = record.id
+                var id = record.uid
                 return (
                     <div onClick={()=>mailOnclick(id)}>
                         {text}
@@ -68,7 +65,7 @@ const Inbox = ({useraddr,setUseraddr,boxData,setBoxData,detailData,setDetailData
             title: '收信日期',
             dataIndex: 'datetime',
             render: (text, record, index) => {
-                var id = record.id
+                var id = record.uid
                 return (
                     <div onClick={()=>mailOnclick(id)}>
                         {text}
@@ -81,7 +78,7 @@ const Inbox = ({useraddr,setUseraddr,boxData,setBoxData,detailData,setDetailData
             dataIndex: 'fromEmailAccount',
             width: 'auto',
             render: (text, record, index) => {
-                var id = record.id
+                var id = record.uid
                 return(
                     <div onClick={()=>mailOnclick(id)}>
                         {text}
@@ -103,6 +100,7 @@ const Inbox = ({useraddr,setUseraddr,boxData,setBoxData,detailData,setDetailData
         },
     ];
     const data = boxData
+    console.log(data)
     var selectedobj = {}
     const rowSelection = {
         onSelect: (record, selected) => {
@@ -126,7 +124,7 @@ const Inbox = ({useraddr,setUseraddr,boxData,setBoxData,detailData,setDetailData
         if(issuccess){
             
             for(var i = 0; i < selectedobj.length; i++){
-                api.deletedInboxListPost(useraddr,selectedobj[i])
+                //api.deletedInboxListPost(useraddr,selectedobj[i])
             }
             Toast.success('删除成功')
             //api.getInboxList(useraddr,boxData,setBoxData)
@@ -147,7 +145,7 @@ const Inbox = ({useraddr,setUseraddr,boxData,setBoxData,detailData,setDetailData
                     padding: '16px',
                 }}
             >
-                <Table columns={columns} dataSource={data} rowSelection={rowSelection} pagination={pagination} rowKey="id"/>
+                <Table columns={columns} dataSource={data} rowSelection={rowSelection} pagination={pagination} rowKey="uid"/>
                 <Button type='primary' theme='solid' style={{ width: 100, marginTop: 12, marginRight: 30,marginLeft:30 }}
                 onClick={deleteOnclick}>删除邮件</Button>
                 <Button style={{marginTop: 12,width:100}}>转发</Button>

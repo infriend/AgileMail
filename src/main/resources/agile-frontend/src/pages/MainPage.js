@@ -4,7 +4,7 @@ import '../css/mainpage.css'
 import HeaderMain from '../components/HeaderMain';
 import SidererMain from '../components/SiderMain';
 import ContentMain from '../components/ContentMain';
-
+import api from '../api/api'
 const MainPage = ({useraddr,setUseraddr}) =>{
     const { Header, Footer, Sider, Content } = Layout;
     const [boxData,setBoxData] = useState();
@@ -12,6 +12,13 @@ const MainPage = ({useraddr,setUseraddr}) =>{
         total:'',
         contactList:[]
     });
+    const [folderList, setFolderList] = useState();
+    if(folderList === undefined){
+        api.getFolderList(useraddr,setFolderList)
+
+    }else{
+        //console.log(folderList)
+    }
     const [detailData,setDetailData] = useState();
     //console.log("main:"+useraddr.name)
     useraddr = JSON.parse(localStorage.getItem("userdata"))
@@ -23,7 +30,8 @@ const MainPage = ({useraddr,setUseraddr}) =>{
             <Layout >
                 <Sider style={{ backgroundColor: 'var(--semi-color-bg-1)' }}>
                     <SidererMain useraddr={useraddr} setUseraddr={setUseraddr} addrData={addrData} setAddrData={setAddrData}
-                    boxData={boxData} setBoxData={setBoxData} />    
+                    boxData={boxData} setBoxData={setBoxData} 
+                    folderList={folderList} setFolderList = {setFolderList}/>    
                 </Sider>
                 <Content
                     style={{
@@ -32,6 +40,7 @@ const MainPage = ({useraddr,setUseraddr}) =>{
                 }}>
                     <ContentMain useraddr = {useraddr} setUseraddr = {setUseraddr} addrData={addrData} setAddrData={setAddrData}
                     boxData={boxData} setBoxData={setBoxData} detailData={detailData} setDetailData={setDetailData}
+                    folderList={folderList} setFolderList = {setFolderList}
                     />
                 </Content>
             </Layout>

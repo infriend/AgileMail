@@ -18,7 +18,7 @@ const InitialMain = ({useraddr,setUseraddr}) => {
         else if (time >= 18 && time < 23)
             return "晚上好"
         else
-            return "深夜了"
+            return "夜深了"
     }
     return(
         <><div>

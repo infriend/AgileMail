@@ -1,32 +1,34 @@
 import React ,{useMemo}from 'react';
 import { Col, Layout, Row,Table, Button,Toast} from '@douyinfe/semi-ui';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate,useSearchParams } from 'react-router-dom';
 import api from '../../api/api'
 const DraftBox = ({useraddr,setUseraddr,boxData,setBoxData,detailData,setDetailData}) => {
     const navigate = useNavigate()
     useraddr = JSON.parse(localStorage.getItem("userdata"))
-    var all
+    var all,bidcurr
+    const [params] = useSearchParams()
     if(boxData == undefined){
         all = 0
-        api.getDraftList(useraddr,boxData,setBoxData)
+        bidcurr = params.get('bid')
+        api.getMailList(bidcurr,useraddr,setBoxData)
     }
     else all = boxData.length
-    const mailOnclick = (id) => {
-        var url = '/main/readmail?id='+id
-        api.getDraftList(useraddr,boxData,setBoxData)
-        api.getDetailOfDraft(useraddr,id,data[id-1].to,data[id-1].subject,setDetailData)
+    
+     const mailOnclick= async(id) =>{
+        var url = '/main/readmail?id='+params.get('bid')+"_"+id
+        const sth = await api.getMailDetail(params.get('bid'),useraddr,id,setDetailData)
         navigate(url)
     }
     const columns = [
         {
             title: '收信人',
-            dataIndex: 'to',
+            dataIndex: 'replyTo',
             width: 'auto',
             render: (text, record, index) => {
-                 var id = record.id
+                 var id = record.uid
                 return (
                     <div onClick={()=>mailOnclick(id)}>
-                        {text}
+                        {text[0]}
                     </div>
                 );
             },
@@ -48,7 +50,7 @@ const DraftBox = ({useraddr,setUseraddr,boxData,setBoxData,detailData,setDetailD
             dataIndex: 'subject',
             width:450,
             render: (text, record, index) => {
-                var id = record.id
+                var id = record.uid
                 return (
                     <div onClick={()=>mailOnclick(id)}>
                         {text}
@@ -60,7 +62,7 @@ const DraftBox = ({useraddr,setUseraddr,boxData,setBoxData,detailData,setDetailD
             title: '更新日期',
             dataIndex: 'datetime',
             render: (text, record, index) => {
-                var id = record.id
+                var id = record.uid
                 return (
                     <div onClick={()=>mailOnclick(id)}>
                         {text}
@@ -72,7 +74,7 @@ const DraftBox = ({useraddr,setUseraddr,boxData,setBoxData,detailData,setDetailD
             title: '发信邮箱',
             dataIndex: 'fromEmailAccount',
             render: (text, record, index) => {
-                var id = record.id
+                var id = record.uid
                 return(
                      <div onClick={()=>mailOnclick(id)}>
                         {text}

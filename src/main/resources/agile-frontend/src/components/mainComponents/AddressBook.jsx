@@ -6,7 +6,7 @@ const AddressBook= ({useraddr,setUseraddr,addrData,setAddrData}) => {
     var all
     if(addrData == undefined) {
         all = 0
-        api.getAddrBook(useraddr,addrData,setAddrData)
+        //api.getAddrBook(useraddr,addrData,setAddrData)
         }
     else all = addrData.length
 
@@ -59,10 +59,10 @@ const AddressBook= ({useraddr,setUseraddr,addrData,setAddrData}) => {
         if(issuccess){
             console.log(selectedobj);
             for(var i = 0; i < selectedobj.length; i++){
-                api.deleteAddrListPost(useraddr,selectedobj[i])
+                //api.deleteAddrListPost(useraddr,selectedobj[i])
             }
             Toast.success('删除成功')
-            api.getAddrBook(useraddr,addrData,setAddrData)
+            //api.getAddrBook(useraddr,addrData,setAddrData)
         }
             
         else
