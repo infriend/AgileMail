@@ -1,25 +1,50 @@
 import React ,{useMemo}from 'react';
 import { Col, Layout, Row,Table, Button,Toast} from '@douyinfe/semi-ui';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import api from '../../api/api'
-const AlreadySend = ({useraddr,setUseraddr,boxData,setBoxData}) => {
+const AlreadySend = ({useraddr,setUseraddr,boxData,setBoxData,detailData,setDetailData,folderList,setFolderList}) => {
     const navigate = useNavigate()
     useraddr = JSON.parse(localStorage.getItem("userdata"))
-    var all = 0
+    var all,bidcurr
+    const [params] = useSearchParams()
+    folderList = JSON.parse(localStorage.getItem("folderList"))
+    const findName = (list,bid) =>{
+        let resname
+        for(let obj in list){
+            console.log(list[obj])
+            if(list[obj].children.length !== 0){
+                console.log("children")
+                resname = findName(list[obj].children,bid)
+                if(resname !== undefined)
+                    return resname
+            }
+            if(list[obj].folderId === bid)
+                return list[obj].name
+        }
+        return resname
+    }
+    const boxname = findName(folderList,params.get('bid'))
     if(boxData == undefined){
         all = 0
-        api.getSentList(useraddr,boxData,setBoxData)
+        bidcurr = params.get('bid')
+        api.getMailList(bidcurr,useraddr,setBoxData)
     }
     else all = boxData.length
+    const mailOnclick= async(id) =>{
+        var url = '/main/readmail?id='+params.get('bid')+"_"+id
+        const sth = await api.getMailDetail(params.get('bid'),useraddr,id,setDetailData)
+        navigate(url)
+    }
     const columns = [
         {
             title: '收信人',
-            dataIndex: 'to',
+            dataIndex: 'replyTo',
             width: 'auto',
             render: (text, record, index) => {
+                var id = record.uid
                 return (
-                    <div onClick={() => navigate('/main/readmail')}>
-                        {text}
+                    <div onClick={()=>mailOnclick(id)}>
+                        {text[0]}
                     </div>
                 );
             },
@@ -41,8 +66,9 @@ const AlreadySend = ({useraddr,setUseraddr,boxData,setBoxData}) => {
             dataIndex: 'subject',
             width:450,
             render: (text, record, index) => {
+                var id = record.uid
                 return (
-                    <div onClick={() => navigate('/main/readmail')}>
+                    <div onClick={()=>mailOnclick(id)}>
                         {text}
                     </div>
                 );
@@ -52,8 +78,9 @@ const AlreadySend = ({useraddr,setUseraddr,boxData,setBoxData}) => {
             title: '更新日期',
             dataIndex: 'datetime',
             render: (text, record, index) => {
+                var id = record.uid
                 return (
-                    <div onClick={() => navigate('/main/readmail')}>
+                    <div onClick={()=>mailOnclick(id)}>
                         {text}
                     </div>
                 );
@@ -63,9 +90,10 @@ const AlreadySend = ({useraddr,setUseraddr,boxData,setBoxData}) => {
             title: '发送邮箱',
             dataIndex: 'fromEmailAccount',
             render: (text, record, index) => {
+                var id = record.uid
                 return(
-                    <div onClick={() => navigate('/main/readmail') }>
-                            {text}
+                    <div onClick={()=>mailOnclick(id)}>
+                        {text}
                     </div>
                 )
                 
@@ -109,7 +137,7 @@ const AlreadySend = ({useraddr,setUseraddr,boxData,setBoxData}) => {
             //setBoxData(newdata)
             Toast.success('删除成功')
             api.getSentList(useraddr,boxData,setBoxData)
-            navigate('/main/alreadySent')
+            navigate('/main/alreadySent?='+params.get('bid'))
         }
             
         else
@@ -120,7 +148,7 @@ const AlreadySend = ({useraddr,setUseraddr,boxData,setBoxData}) => {
     }), []);
     return(
         <><div>
-            <h4>已发送，一共{all}封</h4>
+            <h4>{boxname}，一共{all}封</h4>
         </div>
             <div
                 style={{
@@ -130,7 +158,7 @@ const AlreadySend = ({useraddr,setUseraddr,boxData,setBoxData}) => {
                     padding: '16px',
                 }}
             >
-                <Table columns={columns} dataSource={data} rowSelection={rowSelection} pagination={pagination} rowKey="id" />
+                <Table columns={columns} dataSource={data} rowSelection={rowSelection} pagination={pagination} rowKey="uid" />
                 <Button type='primary' theme='solid' style={{ width: 100, marginTop: 12, marginRight: 30,marginLeft:30 }}
                 onClick={deleteOnclick}>删除记录</Button>
                 <Button style={{marginTop: 12,width:100}}>转发</Button>

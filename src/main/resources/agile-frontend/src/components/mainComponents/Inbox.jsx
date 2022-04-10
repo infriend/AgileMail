@@ -6,10 +6,26 @@ import { useState } from 'react';
 const Inbox = ({useraddr,setUseraddr,boxData,setBoxData,detailData,setDetailData,folderList,setFolderList}) => {
     const navigate = useNavigate()
     useraddr = JSON.parse(localStorage.getItem("userdata"))
-    const [mailData,setMailData] = useState()
+    const [params] = useSearchParams()
     var all = 0,notRead = 0
     var bidcurr
-    const [params] = useSearchParams()
+    folderList = JSON.parse(localStorage.getItem("folderList"))
+    const findName = (list,bid) =>{
+        let resname
+        for(let obj in list){
+            console.log(list[obj])
+            if(list[obj].children.length !== 0){
+                console.log("children")
+                resname = findName(list[obj].children,bid)
+                if(resname !== undefined)
+                    return resname
+            }
+            if(list[obj].folderId === bid)
+                return list[obj].name
+        }
+        return resname
+    }
+    const boxname = findName(folderList,params.get('bid'))
     if(boxData == undefined){
         bidcurr = params.get('bid')
         api.getMailList(bidcurr,useraddr,setBoxData)
@@ -17,9 +33,10 @@ const Inbox = ({useraddr,setUseraddr,boxData,setBoxData,detailData,setDetailData
     else {
         all = boxData.length
     }
-    folderList = JSON.parse(localStorage.getItem("folderList"))
-    const mailOnclick = (id) => {
+    
+    const mailOnclick = async(id) => {
         var url = '/main/readmail?id='+params.get('bid')+"_"+id
+        const sth = await api.getMailDetail(params.get('bid'),useraddr,id,setDetailData)
         navigate(url)
     }
     const columns = [
@@ -128,14 +145,14 @@ const Inbox = ({useraddr,setUseraddr,boxData,setBoxData,detailData,setDetailData
             }
             Toast.success('删除成功')
             //api.getInboxList(useraddr,boxData,setBoxData)
-            navigate('/main/inbox')
+            navigate('/main/inbox?='+params.get('bid'))
         }
         else
             Toast.error('删除失败')
     }
     return(
         <><div>
-            <h4>收件箱，一共{all}封，未读{notRead}封</h4>
+            <h4>{boxname}，一共{all}封，未读{notRead}封</h4>
         </div>
             <div
                 style={{

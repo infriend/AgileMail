@@ -29,6 +29,18 @@
       "password": "asdasd",
       "domain": "gmail.com",
       "id": 5
+    },
+    {
+      "emailAddress": "ssss",
+      "password": "asdasd",
+      "domain": "163.com",
+      "id": 6
+    },
+    {
+      "emailAddress": "ssss",
+      "password": "asdasd",
+      "domain": "163.com",
+      "id": 7
     }
   ],
   "folder": [
@@ -78,6 +90,31 @@
           "unread": 6,
           "deleted": 7,
           "children": []
+        },
+        {
+          "folderId": "6",
+          "previousFolderId": "3",
+          "name": "自定义sent2",
+          "category": "SENT",
+          "uid": 5,
+          "message": 34,
+          "recent": 5,
+          "unread": 6,
+          "deleted": 7,
+          "children": [
+            {
+              "folderId": "7",
+              "previousFolderId": "6",
+              "name": "自定义sent3",
+              "category": "SENT",
+              "uid": 5,
+              "message": 34,
+              "recent": 5,
+              "unread": 6,
+              "deleted": 7,
+              "children": []
+            }
+          ]
         }
       ]
     },

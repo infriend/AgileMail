@@ -2,11 +2,29 @@ import React ,{useMemo}from 'react';
 import { Col, Layout, Row,Table, Button,Toast} from '@douyinfe/semi-ui';
 import { useNavigate,useSearchParams } from 'react-router-dom';
 import api from '../../api/api'
-const DraftBox = ({useraddr,setUseraddr,boxData,setBoxData,detailData,setDetailData}) => {
+const DraftBox = ({useraddr,setUseraddr,boxData,setBoxData,detailData,setDetailData,folderList,setFolderList}) => {
     const navigate = useNavigate()
     useraddr = JSON.parse(localStorage.getItem("userdata"))
     var all,bidcurr
     const [params] = useSearchParams()
+
+    folderList = JSON.parse(localStorage.getItem("folderList"))
+    const findName = (list,bid) =>{
+        let resname
+        for(let obj in list){
+            console.log(list[obj])
+            if(list[obj].children.length !== 0){
+                console.log("children")
+                resname = findName(list[obj].children,bid)
+                if(resname !== undefined)
+                    return resname
+            }
+            if(list[obj].folderId === bid)
+                return list[obj].name
+        }
+        return resname
+    }
+    const boxname = findName(folderList,params.get('bid'))
     if(boxData == undefined){
         all = 0
         bidcurr = params.get('bid')
@@ -117,7 +135,7 @@ const DraftBox = ({useraddr,setUseraddr,boxData,setBoxData,detailData,setDetailD
             }
             Toast.success('删除成功')
             api.getDraftList(useraddr,boxData,setBoxData)
-            navigate('/main/draft')
+            navigate('/main/draft?='+params.get('bid'))
         }
             
         else
@@ -128,7 +146,7 @@ const DraftBox = ({useraddr,setUseraddr,boxData,setBoxData,detailData,setDetailD
     }), []);
     return(
         <><div>
-            <h4>草稿箱，一共{all}封</h4>
+            <h4>{boxname}，一共{all}封</h4>
         </div>
             <div
                 style={{
@@ -138,7 +156,7 @@ const DraftBox = ({useraddr,setUseraddr,boxData,setBoxData,detailData,setDetailD
                     padding: '16px',
                 }}
             >
-                <Table columns={columns} dataSource={data} rowSelection={rowSelection} pagination={pagination} rowKey="id" />
+                <Table columns={columns} dataSource={data} rowSelection={rowSelection} pagination={pagination} rowKey="uid" />
                 <Button type='primary' theme='solid' style={{ width: 100, marginTop: 12, marginRight: 30,marginLeft:30 }}
                 onClick={deleteOnclick}>删除草稿</Button>
                 <Button style={{marginTop: 12,width:100}}>转发</Button>

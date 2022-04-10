@@ -15,13 +15,11 @@ const SiderMain = ({useraddr,setUseraddr,addrData,setAddrData,boxData,setBoxData
                 itemKey : target.category+"_"+target.folderId,
                 text : target.name,
                 icon: <IconMailStroked1 size="large" />,
-                //folderid : target.folderId,
             }
         }else{
             return{
                 text :target.name,
-                itemKey : target.category+target.folderId,
-                //folderid : target.folderId,
+                itemKey : target.category+"_"+target.folderId,
                 icon: <IconSetting />,
                 items : target.children.map(turnIntoItem)
             }
@@ -30,28 +28,22 @@ const SiderMain = ({useraddr,setUseraddr,addrData,setAddrData,boxData,setBoxData
     if(folderList === undefined){
         if (localStorage.getItem("folderList") != null){
             folderList = JSON.parse(localStorage.getItem("folderList"))
-            //console.log(1)
         }else
             api.getFolderList(useraddr,setFolderList)
     }else{
-        //console.log(1)
         console.log(folderList)
         itemlist.push(...folderList.map(turnIntoItem))
         let temp = itemlist[1]
         itemlist[1] = itemlist[2]
         itemlist[2] = temp
-        //console.log(2)
         console.log(itemlist)
     }
-
-    //console.log(folderList)
     const siderOnSelect = (data) =>{
         console.log(data)
         let tempaddr = ''
-        if(data.itemKey.indexOf('addressbook') != -1){
+        if(data.itemKey.indexOf('addressbook') != -1){//api还没弄好
             tempaddr = data.itemKey
-            //api.getAddrBook(useraddr,addrData,setAddrData)
-        }else if(data.itemKey === 'writemail'){
+        }else if(data.itemKey === 'writemail'){//api还没弄好
             tempaddr = 'writemail'
         }
         else if(data.itemKey.indexOf('INBOX') != -1){
@@ -62,15 +54,20 @@ const SiderMain = ({useraddr,setUseraddr,addrData,setAddrData,boxData,setBoxData
             let arr = data.itemKey.split("_")
             tempaddr = 'draft?bid='+arr[1]
             api.getMailList(arr[1],useraddr,setBoxData)
-        }else if(data.itemKey === 'SENT'){
-            tempaddr = 'alreadySent'
-            //api.getSentList(useraddr,boxData,setBoxData)
-        }else if(data.itemKey === 'TRASH'){
-            tempaddr = 'deleted'
-            //api.getDeleteList(useraddr,boxData,setBoxData)
-        }else if(data.itemKey === 'OTHER'){
-            tempaddr = 'inbox'
+        }else if(data.itemKey.indexOf('SENT') != -1){
+            let arr = data.itemKey.split("_")
+            tempaddr = 'alreadySent?bid='+arr[1]
+            api.getMailList(arr[1],useraddr,setBoxData)
+        }else if(data.itemKey.indexOf('TRASH') != -1){
+            let arr = data.itemKey.split("_")
+            tempaddr = 'deleted?bid='+arr[1]
+            api.getMailList(arr[1],useraddr,setBoxData)
+        }else if(data.itemKey.indexOf('OTHER') != -1){
+            let arr = data.itemKey.split("_")
+            tempaddr = 'inbox?bid='+arr[1]
+            api.getMailList(arr[1],useraddr,setBoxData)
         }
+        //localStorage.setItem("boxName",data.text)
         navigate('/main/'+tempaddr)
     }
     return(

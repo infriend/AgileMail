@@ -1,4 +1,4 @@
-import React, { useRef, useEffect,useState } from 'react'
+import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import api from '../api/api'
 import { Button, Card ,Row, Col,
@@ -25,22 +25,10 @@ const Login = ({useraddr,setUseraddr}) => {
     };
     const navigate = useNavigate()
     let success = true;//测试用
-    const cardWidth = useRef()
     var t3 = window.innerWidth
     const t1 = t3 *0.18
     const t2 = t3 * 0.12
     console.log(t3)
-    /*useEffect((async)=>{
-        console.log(cardWidth.current.offsetWidth)
-        t3 = cardWidth.current.offsetWidth
-        t1 = cardWidth.current.offsetWidth * 0.6
-        t2 = cardWidth.current.offsetWidth * 0.4
-        console.log(t1 + " "+ t2)
-    },[])
-    if(t3 !== undefined){
-        t1 = t3 *0.6
-        t2 = t3 *0.4
-    }*/
     const loginSubmmit = (values) => {
         console.log(values)
         if(values.mail===undefined){
@@ -95,7 +83,7 @@ const Login = ({useraddr,setUseraddr}) => {
                                 onSubmit={loginSubmmit}>
                                 <Row >
                                     <Col>
-                                    <div ref = {cardWidth}>
+                                    <div>
                                         <Form.InputGroup label={{ text: (<span>用户名</span>), required: true }} labelPosition='top'>
                                             <Form.Input field='username' placeholder='请输入用户名' style={{ width: t1 }} showClear />
                                             <Form.Select field='mail' defaultValue='@gmail.com' style={{ width: t2 }}>

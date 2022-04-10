@@ -31,12 +31,15 @@ const ContentMain = ({useraddr,setUseraddr,addrData,setAddrData,boxData,setBoxDa
                                                         addrData={addrData} setAddrData={setAddrData}/>} />
             <Route path='/draft' element={<DraftBox useraddr = {useraddr} setUseraddr = {setUseraddr}
                                                         boxData={boxData} setBoxData={setBoxData}
+                                                        folderList={folderList} setFolderList = {setFolderList}
                                                         />} />
             <Route path='/alreadysent' element={<AlreadySend useraddr = {useraddr} setUseraddr = {setUseraddr}
                                                         boxData={boxData} setBoxData={setBoxData}
+                                                        folderList={folderList} setFolderList = {setFolderList}
                                                         />} />
             <Route path='/deleted' element={<DeletedBox useraddr = {useraddr} setUseraddr = {setUseraddr}
                                                         boxData={boxData} setBoxData={setBoxData}
+                                                        folderList={folderList} setFolderList = {setFolderList}
                                                          />} />
             <Route path='/readmail' element={<ReadMail useraddr = {useraddr} setUseraddr = {setUseraddr}
                                                         boxData={boxData} setBoxData={setBoxData}
