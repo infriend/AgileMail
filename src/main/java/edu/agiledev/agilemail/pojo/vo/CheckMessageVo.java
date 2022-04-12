@@ -16,7 +16,7 @@ public class CheckMessageVo {
     private List<Recipient> recipients;
     private String subject;
 
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
     private Date datetime;
 
     private boolean flagged;

@@ -18,17 +18,18 @@ public class DetailMessageVo {
     private List<String> replyTo;
     private List<Recipient> recipients;
     private String subject;
-    private ZonedDateTime receivedDate;
+
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
+    private Date datetime;
+
     private Long size;
+    private String content;
+    private List<Attachment> attachments;
+
     private Boolean flagged;
     private Boolean seen;
     private Boolean recent;
     private Boolean deleted;
-    private String content;
-    private List<Attachment> attachments;
-
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private Date datetime;
 
     private String fromEmailAccount;
 

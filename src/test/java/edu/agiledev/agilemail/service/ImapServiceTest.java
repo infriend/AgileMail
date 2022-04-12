@@ -1,7 +1,12 @@
 package edu.agiledev.agilemail.service;
 
+import com.sun.mail.imap.IMAPFolder;
+import com.sun.mail.imap.IMAPStore;
+import edu.agiledev.agilemail.config.FolderCategory;
 import edu.agiledev.agilemail.config.TestConfiguration;
+import edu.agiledev.agilemail.pojo.message.AFolder;
 import edu.agiledev.agilemail.pojo.model.EmailAccount;
+import edu.agiledev.agilemail.pojo.model.SupportDomain;
 import edu.agiledev.agilemail.pojo.vo.CheckMessageVo;
 import edu.agiledev.agilemail.pojo.vo.DetailMessageVo;
 import edu.agiledev.agilemail.pojo.vo.FolderVO;
@@ -11,8 +16,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.text.SimpleDateFormat;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @SpringBootTest
 class ImapServiceTest {
@@ -38,7 +46,7 @@ class ImapServiceTest {
     }
 
     @Test
-    void getMessagesInFolder() {
+    void fetchMessagesInFolder() {
         EmailAccount testAccount = testConfig.getTestEmailAccount();
         Map<String, String> folderIdMap = testConfig.getAccountFolderIdMap(testAccount);
         String inboxId = folderIdMap.get("INBOX");

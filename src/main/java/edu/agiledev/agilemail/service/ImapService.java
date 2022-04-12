@@ -26,6 +26,8 @@ public interface ImapService {
      */
     DetailMessageVo getMessageInFolder(EmailAccount account, Long msgUid, URLName folderId);
 
+    void testNewDomainFolders(EmailAccount account);
+
     void deleteMessage(Long msgUid, URLName folderId);
 
 }

@@ -59,6 +59,7 @@ public class AFolder {
                 res.setFullName(mailFolder.getFullName());
                 res.setFullURL(mailFolder.getURLName().toString());
                 res.setAttributes(new HashSet<>(Arrays.asList(mailFolder.getAttributes())));
+                res.setUIDValidity(mailFolder.getUIDValidity());
 
                 //根据attribute对文件夹类型进行分类
                 Stream.of(FolderCategory.defaultCategory)
@@ -74,7 +75,6 @@ public class AFolder {
 
 
                 if ((mailFolder.getType() & HOLDS_MESSAGES) != 0) {
-                    res.setUIDValidity(mailFolder.getUIDValidity());
                     res.setMessageCount(mailFolder.getMessageCount());
                     res.setRecentCount(mailFolder.getNewMessageCount());
                     res.setUnreadCount(mailFolder.getUnreadMessageCount());
