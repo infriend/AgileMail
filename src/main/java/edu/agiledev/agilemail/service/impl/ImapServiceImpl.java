@@ -68,6 +68,8 @@ public class ImapServiceImpl implements ImapService {
     static {
         SupportDomain _163 = new SupportDomain("INBOX", "已发送", "草稿箱", "已删除", "垃圾箱");
         domainMap.put("163.com", _163);
+        SupportDomain _qq = new SupportDomain("INBOX", "Sent Messages", "Drafts", "Deleted Messages", "Junk");
+        domainMap.put("qq.com", _qq);
     }
 
     @Autowired
@@ -98,7 +100,16 @@ public class ImapServiceImpl implements ImapService {
                     .sorted(Comparator.comparing(AFolder::getName))
                     .collect(Collectors.toList());
             //找出INBOX
-            folders.stream().filter(o -> o.getName().contains(domainInfo.getInbox())).forEach(f -> f.setCategory(FolderCategory.INBOX));
+//            folders.stream().filter(o -> o.getName().contains(domainInfo.getInbox())).forEach(f -> f.setCategory(FolderCategory.INBOX));
+            folders = Stream.concat(folders.stream().filter(o -> o.getUIDValidity() > 0),
+                    folders.stream()
+                            .filter(o -> o.getUIDValidity() <= 0)
+                            .filter(o -> o.getChildren().length > 0)
+                            .flatMap(o -> Stream.of(o.getChildren())))
+                    .collect(Collectors.toList());
+
+            //设置category
+            folders.forEach(o -> setCategory(o, domainInfo));
 
             return folders.stream().map(FolderVO::from).collect(Collectors.toList());
 //            return folders;
@@ -165,61 +176,26 @@ public class ImapServiceImpl implements ImapService {
         }
     }
 
-//    @Override
-//    public List<CheckMessageVo> getDefaultFolderMessages(EmailAccount account, FolderCategory folderName) {
-//        IMAPStore store = getImapStore(account);
-//        SupportDomain domainInfo = domainMap.get(account.getDomain());
-//        IMAPFolder folder;
-//        try {
-//            switch (folderName) {
-//                case INBOX:
-//                    folder = (IMAPFolder) store.getFolder(domainInfo.getInbox());
-//                    break;
-//                case SENT:
-//                    folder = (IMAPFolder) store.getFolder(domainInfo.getSent());
-//                    break;
-//                case DRAFTS:
-//                    folder = (IMAPFolder) store.getFolder(domainInfo.getDraft());
-//                    break;
-//                case TRASH:
-//                    folder = (IMAPFolder) store.getFolder(domainInfo.getTrash());
-//                    break;
-//                case JUNK:
-//                    folder = (IMAPFolder) store.getFolder(domainInfo.getJunk());
-//                    break;
-//
-//                default:
-//                    throw new BaseException("非默认文件夹!");
-//            }
-//        } catch (MessagingException e) {
-//            throw new BaseException(ReturnCode.IMAP_FOLDER_ERROR, "imap: 文件夹读取失败", e);
-//        }
-//
-//
-//        List<AMessage> messages;
-//        try {
-//            messages = getAllMessagesInFolder(folder);
-//        } catch (MessagingException e) {
-//            throw new BaseException(ReturnCode.IMAP_MESSAGE_ERROR, "imap: 邮件读取失败", e);
-//        }
-//
-//        List<CheckMessageVo> checkMessageVos = new ArrayList<>();
-//
-//        for (AMessage message : messages) {
-//            CheckMessageVo messageVo = CheckMessageVo.from(message);
-//            messageVo.setFromEmailAccount(account.getUsername());
-//            checkMessageVos.add(messageVo);
-//        }
-//
-//        try {
-//            folder.close();
-//            store.close();
-//        } catch (MessagingException e) {
-//            throw new BaseException(ReturnCode.IMAP_CONNECTION_ERROR, "imap: 连接错误", e);
-//        }
-//
-//        return checkMessageVos;
-//    }
+    @Override
+    public void testNewDomainFolders(EmailAccount account) {
+        IMAPStore store = getImapStore(account);
+        try {
+            IMAPFolder root = (IMAPFolder) store.getDefaultFolder();
+            List<AFolder> folders = Stream.of(root.list())
+                    .map(IMAPFolder.class::cast)
+                    .map(mf -> AFolder.from(mf, true))
+                    .sorted(Comparator.comparing(AFolder::getName))
+                    .collect(Collectors.toList());
+
+            for (AFolder fd : folders) {
+                log.info((String.format("sub:%s\tdate:%s\tfrom:%s\n", fd.getFolderId(), fd.getName(), fd.getCategory(), fd.getFullURL(), fd.getUIDValidity())));
+            }
+
+//            return folders;
+        } catch (MessagingException e) {
+            throw new BaseException(ReturnCode.IMAP_FOLDER_ERROR, "imap: 读取文件夹失败", e);
+        }
+    }
 
 
     @Override
@@ -376,11 +352,33 @@ public class ImapServiceImpl implements ImapService {
                 prop.setProperty("mail.imap.host", "imap.163.com");
                 prop.setProperty("mail.imap.port", "143");
                 break;
+            case "qq.com":
+                prop.put("mail.imap.ssl.enable", true);
+                prop.setProperty("mail.store.protocol", "imap");
+                prop.setProperty("mail.imap.host", "imap.qq.com");
+                prop.setProperty("mail.imap.port", "993");
+                break;
             default:
                 throw new BaseException("未识别的邮箱！");
         }
 
         return prop;
+    }
+
+    private void setCategory(AFolder folder, SupportDomain domainInfo) {
+        if (folder.getName().equals(domainInfo.getInbox())) {
+            folder.setCategory(FolderCategory.INBOX);
+        } else if (folder.getName().equals(domainInfo.getSent())) {
+            folder.setCategory(FolderCategory.SENT);
+        } else if (folder.getName().equals(domainInfo.getDraft())) {
+            folder.setCategory(FolderCategory.DRAFTS);
+        } else if (folder.getName().equals(domainInfo.getJunk())) {
+            folder.setCategory(FolderCategory.JUNK);
+        } else if (folder.getName().equals(domainInfo.getTrash())) {
+            folder.setCategory(FolderCategory.TRASH);
+        } else {
+            folder.setCategory(FolderCategory.OTHER);
+        }
     }
 
 
