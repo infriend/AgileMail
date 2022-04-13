@@ -90,8 +90,6 @@ const Readmail = ({useraddr,setUseraddr,boxData,setBoxData,detailData,setDetailD
                                 <Row gutter={16}>
                                     <Col>
                                         <Text strong>收件人：</Text>
-                                        {/*<Text style={{color:'rgba(var(--semi-purple-7), 1)'}} strong>{data.fromEmailAccount}</Text>
-                                        <Text> {`<`}{data.fromEmailAccount}{`>`}</Text>*/}
                                         <ReceiveText/>
                                     </Col>
                                 </Row>

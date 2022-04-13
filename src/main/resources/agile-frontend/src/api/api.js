@@ -71,13 +71,13 @@ const getMailList = (folderid,useraddr,setBoxData) => {
         setBoxData(data)
     })
 }
-const getMailDetail = async(folderId, useraddr, messageuid, setDetailData) => {
+const getMailDetail = async(folderid, useraddr, messageuid, setDetailData) => {
     await axios({
         method: 'GET',
         //url: `${baseUrl}/${folderId}/message/${messageuid}`,
         url: `${baseUrl}/testDetail`,
         data: {
-            folderId: folderId,
+            folderId: folderid,
             emailAddress: useraddr.name + "@" + useraddr.addr,
             messageUid: messageuid
         }
@@ -90,9 +90,57 @@ const getMailDetail = async(folderId, useraddr, messageuid, setDetailData) => {
         //setDetailData(data[0]);     
     });
 }
+const putMailIntoTrash = (folderid,useraddr,messageidList) => {
+    axios({
+        method: 'PUT',
+        url:`${folderid}/messages/trash`,
+        data:{
+            folderId : folderid,
+        	emailAddress: useraddr.name + "@" + useraddr.addr,
+	        msgIds: messageidList
+        }
+    }).then(response => {
+        console.log(response.data)
+        //更新folder信息
+        let tempfolderInf = JSON.parse(localStorage.getItem("folderList"))
+        for(let i in tempfolderInf){
+            if(tempfolderInf[i].folderId === response.data.folderId){
+                tempfolderInf[i] = response.data
+                localStorage.setItem("folderList",JSON.stringify(tempfolderInf))
+                break
+            }
+        }
+    })
 
-export default {loginPost,
+}
+const deleteMail = (folderid,useraddr,messageidList) => {
+    axios({
+        method: 'DELETE',
+        url: `${folderid}/messages`,
+        data:{
+            folderId : folderid,
+        	emailAddress: useraddr.name + "@" + useraddr.addr,
+	        msgIds: messageidList
+        }
+    }).then(response => {
+        let tempfolderInf = JSON.parse(localStorage.getItem("folderList"))
+        for(let i in tempfolderInf){
+            if(tempfolderInf[i].folderId === response.data.folderId){
+                tempfolderInf[i] = response.data
+                localStorage.setItem("folderList",JSON.stringify(tempfolderInf))
+                break
+            }
+        }
+
+    })
+}
+
+export default {
+                loginPost,
                 getFolderList,
                 getMailList,
                 setAuthToken,
-                getMailDetail}
+                getMailDetail,
+                putMailIntoTrash,
+                deleteMail
+                }

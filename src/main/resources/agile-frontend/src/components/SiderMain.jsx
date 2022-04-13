@@ -31,12 +31,12 @@ const SiderMain = ({useraddr,setUseraddr,addrData,setAddrData,boxData,setBoxData
         }else
             api.getFolderList(useraddr,setFolderList)
     }else{
-        console.log(folderList)
+        //console.log(folderList)
         itemlist.push(...folderList.map(turnIntoItem))
         let temp = itemlist[1]
         itemlist[1] = itemlist[2]
         itemlist[2] = temp
-        console.log(itemlist)
+        //console.log(itemlist)
     }
     const siderOnSelect = (data) =>{
         console.log(data)

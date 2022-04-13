@@ -7,15 +7,15 @@ const Inbox = ({useraddr,setUseraddr,boxData,setBoxData,detailData,setDetailData
     const navigate = useNavigate()
     useraddr = JSON.parse(localStorage.getItem("userdata"))
     const [params] = useSearchParams()
-    var all = 0,notRead = 0
+    var all = 0,notRead = 0,recent = 0
     var bidcurr
     folderList = JSON.parse(localStorage.getItem("folderList"))
     const findName = (list,bid) =>{
         let resname
         for(let obj in list){
-            console.log(list[obj])
+            //console.log(list[obj])
             if(list[obj].children.length !== 0){
-                console.log("children")
+                //console.log("children")
                 resname = findName(list[obj].children,bid)
                 if(resname !== undefined)
                     return resname
@@ -25,13 +25,36 @@ const Inbox = ({useraddr,setUseraddr,boxData,setBoxData,detailData,setDetailData
         }
         return resname
     }
+    const findInf = (list,bid) => {
+        let ans
+        for(let i in list){
+            if(list[i].children.length !== 0){
+                ans = findInf(list[i].children,bid)
+                if(ans !== undefined)
+                    return ans
+            }
+            if(list[i].folderId === bid){
+                return {
+                    all : list[i].message,
+                    notread : list[i].unread,
+                    recent: list[i].recent
+                }
+            }
+                
+        }
+        return ans
+    }
     const boxname = findName(folderList,params.get('bid'))
     if(boxData == undefined){
         bidcurr = params.get('bid')
         api.getMailList(bidcurr,useraddr,setBoxData)
     }
     else {
-        all = boxData.length
+        let ans = findInf(folderList,params.get('bid'))
+        all = ans.all
+        recent = ans.recent
+        notRead = ans.notread
+
     }
     
     const mailOnclick = async(id) => {
@@ -117,17 +140,17 @@ const Inbox = ({useraddr,setUseraddr,boxData,setBoxData,detailData,setDetailData
         },
     ];
     const data = boxData
-    console.log(data)
+    //console.log(data)
     var selectedobj = {}
     const rowSelection = {
         onSelect: (record, selected) => {
-            console.log(`select row: ${selected}`, record);
+            //console.log(`select row: ${selected}`, record);
         },
         onSelectAll: (selected, selectedRows) => {
-            console.log(`select all rows: ${selected}`, selectedRows);
+            //console.log(`select all rows: ${selected}`, selectedRows);
         },
         onChange: (selectedRowKeys, selectedRows) => {
-            console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
+            //console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
             selectedobj = selectedRows
             //console.log(selectedobj)
         },
@@ -136,23 +159,26 @@ const Inbox = ({useraddr,setUseraddr,boxData,setBoxData,detailData,setDetailData
         pageSize: 7
     }), []);
     const deleteOnclick = ()=> {
-        var issuccess = true//test
-        let newdata = boxData
-        if(issuccess){
-            
-            for(var i = 0; i < selectedobj.length; i++){
-                //api.deletedInboxListPost(useraddr,selectedobj[i])
+        if(selectedobj.length === undefined){
+            Toast.error('删除列表为空！')
+        }else{
+            let maillist = selectedobj.map(target => {
+            return target.uid
+            })
+            if(maillist.length === 0){
+            Toast.error('删除列表为空！')
+            }else{
+                console.log(maillist)
+                api.putMailIntoTrash(params.get('bid'),useraddr,maillist)
+                Toast.success('删除成功')
+                navigate('/main/inbox?='+params.get('bid'))
+                //navigate('/main/')
             }
-            Toast.success('删除成功')
-            //api.getInboxList(useraddr,boxData,setBoxData)
-            navigate('/main/inbox?='+params.get('bid'))
-        }
-        else
-            Toast.error('删除失败')
+        }       
     }
     return(
         <><div>
-            <h4>{boxname}，一共{all}封，未读{notRead}封</h4>
+            <h4>{boxname}，一共{all}封，新邮件{recent}封，未读{notRead}封</h4>
         </div>
             <div
                 style={{

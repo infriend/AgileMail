@@ -23,13 +23,28 @@ const AlreadySend = ({useraddr,setUseraddr,boxData,setBoxData,detailData,setDeta
         }
         return resname
     }
+    const findInf = (list,bid) => {
+        let ans
+        for(let i in list){
+            if(list[i].children.length !== 0){
+                ans = findInf(list[i].children,bid)
+                if(ans !== undefined)
+                    return ans
+            }
+            if(list[i].folderId === bid)
+                return list[i].message
+        }
+        return ans
+    }
     const boxname = findName(folderList,params.get('bid'))
     if(boxData == undefined){
         all = 0
         bidcurr = params.get('bid')
         api.getMailList(bidcurr,useraddr,setBoxData)
     }
-    else all = boxData.length
+    else {
+        all = findInf(folderList,params.get('bid'))
+    }
     const mailOnclick= async(id) =>{
         var url = '/main/readmail?id='+params.get('bid')+"_"+id
         const sth = await api.getMailDetail(params.get('bid'),useraddr,id,setDetailData)
@@ -126,22 +141,22 @@ const AlreadySend = ({useraddr,setUseraddr,boxData,setBoxData,detailData,setDeta
         },
     };
     const deleteOnclick = ()=> {
-        var issuccess = true//test
-        //let newdata = boxData
-        if(issuccess){
-            console.log(selectedobj);
-            for(var i = 0; i < selectedobj.length; i++){
-                api.deletedSentListPost(useraddr,selectedobj[i])
-                //newdata.splice(i)
+        if(selectedobj.length === undefined){
+            Toast.error('删除列表为空！')
+        }else{
+            let maillist = selectedobj.map(target => {
+            return target.uid
+            })
+            if(maillist.length === 0){
+            Toast.error('删除列表为空！')
+            }else{
+                console.log(maillist)
+                api.putMailIntoTrash(params.get('bid'),useraddr,maillist)
+                Toast.success('删除成功')
+                navigate('/main/inbox?='+params.get('bid'))
+                //navigate('/main/')
             }
-            //setBoxData(newdata)
-            Toast.success('删除成功')
-            api.getSentList(useraddr,boxData,setBoxData)
-            navigate('/main/alreadySent?='+params.get('bid'))
-        }
-            
-        else
-            Toast.error('删除失败')
+        }       
     }
     const pagination = useMemo(() => ({
         pageSize: 7

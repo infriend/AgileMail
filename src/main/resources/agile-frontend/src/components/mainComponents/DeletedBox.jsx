@@ -5,7 +5,7 @@ import api from '../../api/api'
 const DeletedBox = ({useraddr,setUseraddr,boxData,setBoxData,detailData,setDetailData,folderList,setFolderList}) => {
     const navigate = useNavigate()
     useraddr = JSON.parse(localStorage.getItem("userdata"))
-    var all = 0,notRead = 0
+    var all = 0
     var bidcurr
     const [params] = useSearchParams()
     folderList = JSON.parse(localStorage.getItem("folderList"))
@@ -24,13 +24,32 @@ const DeletedBox = ({useraddr,setUseraddr,boxData,setBoxData,detailData,setDetai
         }
         return resname
     }
+    const findInf = (list,bid) => {
+        let ans
+        for(let i in list){
+            if(list[i].children.length !== 0){
+                ans = findInf(list[i].children,bid)
+                if(ans !== undefined)
+                    return ans
+            }
+            if(list[i].folderId === bid)
+                return list[i].message
+        }
+        return ans
+    }
     const boxname = findName(folderList,params.get('bid'))
     if(boxData == undefined){
         bidcurr = params.get('bid')
         api.getMailList(bidcurr,useraddr,setBoxData)
     }
     else {
-        all = boxData.length
+        all = findInf(folderList,params.get('bid'))
+        /*let id = params.get('bid')
+        for(let obj in folderList){
+            if(folderList[obj].folderId === id){
+                all = folderList[obj].message
+            }
+        }*/
     }
     const mailOnclick = async(id) => {
         var url = '/main/readmail?id='+params.get('bid')+"_"+id
@@ -132,19 +151,22 @@ const DeletedBox = ({useraddr,setUseraddr,boxData,setBoxData,detailData,setDetai
         pageSize: 7
     }), []);
     const onconfirm = () => {
-        var issuccess = true//test
-        if(issuccess){
-            console.log(selectedobj);
-            for(var i = 0; i < selectedobj.length; i++){
-                //api.deletedTotoallyListPost(useraddr,selectedobj[i])
+        if(selectedobj.length === undefined){
+            Toast.error('删除列表为空！')
+        }else{
+            let maillist = selectedobj.map(target => {
+            return target.uid
+            })
+            if(maillist.length === 0){
+            Toast.error('删除列表为空！')
+            }else{
+                console.log(maillist)
+                api.deleteMail(params.get('bid'),useraddr,maillist)
+                Toast.success('删除成功')
+                navigate('/main/deleted?='+params.get('bid'))
+                //navigate('/main/')
             }
-            Toast.success('彻底删除')
-            //api.getDeleteList(useraddr,boxData,setBoxData)
-            navigate('/main/deleted')
-        }
-            
-        else
-            Toast.error('删除失败')
+        } 
     }
     return(
         <><div>
