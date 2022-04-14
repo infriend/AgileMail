@@ -14,7 +14,8 @@ import java.io.IOException;
  * @version 1.0
  * @since 2022/3/22
  */
-public interface MessageReadService {
+public interface ReadDetailService {
+
 
     /**
      * 从给定{@link IMAPMessage}中读取邮件详情，映射到{@link AMessage}中，包括读取content

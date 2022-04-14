@@ -2,10 +2,9 @@ package edu.agiledev.agilemail.service.impl;
 
 import com.sun.mail.imap.IMAPFolder;
 import com.sun.mail.imap.IMAPMessage;
-import com.sun.mail.util.MailSSLSocketFactory;
 import edu.agiledev.agilemail.pojo.message.AMessage;
 import edu.agiledev.agilemail.pojo.message.Attachment;
-import edu.agiledev.agilemail.service.MessageReadService;
+import edu.agiledev.agilemail.service.ReadDetailService;
 import edu.agiledev.agilemail.utils.MessageUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +23,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static edu.agiledev.agilemail.utils.MessageUtil.MULTIPART_MIME_TYPE;
-import static javax.mail.Folder.READ_ONLY;
 
 /**
  * Description of the class
@@ -35,12 +33,12 @@ import static javax.mail.Folder.READ_ONLY;
  */
 @Service
 @Slf4j
-public class MessageReadServiceImpl implements MessageReadService {
+public class ReadDetailServiceImpl implements ReadDetailService {
 
     private final Long embeddedImageSize;
 
     @Autowired
-    public MessageReadServiceImpl(@Value("${config.embedded.imageSize}") Long embeddedImageSize) {
+    public ReadDetailServiceImpl(@Value("${config.embedded.imageSize}") Long embeddedImageSize) {
         this.embeddedImageSize = embeddedImageSize;
     }
 
