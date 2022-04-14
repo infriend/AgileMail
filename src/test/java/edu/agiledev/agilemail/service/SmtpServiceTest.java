@@ -21,4 +21,16 @@ class SmtpServiceTest {
         EmailAccount testAccount = testConfig.getTestEmailAccount();
         smtpService.checkAccount(testAccount);
     }
+
+    @Test
+    void sendmail() {
+        smtpService.sendMessage(
+                "stalker01@163.com",
+                "testmessage",
+                "This is a test message!",
+                "infriendliu@gmail.com",
+                "stive0118@sina.com",
+                "695520903@qq.com"
+        );
+    }
 }

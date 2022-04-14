@@ -16,4 +16,6 @@ public interface AccountService {
 
     //向数据库中注册新用户
     Credentials registerUser(EmailAccount account);
+
+    //
 }
