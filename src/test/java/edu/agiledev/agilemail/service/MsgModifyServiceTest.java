@@ -15,7 +15,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.assertj.core.api.Assertions.*;
 
 @SpringBootTest
@@ -44,11 +43,11 @@ class MsgModifyServiceTest {
 
         msgModifyService.setMessagesSeen(testAccount, EncodeUtil.toUrl(inboxId), Arrays.asList(target.getUid()), reverse);
 
-        DetailMessageVo targetDetail = msgReadService.getMessageInFolder(testAccount, target.getUid(), EncodeUtil.toUrl(inboxId));
+        DetailMessageVo targetDetail = msgReadService.readMessage(testAccount, target.getUid(), EncodeUtil.toUrl(inboxId));
         assertThat(targetDetail.getSeen()).isEqualTo(reverse);
 
         msgModifyService.setMessagesSeen(testAccount, EncodeUtil.toUrl(inboxId), Arrays.asList(target.getUid()), !reverse);
-        targetDetail = msgReadService.getMessageInFolder(testAccount, target.getUid(), EncodeUtil.toUrl(inboxId));
+        targetDetail = msgReadService.readMessage(testAccount, target.getUid(), EncodeUtil.toUrl(inboxId));
         assertThat(targetDetail.getSeen()).isEqualTo(!reverse);
 
     }
@@ -66,11 +65,11 @@ class MsgModifyServiceTest {
 
         msgModifyService.setMessagesFlagged(testAccount, EncodeUtil.toUrl(inboxId), Arrays.asList(target.getUid()), reverse);
 
-        DetailMessageVo targetDetail = msgReadService.getMessageInFolder(testAccount, target.getUid(), EncodeUtil.toUrl(inboxId));
+        DetailMessageVo targetDetail = msgReadService.readMessage(testAccount, target.getUid(), EncodeUtil.toUrl(inboxId));
         assertThat(targetDetail.getFlagged()).isEqualTo(reverse);
 
         msgModifyService.setMessagesFlagged(testAccount, EncodeUtil.toUrl(inboxId), Arrays.asList(target.getUid()), !reverse);
-        targetDetail = msgReadService.getMessageInFolder(testAccount, target.getUid(), EncodeUtil.toUrl(inboxId));
+        targetDetail = msgReadService.readMessage(testAccount, target.getUid(), EncodeUtil.toUrl(inboxId));
         assertThat(targetDetail.getFlagged()).isEqualTo(!reverse);
 
     }

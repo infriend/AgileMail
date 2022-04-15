@@ -49,14 +49,13 @@ class MsgReadServiceTest {
         String inboxId = folderIdMap.get("INBOX");
         List<CheckMessageVo> messages = msgReadService.fetchMessagesInFolder(testAccount, EncodeUtil.toUrl(inboxId));
         CheckMessageVo target = messages.get(0);
-        DetailMessageVo m = msgReadService.getMessageInFolder(testAccount, target.getUid(), EncodeUtil.toUrl(inboxId));
+        DetailMessageVo m = msgReadService.readMessage(testAccount, target.getUid(), EncodeUtil.toUrl(inboxId));
         System.out.println(m.getContent());
     }
+
 
     SimpleDateFormat dateFormat() {
         String pattern = "yyyy-MM-dd HH:mm:ss";
         return new SimpleDateFormat(pattern);
     }
-
-
 }

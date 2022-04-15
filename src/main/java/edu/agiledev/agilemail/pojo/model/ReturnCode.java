@@ -20,6 +20,7 @@ public enum ReturnCode {
     ATTACHMENT_NOT_FOUND(2004, "找不到附件"),
     MOVE_MESSAGE_ERROR(2005, "移动邮件时发生错误"),
     DELETE_MESSAGE_ERROR(2005, "删除邮件时发生错误"),
+    DOWNLOAD_MESSAGE_ERROR(2006, "下载邮件时发生错误"),
 
     INTERNAL_ERROR(3000, "系统错误"),
     CHECKING_ERROR(3001, "检查时发生错误"),

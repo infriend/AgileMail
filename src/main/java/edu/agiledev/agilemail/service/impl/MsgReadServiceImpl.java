@@ -25,6 +25,8 @@ import javax.mail.*;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -91,7 +93,7 @@ public class MsgReadServiceImpl implements MsgReadService {
 
 
     @Override
-    public DetailMessageVo getMessageInFolder(EmailAccount account, Long msgUid, URLName folderId) {
+    public DetailMessageVo readMessage(EmailAccount account, Long msgUid, URLName folderId) {
         IMAPStore store = imapService.getImapStore(account);
 
         try (IMAPFolder folder = imapService.getFolder(store, folderId)) {
@@ -139,9 +141,26 @@ public class MsgReadServiceImpl implements MsgReadService {
             } else {
                 throw new BaseException(ReturnCode.ATTACHMENT_NOT_FOUND, "找不到附件");
             }
-        } catch (MessagingException | IOException ex) {
-            log.error("Error loading messages for folder: " + folderId, ex);
-            throw new BaseException(ReturnCode.IMAP_MESSAGE_ERROR, "获取附件时出错");
+        } catch (MessagingException | IOException e) {
+            throw new BaseException(ReturnCode.IMAP_MESSAGE_ERROR, "获取附件时出错", e);
+        }
+    }
+
+    @Override
+    public String downloadMessage(EmailAccount account, URLName folderId, Long msgUid, OutputStream outputStream) {
+        IMAPStore store = imapService.getImapStore(account);
+
+        try (final IMAPFolder folder = imapService.getFolder(store, folderId)) {
+            if (!folder.isOpen()) {
+                folder.open(READ_ONLY);
+            }
+            final IMAPMessage imapMessage = (IMAPMessage) folder.getMessageByUID(msgUid);
+            imapMessage.writeTo(outputStream);
+            String subject = imapMessage.getSubject();
+            return String.format("attachment; filename=%s.eml", URLEncoder.encode(subject.length() <= 10 ? subject : subject.substring(0, 10), "UTF-8"));
+
+        } catch (MessagingException | IOException e) {
+            throw new BaseException(ReturnCode.DOWNLOAD_MESSAGE_ERROR, "下载邮件时出错", e);
         }
     }
 

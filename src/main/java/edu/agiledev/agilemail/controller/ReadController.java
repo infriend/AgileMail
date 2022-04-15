@@ -12,12 +12,11 @@ import edu.agiledev.agilemail.service.MsgReadService;
 import edu.agiledev.agilemail.utils.EncodeUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.mail.BodyPart;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.net.URLEncoder;
 import java.util.List;
 
 @RestController
@@ -51,7 +50,7 @@ public class ReadController extends RBaseController {
                                                @RequestBody String emailAddress) {
 
         EmailAccount account = getCurrentAccount(emailAddress);
-        DetailMessageVo res = msgReadService.getMessageInFolder(account, messageUid, EncodeUtil.toUrl(folderId));
+        DetailMessageVo res = msgReadService.readMessage(account, messageUid, EncodeUtil.toUrl(folderId));
         return success(res);
     }
 
@@ -74,6 +73,22 @@ public class ReadController extends RBaseController {
         }
 
         return success(null);
+    }
+
+    @GetMapping(path = "/{folderId}/messages/{messageUid}/download", produces = "message/rfc822")
+    public R<String> downloadMessage(
+            @PathVariable("folderId") String folderId,
+            @PathVariable("messageUid") Long messageUid,
+            @RequestParam("emailAddress") String emailAddress,
+            HttpServletResponse response) {
+        EmailAccount account = getCurrentAccount(emailAddress);
+        try {
+            String contentDisposition = msgReadService.downloadMessage(account, EncodeUtil.toUrl(folderId), messageUid, response.getOutputStream());
+            response.setHeader("Content-Disposition", contentDisposition);
+        } catch (IOException e) {
+            throw new BaseException(ReturnCode.IO_ERROR, "写入response时发生错误");
+        }
+        return success();
     }
 
 

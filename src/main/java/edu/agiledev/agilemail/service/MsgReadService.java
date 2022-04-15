@@ -21,19 +21,27 @@ import java.util.List;
 public interface MsgReadService {
 
     /**
-     * Get all folders of the email account.
+     * 获取账户下所有的文件夹
      */
     List<FolderVO> getFolders(EmailAccount account);
 
+    /**
+     * 读取文件夹中的邮件信息
+     */
     List<CheckMessageVo> fetchMessagesInFolder(EmailAccount account, URLName folderId);
 
     /**
-     * Get certain specific message from the selected folder.
+     * 读取邮件详细信息
      */
-    DetailMessageVo getMessageInFolder(EmailAccount account, Long msgUid, URLName folderId);
+    DetailMessageVo readMessage(EmailAccount account, Long msgUid, URLName folderId);
 
     /**
      * 读取邮件附件，写入输出流中，返回contentType
      */
     String readAttachment(EmailAccount account, URLName folderId, Long msgUid, String aid, boolean isContentId, OutputStream outputStream);
+
+    /**
+     * 下载邮件，返回用于response的Content-Disposition header
+     */
+    String downloadMessage(EmailAccount account, URLName folderId, Long msgUid, OutputStream outputStream);
 }
