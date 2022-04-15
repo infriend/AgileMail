@@ -8,7 +8,7 @@ import javax.mail.MessagingException;
 import java.io.IOException;
 
 /**
- * Description of the class
+ * 读取邮件详情的服务接口，附件相关
  *
  * @author Nosolution
  * @version 1.0

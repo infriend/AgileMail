@@ -19,7 +19,7 @@ import java.util.List;
 
 
 /**
- * Account controller
+ * 账户相关请求Controller
  *
  * @author Nosolution
  * @version 1.0

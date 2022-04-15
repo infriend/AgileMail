@@ -67,6 +67,7 @@ public class AccountServiceImpl implements AccountService {
 
 
     public void checkAccount(EmailAccount account) {
+        //异步检查，提高速度
         Runnable imapCheckR = () -> imapService.checkAccount(account);
         Future imapCheckF = checkExecutor.submit(imapCheckR);
         Runnable smtpCheckR = () -> smtpService.checkAccount(account);
@@ -75,8 +76,6 @@ public class AccountServiceImpl implements AccountService {
 
         try {
             checkHost(account);
-//            imapService.checkAccount(account);
-//            smtpService.checkAccount(account);
             imapCheckF.get();
             smtpCheckF.get();
         } catch (AuthenticationException e) {

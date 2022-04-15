@@ -12,7 +12,7 @@ import java.io.OutputStream;
 import java.util.List;
 
 /**
- * 邮件读取服务类
+ * 邮件读取服务接口
  *
  * @author Nosolution
  * @version 1.0

@@ -11,7 +11,7 @@ package edu.agiledev.agilemail.config;
 public enum FolderCategory {
     INBOX("INBOX"), SENT("\\Sent"), DRAFTS("\\Drafts"), TRASH("\\Trash"), JUNK("\\Junk"), OTHER("Other");
 
-    private String label;
+    private final String label;
 
     public String getLabel() {
         return label;

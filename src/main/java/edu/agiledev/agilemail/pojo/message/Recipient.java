@@ -7,7 +7,7 @@ import lombok.Data;
 import java.io.Serializable;
 
 /**
- * Message recipient
+ * 邮件收件人模型
  *
  * @author Nosolution
  * @version 1.0

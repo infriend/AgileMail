@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 /**
- * 邮件操作Controller
+ * 邮件操作请求Controller
  *
  * @author Nosolution
  * @version 1.0

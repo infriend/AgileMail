@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Configuration of global variables
+ * 全局变量配置器
  *
  * @author Nosolution
  * @version 1.0

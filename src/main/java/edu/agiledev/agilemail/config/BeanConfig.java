@@ -36,7 +36,11 @@ import java.util.Map;
 import java.util.Properties;
 
 /**
- * Created by Marc Nuri <marc@marcnuri.com> on 2018-10-10.
+ * bean配置器
+ *
+ * @author Nosolution
+ * @version 1.0
+ * @since 2022/2/7
  */
 @Configuration
 public class BeanConfig {
@@ -82,7 +86,7 @@ public class BeanConfig {
     }
 
     @Bean
-    public Map<String, Properties> getSmtpProperties(){
+    public Map<String, Properties> getSmtpProperties() {
         Map<String, Properties> domainMap = new HashMap();
 
         Properties _163 = new Properties();

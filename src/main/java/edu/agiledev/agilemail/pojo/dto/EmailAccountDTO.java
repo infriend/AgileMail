@@ -3,7 +3,7 @@ package edu.agiledev.agilemail.pojo.dto;
 import lombok.Data;
 
 /**
- * 邮箱登录VO
+ * 邮箱登录DTO
  *
  * @author Nosolution
  * @version 1.0

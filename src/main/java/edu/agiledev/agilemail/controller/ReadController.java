@@ -19,6 +19,13 @@ import java.io.IOException;
 import java.net.URLEncoder;
 import java.util.List;
 
+/**
+ * 邮件读取请求Controller
+ *
+ * @author Nosolution
+ * @version 1.0
+ * @since 2022/3/7
+ */
 @RestController
 @Slf4j
 public class ReadController extends RBaseController {
@@ -65,7 +72,7 @@ public class ReadController extends RBaseController {
         final String contentType;
         try {
             contentType = msgReadService.readAttachment(account, EncodeUtil.toUrl(folderId), messageUid, aid,
-                    emailAddressAttach.getIsContentId().equals(Boolean.TRUE), response.getOutputStream());
+                    emailAddressAttach.getContentId().equals(Boolean.TRUE), response.getOutputStream());
             response.setContentType(contentType);
         } catch (IOException e) {
             e.printStackTrace();

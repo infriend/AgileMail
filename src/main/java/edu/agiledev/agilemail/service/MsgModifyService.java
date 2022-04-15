@@ -7,7 +7,7 @@ import javax.mail.URLName;
 import java.util.List;
 
 /**
- * 邮件修改接口
+ * 邮件修改服务接口
  *
  * @author Nosolution
  * @version 1.0

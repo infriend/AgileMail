@@ -10,6 +10,13 @@ import java.time.ZonedDateTime;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * 邮件详情VO
+ *
+ * @author Nosolution
+ * @version 1.0
+ * @since 2022/3/23
+ */
 @Data
 public class DetailMessageVo {
 

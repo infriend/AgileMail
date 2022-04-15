@@ -8,6 +8,13 @@ import org.springframework.format.annotation.DateTimeFormat;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * 邮件预览VO
+ *
+ * @author Nosolution
+ * @version 1.0
+ * @since 2022/3/23
+ */
 @Data
 public class CheckMessageVo {
     private Long uid;

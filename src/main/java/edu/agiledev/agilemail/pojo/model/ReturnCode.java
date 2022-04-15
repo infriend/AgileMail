@@ -1,7 +1,7 @@
 package edu.agiledev.agilemail.pojo.model;
 
 /**
- * Return code definition
+ * 返回码定义
  *
  * @author Nosolution
  * @version 1.0

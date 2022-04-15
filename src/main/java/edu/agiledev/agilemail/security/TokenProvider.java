@@ -4,7 +4,6 @@ import org.springframework.security.core.Authentication;
 
 /**
  * 通信token的工具类，负责验证和生成token
- * TODO：实现接口
  *
  * @author Nosolution
  * @version 1.0

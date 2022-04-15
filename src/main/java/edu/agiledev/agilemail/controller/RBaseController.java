@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 /**
- * Controller base class
+ * 控制器基类
  *
  * @author Nosolution
  * @version 1.0
