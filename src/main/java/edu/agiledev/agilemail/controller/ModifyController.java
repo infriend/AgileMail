@@ -1,5 +1,6 @@
 package edu.agiledev.agilemail.controller;
 
+import edu.agiledev.agilemail.pojo.dto.MsgIdsDTO;
 import edu.agiledev.agilemail.pojo.model.EmailAccount;
 import edu.agiledev.agilemail.pojo.model.R;
 import edu.agiledev.agilemail.pojo.vo.FolderVO;
@@ -30,14 +31,21 @@ public class ModifyController extends RBaseController {
         this.msgModifyService = messageModifyService;
     }
 
+    @PutMapping("/{folderId}/messages/trash")
+    public R<FolderVO> setMessagesTrash(
+            @PathVariable("folderId") String folderId,
+            @RequestBody MsgIdsDTO msgIdsDTO) {
+
+        return success(null);
+    }
+
     @DeleteMapping("/{folderId}/messages")
     public R<FolderVO> deleteMessages(
             @PathVariable("folderId") String folderId,
-            @RequestParam("emailAddress") String emailAddress,
-            @RequestParam("msgIds") List<Long> messageIds) {
+            @RequestBody MsgIdsDTO msgIdsDTO) {
 
-        EmailAccount account = getCurrentAccount(emailAddress);
-        FolderVO res = msgModifyService.deleteMessages(account, EncodeUtil.toUrl(folderId), messageIds);
+        EmailAccount account = getCurrentAccount(msgIdsDTO.getEmailAddress());
+        FolderVO res = msgModifyService.deleteMessages(account, EncodeUtil.toUrl(folderId), msgIdsDTO.getMsgIds());
         return success(res);
     }
 }

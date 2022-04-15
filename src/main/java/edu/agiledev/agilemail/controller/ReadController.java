@@ -1,6 +1,7 @@
 package edu.agiledev.agilemail.controller;
 
 import edu.agiledev.agilemail.exception.BaseException;
+import edu.agiledev.agilemail.pojo.dto.EmailAddressAttachDTO;
 import edu.agiledev.agilemail.pojo.model.EmailAccount;
 import edu.agiledev.agilemail.pojo.model.R;
 import edu.agiledev.agilemail.pojo.model.ReturnCode;
@@ -47,7 +48,7 @@ public class ReadController extends RBaseController {
     @GetMapping("/{folderId}/message/{messageUid}")
     public R<DetailMessageVo> getMessageDetail(@PathVariable(value = "folderId") String folderId,
                                                @PathVariable(value = "messageUid") Long messageUid,
-                                               @RequestParam(value = "emailAddress") String emailAddress) {
+                                               @RequestBody String emailAddress) {
 
         EmailAccount account = getCurrentAccount(emailAddress);
         DetailMessageVo res = msgReadService.getMessageInFolder(account, messageUid, EncodeUtil.toUrl(folderId));
@@ -58,14 +59,14 @@ public class ReadController extends RBaseController {
     public R<String> getAttachment(@PathVariable("folderId") String folderId,
                                    @PathVariable("messageUid") Long messageUid,
                                    @PathVariable("aid") String aid,
-                                   @RequestParam("emailAddress") String emailAddress,
-                                   @RequestParam(name = "contentId", required = false) boolean isContentId,
+                                   @RequestBody EmailAddressAttachDTO emailAddressAttach,
                                    HttpServletResponse response) {
 
-        EmailAccount account = getCurrentAccount(emailAddress);
+        EmailAccount account = getCurrentAccount(emailAddressAttach.getEmailAddress());
         final String contentType;
         try {
-            contentType = msgReadService.readAttachment(account, EncodeUtil.toUrl(folderId), messageUid, aid, isContentId, response.getOutputStream());
+            contentType = msgReadService.readAttachment(account, EncodeUtil.toUrl(folderId), messageUid, aid,
+                    emailAddressAttach.getIsContentId().equals(Boolean.TRUE), response.getOutputStream());
             response.setContentType(contentType);
         } catch (IOException e) {
             e.printStackTrace();

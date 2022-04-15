@@ -78,9 +78,9 @@ public class ImapService {
 
                 HashMap IAM = new HashMap();
                 //带上IMAP ID信息，由key和value组成，例如name，version，vendor，support-email等。
-                IAM.put("name", "myname");
+                IAM.put("name", "njuagile");
                 IAM.put("version", "1.0.0");
-                IAM.put("vendor", "myclient");
+                IAM.put("vendor", "test_client");
                 imapStore.id(IAM);
 
                 log.debug("Opened new ImapStore session");
@@ -96,10 +96,14 @@ public class ImapService {
      * 返回存在并且关闭的folder
      */
     public IMAPFolder getFolder(IMAPStore store, URLName folderId) {
+        return getFolder(store, folderId.getFile());
+    }
+
+    public IMAPFolder getFolder(IMAPStore store, String folderName) {
         try {
-            IMAPFolder folder = (IMAPFolder) store.getFolder(folderId);
+            IMAPFolder folder = (IMAPFolder) store.getFolder(folderName);
             if (!folder.exists()) {
-                throw new BaseException(ReturnCode.IMAP_FOLDER_ERROR, "imap: 文件夹不存在");
+                throw new BaseException(ReturnCode.IMAP_FOLDER_ERROR, String.format("imap: 文件夹 %s 不存在", folderName));
             }
             return folder;
         } catch (MessagingException e) {
@@ -125,6 +129,13 @@ public class ImapService {
         } catch (MessagingException e) {
             throw new BaseException(ReturnCode.IMAP_FOLDER_ERROR, "imap: 读取文件夹失败", e);
         }
+    }
+
+    public static Message[] getMassagesByUid(IMAPFolder folder, List<Long> msgUids) throws MessagingException {
+        Message[] res = Stream.of(folder.getMessagesByUID(msgUids.stream().mapToLong(Long::longValue).toArray()))
+                .filter(Objects::nonNull)
+                .toArray(javax.mail.Message[]::new);
+        return res;
     }
 
 
@@ -184,7 +195,7 @@ public class ImapService {
         return String.format("%s%s", folder.getFile(), folder.getRef() == null ? "" : "#" + folder.getRef());
     }
 
-    private static Properties initMailProperties(MailSSLSocketFactory mailSSLSocketFactory, String domain) {
+    private static Properties   initMailProperties(MailSSLSocketFactory mailSSLSocketFactory, String domain) {
         final Properties prop = new Properties();
         switch (domain) {
             case "gmail.com":

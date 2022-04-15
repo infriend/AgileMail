@@ -17,8 +17,9 @@ public enum ReturnCode {
     IMAP_CONNECTION_ERROR(2001, "imap连接错误"),
     IMAP_FOLDER_ERROR(2002, "imap文件夹操作错误"),
     IMAP_MESSAGE_ERROR(2003, "imap邮件操作错误"),
-    DELETE_MESSAGE_ERROR(2004, "删除邮件错误"),
-    ATTACHMENT_NOT_FOUND(2005, "找不到附件"),
+    ATTACHMENT_NOT_FOUND(2004, "找不到附件"),
+    MOVE_MESSAGE_ERROR(2005, "移动邮件时发生错误"),
+    DELETE_MESSAGE_ERROR(2005, "删除邮件时发生错误"),
 
     INTERNAL_ERROR(3000, "系统错误"),
     CHECKING_ERROR(3001, "检查时发生错误"),

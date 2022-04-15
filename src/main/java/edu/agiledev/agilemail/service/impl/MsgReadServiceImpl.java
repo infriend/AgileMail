@@ -120,8 +120,7 @@ public class MsgReadServiceImpl implements MsgReadService {
     public String readAttachment(EmailAccount account, URLName folderId, Long msgUid, String aid, boolean isContentId, OutputStream outputStream) {
         IMAPStore store = imapService.getImapStore(account);
 
-        try {
-            IMAPFolder folder = imapService.getFolder(store, folderId);
+        try (IMAPFolder folder = imapService.getFolder(store, folderId)) {
             if (!folder.isOpen()) {
                 folder.open(READ_ONLY);
             }
@@ -142,7 +141,7 @@ public class MsgReadServiceImpl implements MsgReadService {
                 throw new BaseException(ReturnCode.ATTACHMENT_NOT_FOUND, "找不到附件");
             }
         } catch (MessagingException | IOException ex) {
-            log.error("Error loading messages for folder: " + folderId.toString(), ex);
+            log.error("Error loading messages for folder: " + folderId, ex);
             throw new BaseException(ReturnCode.IMAP_MESSAGE_ERROR, "获取附件时出错");
         }
     }
@@ -200,9 +199,6 @@ public class MsgReadServiceImpl implements MsgReadService {
      */
     List<AMessage> getMessages(IMAPFolder folder, Integer start, Integer end) throws MessagingException {
 
-        if (!folder.isOpen()) {
-            folder.open(READ_ONLY);
-        }
         final Message[] messages;
         if (start != null && end != null) {
             // start / end message counts may no longer match, recalculate index if necessary

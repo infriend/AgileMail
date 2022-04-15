@@ -6,6 +6,7 @@ import edu.agiledev.agilemail.pojo.dto.EmailAccountDTO;
 import edu.agiledev.agilemail.security.TokenProvider;
 import edu.agiledev.agilemail.security.model.Credentials;
 import edu.agiledev.agilemail.service.AccountService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @since 2022/2/7
  */
 @RestController
+@Slf4j
 public class AccountController extends RBaseController {
 
     private final AccountService accountService;

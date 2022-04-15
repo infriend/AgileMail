@@ -17,7 +17,10 @@ import java.util.List;
  */
 public interface MsgModifyService {
 
+    FolderVO moveMessages(EmailAccount account, URLName fromFolderId, URLName toFolderId, List<Long> msgUids);
 
-    FolderVO deleteMessages(EmailAccount account, URLName folderId, List<Long> messageIds);
+    FolderVO setMessagesTrash(EmailAccount account, URLName folderId, List<Long> msgUids);
+
+    FolderVO deleteMessages(EmailAccount account, URLName folderId, List<Long> msgUids);
 
 }
