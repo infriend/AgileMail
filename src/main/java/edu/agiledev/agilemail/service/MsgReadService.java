@@ -5,11 +5,14 @@ import edu.agiledev.agilemail.pojo.vo.CheckMessageVo;
 import edu.agiledev.agilemail.pojo.vo.DetailMessageVo;
 import edu.agiledev.agilemail.pojo.vo.FolderVO;
 
+import javax.mail.BodyPart;
 import javax.mail.URLName;
+import javax.servlet.http.HttpServletResponse;
+import java.io.OutputStream;
 import java.util.List;
 
 /**
- * Description of the class
+ * 邮件读取服务类
  *
  * @author Nosolution
  * @version 1.0
@@ -26,7 +29,11 @@ public interface MsgReadService {
 
     /**
      * Get certain specific message from the selected folder.
-     * TODO: add attachment, pictures.
      */
     DetailMessageVo getMessageInFolder(EmailAccount account, Long msgUid, URLName folderId);
+
+    /**
+     * 读取邮件附件，写入输出流中，返回contentType
+     */
+    String readAttachment(EmailAccount account, URLName folderId, Long msgUid, String aid, boolean isContentId, OutputStream outputStream);
 }

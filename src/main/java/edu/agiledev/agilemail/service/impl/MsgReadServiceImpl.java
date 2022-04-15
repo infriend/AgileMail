@@ -21,15 +21,15 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.mail.Folder;
-import javax.mail.Message;
-import javax.mail.MessagingException;
-import javax.mail.URLName;
+import javax.mail.*;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -113,6 +113,37 @@ public class MsgReadServiceImpl implements MsgReadService {
         } catch (MessagingException e) {
 //            log.error("Error loading messages for folder: " + folderId.getRef(), e);
             throw new BaseException(ReturnCode.IMAP_MESSAGE_ERROR, String.format("imap: 读取文件夹%s失败", folderId), e);
+        }
+    }
+
+    @Override
+    public String readAttachment(EmailAccount account, URLName folderId, Long msgUid, String aid, boolean isContentId, OutputStream outputStream) {
+        IMAPStore store = imapService.getImapStore(account);
+
+        try {
+            IMAPFolder folder = imapService.getFolder(store, folderId);
+            if (!folder.isOpen()) {
+                folder.open(READ_ONLY);
+            }
+            IMAPMessage imapMessage = (IMAPMessage) folder.getMessageByUID(msgUid);
+            Object content = imapMessage.getContent();
+
+            if (content instanceof Multipart) {
+                final BodyPart bp = MessageUtil.extractBodyPart((Multipart) content, aid, isContentId);
+                if (bp != null) {
+                    bp.getDataHandler().writeTo(outputStream);
+                    outputStream.flush();
+                    return bp.getContentType();
+
+                } else {
+                    throw new BaseException(ReturnCode.ATTACHMENT_NOT_FOUND, "找不到附件");
+                }
+            } else {
+                throw new BaseException(ReturnCode.ATTACHMENT_NOT_FOUND, "找不到附件");
+            }
+        } catch (MessagingException | IOException ex) {
+            log.error("Error loading messages for folder: " + folderId.toString(), ex);
+            throw new BaseException(ReturnCode.IMAP_MESSAGE_ERROR, "获取附件时出错");
         }
     }
 

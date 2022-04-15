@@ -25,7 +25,7 @@ import java.util.List;
 import static edu.agiledev.agilemail.utils.MessageUtil.MULTIPART_MIME_TYPE;
 
 /**
- * Description of the class
+ * 读取邮件详情服务实现类
  *
  * @author Nosolution
  * @version 1.0

@@ -1,18 +1,26 @@
 package edu.agiledev.agilemail.controller;
 
+import edu.agiledev.agilemail.exception.BaseException;
 import edu.agiledev.agilemail.pojo.model.EmailAccount;
 import edu.agiledev.agilemail.pojo.model.R;
+import edu.agiledev.agilemail.pojo.model.ReturnCode;
 import edu.agiledev.agilemail.pojo.vo.CheckMessageVo;
 import edu.agiledev.agilemail.pojo.vo.DetailMessageVo;
 import edu.agiledev.agilemail.pojo.vo.FolderVO;
 import edu.agiledev.agilemail.service.MsgReadService;
 import edu.agiledev.agilemail.utils.EncodeUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.mail.BodyPart;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.List;
 
 @RestController
+@Slf4j
 public class ReadController extends RBaseController {
 
     private final MsgReadService msgReadService;
@@ -44,6 +52,27 @@ public class ReadController extends RBaseController {
         EmailAccount account = getCurrentAccount(emailAddress);
         DetailMessageVo res = msgReadService.getMessageInFolder(account, messageUid, EncodeUtil.toUrl(folderId));
         return success(res);
+    }
+
+    @GetMapping(path = "/{folderId}/messages/{messageUid}/attachments/{aid}")
+    public R<String> getAttachment(@PathVariable("folderId") String folderId,
+                                   @PathVariable("messageUid") Long messageUid,
+                                   @PathVariable("aid") String aid,
+                                   @RequestParam("emailAddress") String emailAddress,
+                                   @RequestParam(name = "contentId", required = false) boolean isContentId,
+                                   HttpServletResponse response) {
+
+        EmailAccount account = getCurrentAccount(emailAddress);
+        final String contentType;
+        try {
+            contentType = msgReadService.readAttachment(account, EncodeUtil.toUrl(folderId), messageUid, aid, isContentId, response.getOutputStream());
+            response.setContentType(contentType);
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new BaseException(ReturnCode.IO_ERROR, "写入response时发生错误");
+        }
+
+        return success(null);
     }
 
 
