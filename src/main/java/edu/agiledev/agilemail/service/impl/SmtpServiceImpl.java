@@ -51,7 +51,7 @@ public class SmtpServiceImpl implements SmtpService {
 
 
     public void sendMessage(EmailAccount emailAccount, String subject, String content,
-                            String toUser, String ccUser, String bccUser){
+                            String toUser, String ccUser, String bccUser, String attachments[]){
         //首先检查to的地址是否合法，接着配置mailsender，最后就发送
         JavaMailSender mailSender = getJavaMailSender(emailAccount);
 
@@ -87,10 +87,15 @@ public class SmtpServiceImpl implements SmtpService {
 
             // set subject
             helper.setSubject(subject);
-/**
+
             // set attachment
+            for (String file: attachments){
+                File temp = new File("../resources/attachments/"+ file);
+                helper.addAttachment(temp.getName(), temp);
+            }
+/**
             for (File f: attachment){
-                helper.addAttachment(f.getName(), f);
+                helper.addAttachments(f.getName(), f);
             } **/
 
             // set content

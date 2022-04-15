@@ -1,10 +1,13 @@
 package edu.agiledev.agilemail.controller;
 
+import edu.agiledev.agilemail.pojo.dto.SendInfo;
+import edu.agiledev.agilemail.pojo.model.EmailAccount;
 import edu.agiledev.agilemail.pojo.model.R;
 import edu.agiledev.agilemail.security.model.Credentials;
+import edu.agiledev.agilemail.service.SmtpService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
@@ -18,9 +21,10 @@ import java.util.List;
 @RestController
 @Slf4j
 public class SmtpController extends RBaseController{
+    @Autowired
+    SmtpService smtpService;
 
-
-    @PostMapping("/uploadattachment")
+    @PostMapping("/attachment")
     public R<String> fileupload(HttpServletRequest request) throws IOException {
 
         long startTime=System.currentTimeMillis();
@@ -48,10 +52,39 @@ public class SmtpController extends RBaseController{
             }
         }
         long  endTime=System.currentTimeMillis();
-        System.out.println("方法三的运行时间："+String.valueOf(endTime-startTime)+"ms");
+        System.out.println("Time: "+String.valueOf(endTime-startTime)+"ms");
 
         return success("upload succeed");
     }
+
+    @PostMapping("/message")
+    public R<String> sendMessage(@RequestBody SendInfo sendInfo){
+        EmailAccount emailAccount = getCurrentAccount(sendInfo.getFrom());
+        smtpService.sendMessage(
+                emailAccount,
+                sendInfo.getSubject(),
+                sendInfo.getContent(),
+                sendInfo.getToUser(),
+                sendInfo.getCcUser(),
+                sendInfo.getBccUser(),
+                sendInfo.getAttachments()
+        );
+
+        return success("successfully send");
+    }
+
+    @GetMapping("/delete/{filename}")
+    public R<String> deleteAttachment(@PathVariable String filename){
+        File file = new File("../resources/attachments/"+filename);
+        boolean res = file.delete();
+        if (res){
+            return success("attachment delete!");
+        } else {
+            return error(500, "file not exist!");
+        }
+    }
+
+
 
 
 

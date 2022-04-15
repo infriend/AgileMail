@@ -31,7 +31,8 @@ class SmtpServiceTest {
                 "This is a test message!",
                 "infriendliu@gmail.com",
                 "stive0118@sina.com",
-                "695520903@qq.com"
+                "695520903@qq.com",
+                null
         );
     }
 }
