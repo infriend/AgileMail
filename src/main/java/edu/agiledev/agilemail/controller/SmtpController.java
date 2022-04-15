@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.node.POJONode;
 import edu.agiledev.agilemail.pojo.dto.SendInfo;
 import edu.agiledev.agilemail.pojo.model.EmailAccount;
 import edu.agiledev.agilemail.pojo.model.R;
+import edu.agiledev.agilemail.pojo.model.ReturnCode;
 import edu.agiledev.agilemail.security.model.Credentials;
 import edu.agiledev.agilemail.service.SmtpService;
 import lombok.extern.slf4j.Slf4j;
@@ -83,7 +84,7 @@ public class SmtpController extends RBaseController{
         if (res){
             return success("attachment delete!");
         } else {
-            return error(500, "file not exist!");
+            return error(ReturnCode.ERROR, "file not exist!");
         }
     }
 
@@ -100,6 +101,16 @@ public class SmtpController extends RBaseController{
                 sendInfo.getAttachments()
         );
         return success("draft saved!");
+    }
+
+    @PostMapping("{folderId}/{messageUid}/replayto/{toAddress}")
+    public R<String> replayMessage(@PathVariable("folderID") String folderId,
+                                   @PathVariable("messageUid") Long messageUid,
+                                   @PathVariable("toAddress") String toAddress,
+                                   @RequestBody SendInfo sendInfo){
+
+
+        return success();
     }
 
 

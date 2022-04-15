@@ -1,10 +1,15 @@
 package edu.agiledev.agilemail.service.impl;
 
+import com.sun.mail.imap.IMAPFolder;
+import com.sun.mail.imap.IMAPMessage;
+import com.sun.mail.imap.IMAPStore;
 import com.sun.mail.util.MailSSLSocketFactory;
 import edu.agiledev.agilemail.exception.AuthenticationException;
 import edu.agiledev.agilemail.exception.BaseException;
 import edu.agiledev.agilemail.pojo.model.EmailAccount;
+import edu.agiledev.agilemail.pojo.model.ReturnCode;
 import edu.agiledev.agilemail.pojo.model.SupportDomain;
+import edu.agiledev.agilemail.service.ImapService;
 import edu.agiledev.agilemail.service.SmtpService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,6 +46,9 @@ public class SmtpServiceImpl implements SmtpService {
     @Autowired
     private Map<String, SupportDomain> domainMap;
 
+    @Autowired
+    private ImapService imapService;
+
     private final MailSSLSocketFactory mailSSLSocketFactory;
 
     private Session session;
@@ -60,63 +68,8 @@ public class SmtpServiceImpl implements SmtpService {
 
 
         MimeMessage message = mailSender.createMimeMessage();
-        try {
-            MimeMessageHelper helper = new MimeMessageHelper(message, true);
-
-            // set from
-            InternetAddress from = new InternetAddress(emailAccount.getUsername());
-            message.setFrom(from);
-
-            // set to
-            if(null != toUser && !toUser.isEmpty()){
-                InternetAddress[] internetAddressTo = new InternetAddress().parse(toUser);
-                helper.setTo(internetAddressTo);
-            }
-
-            // set cc
-            if(null != ccUser && !ccUser.isEmpty()){
-                InternetAddress[] internetAddressCC = new InternetAddress().parse(ccUser);
-                helper.setCc(internetAddressCC);
-            }
-
-            // set bcc
-            if(null != bccUser && !bccUser.isEmpty()){
-                InternetAddress[] internetAddressBCC = new InternetAddress().parse(bccUser);
-                helper.setBcc(internetAddressBCC);
-            }
-
-            // set date
-            helper.setSentDate(new Date());
-
-            // set subject
-            helper.setSubject(subject);
-
-            // set attachment
-            if (null != attachments && attachments.length > 0){
-                for (String file: attachments){
-                    File temp = new File("../resources/attachments/"+ file);
-                    helper.addAttachment(temp.getName(), temp);
-                }
-            }
-
-/**
-            for (File f: attachment){
-                helper.addAttachments(f.getName(), f);
-            } **/
-
-            // set content
-            helper.setText(content);
-
-            mailSender.send(message);
-            if (null != attachments && attachments.length > 0){
-                for (String file: attachments){
-                    File temp = new File("../resources/attachments/"+ file);
-                    temp.delete();
-                }
-            }
-        } catch (MessagingException e){
-            throw new BaseException("send failed!");
-        }
+        messageSender(emailAccount, subject, content, toUser, ccUser,
+                bccUser, attachments, mailSender, message);
     }
 
     @Override
@@ -177,6 +130,89 @@ public class SmtpServiceImpl implements SmtpService {
         MimeMessage draftMessages[] = {message};
         folder.appendMessages(draftMessages);
 
+    }
+
+    @Override
+    public void replyMessage(EmailAccount emailAccount, Long msgUid, URLName folderId,
+                              String subject, String content, String toUser, String ccUser,
+                              String bccUser, String[] attachments, boolean replyToAll) {
+        IMAPStore store = imapService.getImapStore(emailAccount);
+        try (IMAPFolder folder = imapService.getFolder(store, folderId)){
+            folder.open(Folder.READ_ONLY);
+            Message message = (IMAPMessage) folder.getMessageByUID(msgUid);
+
+            if (message == null) {
+                throw new BaseException(ReturnCode.IMAP_MESSAGE_ERROR, "找不到邮件");
+            }
+
+            MimeMessage replyMessage = (MimeMessage) message.reply(replyToAll);
+            JavaMailSender mailSender = getJavaMailSender(emailAccount);
+
+            messageSender(emailAccount, subject, content, toUser, ccUser, bccUser,
+                    attachments, mailSender, replyMessage);
+
+
+        }catch (MessagingException e) {
+            throw new BaseException(ReturnCode.IMAP_MESSAGE_ERROR, String.format("imap: 读取文件夹%s失败", folderId), e);
+        }
+
+    }
+
+    private void messageSender(EmailAccount emailAccount, String subject, String content, String toUser,
+                               String ccUser, String bccUser, String[] attachments,
+                               JavaMailSender mailSender, MimeMessage message) {
+        try {
+            MimeMessageHelper helper = new MimeMessageHelper(message, true);
+
+            // set from
+            InternetAddress from = new InternetAddress(emailAccount.getUsername());
+            message.setFrom(from);
+
+            // set to
+            if(null != toUser && !toUser.isEmpty()){
+                InternetAddress[] internetAddressTo = new InternetAddress().parse(toUser);
+                helper.setTo(internetAddressTo);
+            }
+
+            // set cc
+            if(null != ccUser && !ccUser.isEmpty()){
+                InternetAddress[] internetAddressCC = new InternetAddress().parse(ccUser);
+                helper.setCc(internetAddressCC);
+            }
+
+            // set bcc
+            if(null != bccUser && !bccUser.isEmpty()){
+                InternetAddress[] internetAddressBCC = new InternetAddress().parse(bccUser);
+                helper.setBcc(internetAddressBCC);
+            }
+
+            // set date
+            helper.setSentDate(new Date());
+
+            // set subject
+            helper.setSubject(subject);
+
+            // set attachment
+            if (null != attachments && attachments.length > 0){
+                for (String file: attachments){
+                    File temp = new File("../resources/attachments/"+ file);
+                    helper.addAttachment(temp.getName(), temp);
+                }
+            }
+
+            // set content
+            helper.setText(content);
+
+            mailSender.send(message);
+            if (null != attachments && attachments.length > 0){
+                for (String file: attachments){
+                    File temp = new File("../resources/attachments/"+ file);
+                    temp.delete();
+                }
+            }
+        } catch (MessagingException e){
+            throw new BaseException("send failed!");
+        }
     }
 
 
