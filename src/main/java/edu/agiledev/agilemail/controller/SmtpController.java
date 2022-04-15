@@ -1,5 +1,6 @@
 package edu.agiledev.agilemail.controller;
 
+import com.fasterxml.jackson.databind.node.POJONode;
 import edu.agiledev.agilemail.pojo.dto.SendInfo;
 import edu.agiledev.agilemail.pojo.model.EmailAccount;
 import edu.agiledev.agilemail.pojo.model.R;
@@ -12,9 +13,11 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 
+import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.Iterator;
 import java.util.List;
 
@@ -84,8 +87,20 @@ public class SmtpController extends RBaseController{
         }
     }
 
-
-
+    @PostMapping("/todraft")
+    public R<String> saveToDraft(@RequestBody SendInfo sendInfo) throws MessagingException, UnsupportedEncodingException {
+        EmailAccount emailAccount = getCurrentAccount(sendInfo.getFrom());
+        smtpService.saveToDraft(
+                emailAccount,
+                sendInfo.getSubject(),
+                sendInfo.getContent(),
+                sendInfo.getToUser(),
+                sendInfo.getCcUser(),
+                sendInfo.getBccUser(),
+                sendInfo.getAttachments()
+        );
+        return success("draft saved!");
+    }
 
 
 }

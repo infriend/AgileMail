@@ -6,6 +6,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import javax.mail.MessagingException;
+import java.io.UnsupportedEncodingException;
+
 @SpringBootTest
 class SmtpServiceTest {
 
@@ -29,9 +32,23 @@ class SmtpServiceTest {
                 emailAccount,
                 "testmessage",
                 "This is a test message!",
-                "infriendliu@gmail.com",
-                "stive0118@sina.com",
+                "infriendliu@gmail.com,mg21320011@smail.nju.edu.cn",
                 "695520903@qq.com",
+                "stive0118@sina.com",
+                null
+        );
+    }
+
+    @Test
+    void saveToMail() throws MessagingException, UnsupportedEncodingException {
+        EmailAccount emailAccount = testConfig.getTestEmailAccount();
+        smtpService.saveToDraft(
+                emailAccount,
+                "testmessage",
+                "This is a test message2!",
+                "infriendliu@gmail.com,mg21320011@smail.nju.edu.cn",
+                "695520903@qq.com",
+                "stive0118@sina.com",
                 null
         );
     }
