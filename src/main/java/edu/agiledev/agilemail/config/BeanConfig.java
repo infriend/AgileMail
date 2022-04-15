@@ -33,6 +33,7 @@ import org.springframework.context.annotation.Configuration;
 import java.security.GeneralSecurityException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Properties;
 
 /**
  * Created by Marc Nuri <marc@marcnuri.com> on 2018-10-10.
@@ -77,6 +78,16 @@ public class BeanConfig {
         domainMap.put("qq.com", _qq);
         SupportDomain _smail = new SupportDomain("INBOX", "Sent Messages", "Drafts", "Deleted Messages", "Junk");
         domainMap.put("smail.nju.edu.cn", _smail);
+        return domainMap;
+    }
+
+    @Bean
+    public Map<String, Properties> getSmtpProperties(){
+        Map<String, Properties> domainMap = new HashMap();
+
+        Properties _163 = new Properties();
+
+
         return domainMap;
     }
 

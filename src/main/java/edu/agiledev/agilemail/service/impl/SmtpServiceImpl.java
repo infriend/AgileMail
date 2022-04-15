@@ -18,6 +18,7 @@ import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 import java.io.File;
 import java.util.Date;
+import java.util.Map;
 import java.util.Properties;
 
 import static edu.agiledev.agilemail.exception.AuthenticationException.Type.SMTP;
@@ -33,6 +34,10 @@ import static edu.agiledev.agilemail.exception.AuthenticationException.Type.SMTP
 @Slf4j
 public class SmtpServiceImpl implements SmtpService {
     private JavaMailSender mailSender;
+
+    @Autowired
+    private Map<String, Properties> smtpProperties;
+
     private final MailSSLSocketFactory mailSSLSocketFactory;
 
     private Session session;
@@ -45,10 +50,10 @@ public class SmtpServiceImpl implements SmtpService {
     }
 
 
-    public void sendMessage(String emailAddress, String subject, String content,
+    public void sendMessage(EmailAccount emailAccount, String subject, String content,
                             String toUser, String ccUser, String bccUser){
         //首先检查to的地址是否合法，接着配置mailsender，最后就发送
-        JavaMailSender mailSender = getJavaMailSender();
+        JavaMailSender mailSender = getJavaMailSender(emailAccount);
 
 
         MimeMessage message = mailSender.createMimeMessage();
@@ -56,7 +61,7 @@ public class SmtpServiceImpl implements SmtpService {
             MimeMessageHelper helper = new MimeMessageHelper(message, true);
 
             // set from
-            InternetAddress from = new InternetAddress(emailAddress);
+            InternetAddress from = new InternetAddress(emailAccount.getUsername());
             message.setFrom(from);
 
             // set to
@@ -109,19 +114,25 @@ public class SmtpServiceImpl implements SmtpService {
         }
     }
 
-    private JavaMailSender getJavaMailSender()
+    private JavaMailSender getJavaMailSender(EmailAccount emailAccount)
     {
         JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
-        mailSender.setHost("smtp.163.com");
-        mailSender.setPort(25);
+        String emailDomain = emailAccount.getDomain();
+        switch (emailDomain){
+            case "163.com":
+                mailSender.setHost("smtp.163.com");
+                mailSender.setPort(25);
+                Properties props = mailSender.getJavaMailProperties();
+                props.put("mail.transport.protocol", "smtp");
+                props.put("mail.default-encoding", "UTF-8");
+                mailSender.setJavaMailProperties(props);
+                break;
+            case "gmail.com":
+                break;
+        }
 
-        mailSender.setUsername("stalker01@163.com");
-        mailSender.setPassword("TLRCWUIYZLIMFQQA");
-
-        Properties props = mailSender.getJavaMailProperties();
-        props.put("mail.transport.protocol", "smtp");
-        props.put("mail.default-encoding", "UTF-8");
-        mailSender.setJavaMailProperties(props);
+        mailSender.setUsername(emailAccount.getUsername());
+        mailSender.setPassword(emailAccount.getPassword());
 
         return mailSender;
     }
