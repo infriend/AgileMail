@@ -49,6 +49,16 @@ public class MsgModifyServiceImpl implements MsgModifyService {
         this.domainMap = domainMap;
     }
 
+
+    @Override
+    public void setMessagesSeen(EmailAccount account, URLName folderId, List<Long> msgUids, boolean seen) {
+        setMessagesFlag(account, folderId, msgUids.stream().mapToLong(Long::longValue).toArray(), Flags.Flag.SEEN, seen);
+    }
+
+    public void setMessagesFlagged(EmailAccount account, URLName folderId, List<Long> msgUids, boolean seen) {
+        setMessagesFlag(account, folderId, msgUids.stream().mapToLong(Long::longValue).toArray(), Flags.Flag.FLAGGED, seen);
+    }
+
     @Override
     public FolderVO moveMessages(EmailAccount account, URLName fromFolderId, URLName toFolderId, List<Long> msgUids) {
         IMAPStore store = imapService.getImapStore(account);
@@ -57,10 +67,6 @@ public class MsgModifyServiceImpl implements MsgModifyService {
         try {
             final IMAPFolder fromFolder = imapService.getFolder(store, fromFolderId);
             final IMAPFolder toFolder = imapService.getFolder(store, toFolderId);
-
-//            toFolder.open(READ_ONLY);
-//            long toFolderNextUID = toFolder.getUIDNext();
-//            toFolder.close(false);
 
             fromFolder.open(READ_WRITE);
 
@@ -76,18 +82,6 @@ public class MsgModifyServiceImpl implements MsgModifyService {
             }
 
             fromFolder.close(true);
-
-            //读取新文件夹的邮件
-//            toFolder.open(READ_ONLY);
-            //复制需要时间，可能需要等待
-//            Message[] newMessages;
-//            int retries = 5;
-//            final long sleepTimeMillis = 100L;
-//            while ((newMessages = toFolder.getMessagesByUID(toFolderNextUID, UIDFolder.LASTUID)).length == 0
-//                    && retries-- > 0) {
-//                Thread.sleep(sleepTimeMillis);
-//            }
-//            MessageUtil.envelopeFetch(toFolder, newMessages);
 
             final long sleepTimeMillis = 100L;
             Thread.sleep(sleepTimeMillis);
@@ -133,6 +127,19 @@ public class MsgModifyServiceImpl implements MsgModifyService {
             return FolderVO.from(AFolder.from(folder, true));
         } catch (MessagingException e) {
             throw new BaseException(ReturnCode.DELETE_MESSAGE_ERROR, "删除邮件时出错", e);
+        }
+    }
+
+    private void setMessagesFlag(EmailAccount account, URLName folderId, long[] uids, Flags.Flag flag, boolean flagValue) {
+        IMAPStore store = imapService.getImapStore(account);
+        try {
+            final IMAPFolder folder = imapService.getFolder(store, folderId);
+            folder.open(READ_WRITE);
+            final Message[] messages = folder.getMessagesByUID(uids);
+            folder.setFlags(messages, new Flags(flag), flagValue);
+            folder.close(false);
+        } catch (MessagingException ex) {
+            throw new BaseException(ex.getMessage(), ex);
         }
     }
 }

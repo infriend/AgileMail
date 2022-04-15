@@ -3,6 +3,7 @@ package edu.agiledev.agilemail.service;
 import edu.agiledev.agilemail.config.TestConfiguration;
 import edu.agiledev.agilemail.pojo.model.EmailAccount;
 import edu.agiledev.agilemail.pojo.vo.CheckMessageVo;
+import edu.agiledev.agilemail.pojo.vo.DetailMessageVo;
 import edu.agiledev.agilemail.pojo.vo.FolderVO;
 import edu.agiledev.agilemail.utils.EncodeUtil;
 import org.junit.jupiter.api.Test;
@@ -29,6 +30,51 @@ class MsgModifyServiceTest {
     @Autowired
     MsgReadService msgReadService;
 
+
+    @Test
+    void setMessagesSeen() {
+        EmailAccount testAccount = testConfig.getTestEmailAccount();
+        Map<String, String> folderIdMap = testConfig.getAccountFolderIdMap(testAccount);
+        String inboxId = folderIdMap.get("INBOX");
+        List<CheckMessageVo> messages = msgReadService.fetchMessagesInFolder(testAccount, EncodeUtil.toUrl(inboxId));
+        assertThat(messages.size()).isGreaterThan(0);
+        CheckMessageVo target = messages.stream().findAny().get();
+        boolean reverse = !target.isSeen();
+        System.out.println(target.getSubject());
+
+        msgModifyService.setMessagesSeen(testAccount, EncodeUtil.toUrl(inboxId), Arrays.asList(target.getUid()), reverse);
+
+        DetailMessageVo targetDetail = msgReadService.getMessageInFolder(testAccount, target.getUid(), EncodeUtil.toUrl(inboxId));
+        assertThat(targetDetail.getSeen()).isEqualTo(reverse);
+
+        msgModifyService.setMessagesSeen(testAccount, EncodeUtil.toUrl(inboxId), Arrays.asList(target.getUid()), !reverse);
+        targetDetail = msgReadService.getMessageInFolder(testAccount, target.getUid(), EncodeUtil.toUrl(inboxId));
+        assertThat(targetDetail.getSeen()).isEqualTo(!reverse);
+
+    }
+
+    @Test
+    void setMessagesFlagged() {
+        EmailAccount testAccount = testConfig.getTestEmailAccount();
+        Map<String, String> folderIdMap = testConfig.getAccountFolderIdMap(testAccount);
+        String inboxId = folderIdMap.get("INBOX");
+        List<CheckMessageVo> messages = msgReadService.fetchMessagesInFolder(testAccount, EncodeUtil.toUrl(inboxId));
+        assertThat(messages.size()).isGreaterThan(0);
+        CheckMessageVo target = messages.stream().findAny().get();
+        boolean reverse = !target.isFlagged();
+        System.out.println(target.getSubject());
+
+        msgModifyService.setMessagesFlagged(testAccount, EncodeUtil.toUrl(inboxId), Arrays.asList(target.getUid()), reverse);
+
+        DetailMessageVo targetDetail = msgReadService.getMessageInFolder(testAccount, target.getUid(), EncodeUtil.toUrl(inboxId));
+        assertThat(targetDetail.getFlagged()).isEqualTo(reverse);
+
+        msgModifyService.setMessagesFlagged(testAccount, EncodeUtil.toUrl(inboxId), Arrays.asList(target.getUid()), !reverse);
+        targetDetail = msgReadService.getMessageInFolder(testAccount, target.getUid(), EncodeUtil.toUrl(inboxId));
+        assertThat(targetDetail.getFlagged()).isEqualTo(!reverse);
+
+    }
+
     @Test
     void setMessagesTrash() {
         EmailAccount testAccount = testConfig.getTestEmailAccount();
@@ -54,4 +100,5 @@ class MsgModifyServiceTest {
 //        assertThat(recover).isEqualTo(after + 1);
 
     }
+
 }

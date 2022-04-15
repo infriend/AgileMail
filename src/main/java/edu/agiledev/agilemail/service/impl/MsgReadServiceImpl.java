@@ -111,7 +111,6 @@ public class MsgReadServiceImpl implements MsgReadService {
             }
 
         } catch (MessagingException e) {
-//            log.error("Error loading messages for folder: " + folderId.getRef(), e);
             throw new BaseException(ReturnCode.IMAP_MESSAGE_ERROR, String.format("imap: 读取文件夹%s失败", folderId), e);
         }
     }
