@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="edu.agiledev.agilemail.mappers.AddressbookMapper">
+  <resultMap id="BaseResultMap" type="edu.agiledev.agilemail.pojo.model.Addressbook">
+    <!--@mbg.generated-->
+    <!--@Table sys_addressbook-->
+    <id column="contact_email" jdbcType="VARCHAR" property="contactEmail" />
+    <id column="id" jdbcType="VARCHAR" property="id" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    contact_email, id
+  </sql>
+  <delete id="deleteByPrimaryKey" parameterType="map">
+    <!--@mbg.generated-->
+    delete from sys_addressbook
+    where contact_email = #{contactEmail,jdbcType=VARCHAR}
+      and id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="edu.agiledev.agilemail.pojo.model.Addressbook">
+    <!--@mbg.generated-->
+    insert into sys_addressbook (contact_email, id)
+    values (#{contactEmail,jdbcType=VARCHAR}, #{id,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="edu.agiledev.agilemail.pojo.model.Addressbook">
+    <!--@mbg.generated-->
+    insert into sys_addressbook
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="contactEmail != null">
+        contact_email,
+      </if>
+      <if test="id != null">
+        id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="contactEmail != null">
+        #{contactEmail,jdbcType=VARCHAR},
+      </if>
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+</mapper>
