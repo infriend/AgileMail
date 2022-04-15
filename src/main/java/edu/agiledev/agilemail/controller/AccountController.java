@@ -1,5 +1,6 @@
 package edu.agiledev.agilemail.controller;
 
+import edu.agiledev.agilemail.pojo.model.Addressbook;
 import edu.agiledev.agilemail.pojo.model.EmailAccount;
 import edu.agiledev.agilemail.pojo.model.R;
 import edu.agiledev.agilemail.pojo.dto.EmailAccountDTO;
@@ -13,6 +14,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 
 /**
@@ -52,6 +55,13 @@ public class AccountController extends RBaseController {
     public R<String> isOnline() {
         Credentials credentials = (Credentials) SecurityContextHolder.getContext().getAuthentication();
         return success(String.format("Hello, %s", credentials.getUserId()));
+    }
+
+    @GetMapping("/contact")
+    public R<List<Addressbook>> getContacts(){
+        Credentials credentials = (Credentials) SecurityContextHolder.getContext().getAuthentication();
+        String userId = credentials.getUserId();
+        return success(accountService.getContacts(userId));
     }
 
     private Credentials authenticate(EmailAccount account) {

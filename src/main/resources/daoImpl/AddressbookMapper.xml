@@ -42,4 +42,14 @@
       </if>
     </trim>
   </insert>
+
+  <select id="searchAddressByPrimarykey" resultMap="BaseResultMap">
+    select * from sys_addressbook
+    where id=#{id,jdbcType=VARCHAR} and contact_email=#{contactEmail,jdbcType=VARCHAR}
+  </select>
+
+  <select id="getContactByUserId" resultMap="BaseResultMap">
+    select * from sys_addressbook
+    where id=#{userId,jdbcType=VARCHAR}
+  </select>
 </mapper>

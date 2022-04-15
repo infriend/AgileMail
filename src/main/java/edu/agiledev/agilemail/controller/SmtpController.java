@@ -1,20 +1,26 @@
 package edu.agiledev.agilemail.controller;
 
 import com.fasterxml.jackson.databind.node.POJONode;
+import edu.agiledev.agilemail.mappers.AddressbookMapper;
 import edu.agiledev.agilemail.pojo.dto.SendInfo;
+import edu.agiledev.agilemail.pojo.model.Addressbook;
 import edu.agiledev.agilemail.pojo.model.EmailAccount;
 import edu.agiledev.agilemail.pojo.model.R;
 import edu.agiledev.agilemail.pojo.model.ReturnCode;
 import edu.agiledev.agilemail.security.model.Credentials;
 import edu.agiledev.agilemail.service.SmtpService;
+import edu.agiledev.agilemail.utils.EncodeUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 
 import javax.mail.MessagingException;
+import javax.mail.internet.AddressException;
+import javax.mail.internet.InternetAddress;
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.io.IOException;
@@ -26,7 +32,10 @@ import java.util.List;
 @Slf4j
 public class SmtpController extends RBaseController{
     @Autowired
-    SmtpService smtpService;
+    private SmtpService smtpService;
+
+    @Autowired
+    private AddressbookMapper addressbookMapper;
 
     @PostMapping("/attachment")
     public R<String> fileupload(HttpServletRequest request) throws IOException {
@@ -62,7 +71,7 @@ public class SmtpController extends RBaseController{
     }
 
     @PostMapping("/message")
-    public R<String> sendMessage(@RequestBody SendInfo sendInfo){
+    public R<String> sendMessage(@RequestBody SendInfo sendInfo) throws AddressException {
         EmailAccount emailAccount = getCurrentAccount(sendInfo.getFrom());
         smtpService.sendMessage(
                 emailAccount,
@@ -73,6 +82,21 @@ public class SmtpController extends RBaseController{
                 sendInfo.getBccUser(),
                 sendInfo.getAttachments()
         );
+        Credentials credentials = (Credentials) SecurityContextHolder.getContext().getAuthentication();
+        String userId = credentials.getUserId();
+        String toUser = sendInfo.getToUser();
+
+        if(null != toUser && !toUser.isEmpty()){
+            InternetAddress[] internetAddressTo = new InternetAddress().parse(toUser);
+            for (InternetAddress address: internetAddressTo){
+                String mailId = address.getAddress();
+                Addressbook addressbook = addressbookMapper.searchAddressByPrimarykey(new Addressbook(userId, mailId));
+                if (addressbook == null){
+                    addressbookMapper.insert(new Addressbook(userId, mailId));
+                }
+            }
+        }
+
 
         return success("successfully send");
     }
@@ -103,12 +127,30 @@ public class SmtpController extends RBaseController{
         return success("draft saved!");
     }
 
-    @PostMapping("{folderId}/{messageUid}/replayto/{toAddress}")
-    public R<String> replayMessage(@PathVariable("folderID") String folderId,
+    @PostMapping("{folderId}/{messageUid}/replyto/{replyToAll}")
+    public R<String> replyMessage(@PathVariable("folderID") String folderId,
                                    @PathVariable("messageUid") Long messageUid,
-                                   @PathVariable("toAddress") String toAddress,
+                                   @PathVariable("replyToAll") String toAll,
                                    @RequestBody SendInfo sendInfo){
-
+        EmailAccount emailAccount = getCurrentAccount(sendInfo.getFrom());
+        boolean replyToAll;
+        if (toAll.equals("true")){
+            replyToAll = true;
+        } else {
+            replyToAll = false;
+        }
+        smtpService.replyMessage(
+                emailAccount,
+                messageUid,
+                EncodeUtil.toUrl(folderId),
+                sendInfo.getSubject(),
+                sendInfo.getContent(),
+                sendInfo.getToUser(),
+                sendInfo.getCcUser(),
+                sendInfo.getBccUser(),
+                sendInfo.getAttachments(),
+                replyToAll
+                );
 
         return success();
     }

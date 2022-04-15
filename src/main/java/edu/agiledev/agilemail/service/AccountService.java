@@ -1,7 +1,10 @@
 package edu.agiledev.agilemail.service;
 
+import edu.agiledev.agilemail.pojo.model.Addressbook;
 import edu.agiledev.agilemail.security.model.Credentials;
 import edu.agiledev.agilemail.pojo.model.EmailAccount;
+
+import java.util.List;
 
 /**
  * Description of interface
@@ -17,5 +20,6 @@ public interface AccountService {
     //向数据库中注册新用户
     Credentials registerUser(EmailAccount account);
 
-    //
+    //获得用户通讯录
+    List<Addressbook> getContacts(String userId);
 }
