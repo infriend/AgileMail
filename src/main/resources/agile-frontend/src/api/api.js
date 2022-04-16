@@ -178,8 +178,19 @@ const sendMail = (note) => {
 	        //html: 0/1//如果做了html邮件，可以添加这个字段，没做就当它不存在
         }
     }).then(response=>{
-
     })
+}
+const moveMail = (folderid,toFolderId, messageidList,useraddr) =>{
+    axios({
+        method: 'PUT',
+        url:`${baseUrl}/${folderid}/messages/folder/${toFolderId}`,
+        data:{
+            folderId: folderid,
+            toFolderId: toFolderId,
+            msgIds: messageidList,
+            emailAddress: useraddr.name + "@" + useraddr.addr
+        }
+    }).then()
 
 }
 export default {
@@ -192,5 +203,6 @@ export default {
                 deleteMail,
                 flagMail,
                 setReadStatusMail,
-                sendMail
+                sendMail,
+                moveMail
                 }
