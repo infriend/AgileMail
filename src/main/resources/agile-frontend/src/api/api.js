@@ -3,7 +3,7 @@ import axios from 'axios'
 //const baseUrl = 'http://localhost:8081'
 //const baseUrl = '172.19.240.244:8081'
 const baseUrl = 'http://localhost:3001'//json server
-const setAuthToken = token => {
+const setAuthToken = (token) => {
     if (token) {
       // headers 每个请求都需要用到的
       axios.defaults.headers.common["Authorization"] = token;
@@ -12,18 +12,19 @@ const setAuthToken = token => {
     }
   }
 /* 请求拦截 */
-/*axios.interceptors.request.use(
+axios.interceptors.request.use(
     config => {
       if (localStorage.getItem("loginToken") != null) {
-        config.headers["token"] = localStorage.getItem("token");
+        config.headers["Authorization"] = localStorage.getItem("loginToken");
       }
   
       return config;
     },
     err => Promise.reject(err)
-  );*/
+  );
   
-const loginPost = (address,domain,passwd,setCode) => {//登录邮箱
+const loginPost = (address,domain,passwd,setCode) => {//登录邮箱 
+    let t = 'QWZ3ASASD'
     axios({
         method:'POST',
         url : `${baseUrl}/login`,
@@ -36,10 +37,13 @@ const loginPost = (address,domain,passwd,setCode) => {//登录邮箱
         const {token} = response.data
         const code = response.code
         setCode(code)
+        console.log("log in")
         //setCode('1')
-        localStorage.setItem("loginToken",token)
+        //localStorage.setItem("loginToken",token)
+        localStorage.setItem("loginToken",t)
         console.log(localStorage)
-        setAuthToken(token)
+        //setAuthToken(token)
+        setAuthToken(t)
     })
 }
 const getFolderList = (useraddr,setFolderList) => {//获取folder信息
@@ -159,7 +163,25 @@ const flagMail = (folderid,flagged,useraddr,messageidList) => {//设为已标记
     }).then()
 
 }
+const sendMail = () => {
+    axios({
+        method: 'POST',
+        url:`${baseUrl}/email`,
+        data:{
+            /*from: string, //发送邮箱
+	        toUser: string,//所有邮件地址请用,隔开，摆在同一个字符串中
+	        ccUser: string, //抄送
+	        bccUser: string, //秘密抄送
+	        subject: string, //主题
+	        content: string, //主要内容
+	        attachment: [string],//string数组
+	        html: 0/1//如果做了html邮件，可以添加这个字段，没做就当它不存在*/
+        }
+    }).then(response=>{
 
+    })
+
+}
 export default {
                 loginPost,
                 getFolderList,
@@ -169,5 +191,6 @@ export default {
                 putMailIntoTrash,
                 deleteMail,
                 flagMail,
-                setReadStatusMail
+                setReadStatusMail,
+                sendMail
                 }

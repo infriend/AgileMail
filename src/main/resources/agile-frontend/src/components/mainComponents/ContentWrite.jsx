@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import { Col, Form, Row, Button, Upload,Toast, useFormState} from '@douyinfe/semi-ui';
+import { Col, Form, Row, Button, Upload,Toast, useFormState,Collapsible} from '@douyinfe/semi-ui';
 import api from '../../api/api'
 import Icon, { IconUpload} from '@douyinfe/semi-icons'
 const ContentWrite = ({useraddr,setUseraddr}) => {
@@ -27,16 +27,16 @@ const ContentWrite = ({useraddr,setUseraddr}) => {
         tempNote.subject = values.title
         tempNote.content = values.content
         //console.log(values)
-        //console.log(tempNote)
+        console.log(tempNote)
         var issuccess = true;//test
         if (submitstate == "send"){
-            api.emailPost(tempNote.from,tempNote.to,tempNote.subject,tempNote.content)
+            //api.emailPost(tempNote.from,tempNote.to,tempNote.subject,tempNote.content)
             if(issuccess)
                 Toast.success('发送成功')
             else
                 Toast.error('发送失败')
         }else if(submitstate == "draft"){
-            api.draftPut(tempNote.from,tempNote.to,tempNote.subject,tempNote.content)
+            //api.draftPut(tempNote.from,tempNote.to,tempNote.subject,tempNote.content)
             if(issuccess)
                 Toast.success('保存成功')
             else
@@ -69,11 +69,11 @@ const ContentWrite = ({useraddr,setUseraddr}) => {
                         onSubmit={mailSubmmit}>
                             <Form.Input field='to' label='收件人' style={{ width: '100%' }} ></Form.Input>
                             <Form.Input field='title' label='主题' style={{ width: '100%' }}></Form.Input>
-                            {/*<Form.Upload action='../images'>
+                            <Form.Upload action='../images'>
                                 <Button icon={<IconUpload />} theme="light">
                                     添加附件
                                 </Button>
-            </Form.Upload>*/}
+            </Form.Upload>
                             <Form.TextArea field = 'content' autosize rows={12}></Form.TextArea>
                             <Button type='primary' theme='solid' htmlType='submit'
                             style={{ width: 100, marginTop: 12, marginRight: 30,marginLeft:70 }}

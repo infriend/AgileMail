@@ -157,13 +157,13 @@ const DeletedBox = ({useraddr,setUseraddr,boxData,setBoxData,detailData,setDetai
     var selectedobj = {}
     const rowSelection = {
         onSelect: (record, selected) => {
-            console.log(`select row: ${selected}`, record);
+            //console.log(`select row: ${selected}`, record);
         },
         onSelectAll: (selected, selectedRows) => {
-            console.log(`select all rows: ${selected}`, selectedRows);
+            //console.log(`select all rows: ${selected}`, selectedRows);
         },
         onChange: (selectedRowKeys, selectedRows) => {
-            console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
+            //console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
             selectedobj = selectedRows
         },
     };
