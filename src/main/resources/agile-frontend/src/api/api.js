@@ -24,7 +24,7 @@ axios.interceptors.request.use(
   );
   
 const loginPost = (address,domain,passwd,setCode) => {//登录邮箱 
-    let t = 'QWZ3ASASD'
+    //let t = 'QWZ3ASASD'
     axios({
         method:'POST',
         url : `${baseUrl}/login`,
@@ -39,11 +39,11 @@ const loginPost = (address,domain,passwd,setCode) => {//登录邮箱
         setCode(code)
         console.log("log in")
         //setCode('1')
-        //localStorage.setItem("loginToken",token)
-        localStorage.setItem("loginToken",t)
+        localStorage.setItem("loginToken",token)
+        //localStorage.setItem("loginToken",t)
         console.log(localStorage)
-        //setAuthToken(token)
-        setAuthToken(t)
+        setAuthToken(token)
+        //setAuthToken(t)
     })
 }
 const getFolderList = (useraddr,setFolderList) => {//获取folder信息
