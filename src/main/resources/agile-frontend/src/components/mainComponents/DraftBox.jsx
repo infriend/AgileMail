@@ -153,7 +153,7 @@ const DraftBox = ({useraddr,setUseraddr,boxData,setBoxData,detailData,setDetailD
                 console.log(maillist)
                 api.putMailIntoTrash(params.get('bid'),useraddr,maillist)
                 Toast.success('删除成功')
-                navigate('/main/inbox?='+params.get('bid'))
+                navigate('/main/draft?bid='+params.get('bid'))
                 //navigate('/main/')
             }
         }       

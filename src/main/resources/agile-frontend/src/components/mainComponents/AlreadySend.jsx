@@ -153,7 +153,7 @@ const AlreadySend = ({useraddr,setUseraddr,boxData,setBoxData,detailData,setDeta
                 console.log(maillist)
                 api.putMailIntoTrash(params.get('bid'),useraddr,maillist)
                 Toast.success('删除成功')
-                navigate('/main/inbox?='+params.get('bid'))
+                navigate('/main/alreadySent?bid='+params.get('bid'))
                 //navigate('/main/')
             }
         }       

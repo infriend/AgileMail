@@ -57,7 +57,7 @@ const getFolderList = (useraddr,setFolderList) => {//获取folder信息
     })
 
 }
-const getMailList = (folderid,useraddr,setBoxData) => {
+const getMailList = (folderid,useraddr,setBoxData) => {//查看文件夹邮件列表
     axios({
         method:'GET',
         //url:`${baseUrl}/${folderid}/list`,
@@ -71,7 +71,7 @@ const getMailList = (folderid,useraddr,setBoxData) => {
         setBoxData(data)
     })
 }
-const getMailDetail = async(folderid, useraddr, messageuid, setDetailData) => {
+const getMailDetail = async(folderid, useraddr, messageuid, setDetailData) => {//查看邮件
     await axios({
         method: 'GET',
         //url: `${baseUrl}/${folderId}/message/${messageuid}`,
@@ -90,7 +90,7 @@ const getMailDetail = async(folderid, useraddr, messageuid, setDetailData) => {
         //setDetailData(data[0]);     
     });
 }
-const putMailIntoTrash = (folderid,useraddr,messageidList) => {
+const putMailIntoTrash = (folderid,useraddr,messageidList) => {//删除邮件
     axios({
         method: 'PUT',
         url:`${folderid}/messages/trash`,
@@ -113,7 +113,7 @@ const putMailIntoTrash = (folderid,useraddr,messageidList) => {
     })
 
 }
-const deleteMail = (folderid,useraddr,messageidList) => {
+const deleteMail = (folderid,useraddr,messageidList) => {//彻底删除邮件
     axios({
         method: 'DELETE',
         url: `${folderid}/messages`,

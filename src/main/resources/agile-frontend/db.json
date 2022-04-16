@@ -47,6 +47,18 @@
       "password": "asdasd",
       "domain": "163.com",
       "id": 8
+    },
+    {
+      "emailAddress": "ssss",
+      "password": "asdasd",
+      "domain": "163.com",
+      "id": 9
+    },
+    {
+      "emailAddress": "ssss",
+      "password": "asdasd",
+      "domain": "gmail.com",
+      "id": 10
     }
   ],
   "folder": [
@@ -152,7 +164,7 @@
       ],
       "subject": "testSubject1",
       "datetime": "2020-01-26 11:01",
-      "flagged": false,
+      "flagged": true,
       "seen": true,
       "recent": true,
       "deleted": false,
@@ -193,7 +205,7 @@
       "subject": "testSubject3",
       "datetime": "2020-01-26 11:01",
       "flagged": false,
-      "seen": true,
+      "seen": false,
       "recent": true,
       "deleted": false,
       "fromEmailAccount": "ssss@163.com"
@@ -215,7 +227,7 @@
       ],
       "subject": "testSubject3",
       "datetime": "2020-01-26 11:01",
-      "flagged": false,
+      "flagged": true,
       "seen": true,
       "recent": true,
       "deleted": false,

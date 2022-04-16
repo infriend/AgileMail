@@ -1,10 +1,12 @@
 import React ,{useMemo,useRef,useEffect}from 'react';
-import { Col, Layout, Row,Table, Button,Toast,Dropdown} from '@douyinfe/semi-ui';
+import { Rating,Table, Button,Toast,Dropdown,Typography} from '@douyinfe/semi-ui';
 import api from '../../api/api'
 import { useNavigate,useSearchParams } from 'react-router-dom';
+import { IconMailStroked1,IconInbox } from '@douyinfe/semi-icons';
 import { useState } from 'react';
 const Inbox = ({useraddr,setUseraddr,boxData,setBoxData,detailData,setDetailData,folderList,setFolderList}) => {
     const navigate = useNavigate()
+    const { Text } = Typography;
     useraddr = JSON.parse(localStorage.getItem("userdata"))
     const [params] = useSearchParams()
     var all = 0,notRead = 0,recent = 0
@@ -64,16 +66,43 @@ const Inbox = ({useraddr,setUseraddr,boxData,setBoxData,detailData,setDetailData
     }
     const columns = [
         {
+            dataIndex: 'seen',
+            width:'auto',
+            render: (text,record,index) => {
+                if(text){
+                    return(
+                        <IconInbox size="large" style={{color:'rgba(var(--semi-grey-5), 1)'}}/>
+                    )
+                }else{
+                    return(
+                        <IconMailStroked1 size="large" style={{color:'rgba(var(--semi-amber-5), 1)'}}/>
+                    )
+                }
+
+            }
+
+        },
+        {
             title: '发信人',
             dataIndex: 'from',
             width: 'auto',
             render: (text, record, index) => {
                 var id = record.uid
-                return (
-                    <div onClick={()=>mailOnclick(id)}>
-                        {text[0]}
-                    </div>
-                );
+                if(record.seen){//false表示最近还没看过
+                    return (
+                        <div onClick={()=>mailOnclick(id)} >
+                            <Text>{text[0]}</Text>
+                        </div>
+                    );
+                }else{
+                    return (
+                        <div onClick={()=>mailOnclick(id)} >
+                            <Text strong>{text[0]}</Text>
+                        </div>
+                    );
+
+                }
+
             },
             filters: [
                 {
@@ -94,11 +123,19 @@ const Inbox = ({useraddr,setUseraddr,boxData,setBoxData,detailData,setDetailData
             width:450,
             render: (text, record, index) => {
                 var id = record.uid
-                return (
-                    <div onClick={()=>mailOnclick(id)}>
-                        {text}
-                    </div>
-                );
+                if(record.seen){
+                    return (
+                        <div onClick={()=>mailOnclick(id)}>
+                            <Text>{text}</Text>
+                        </div>
+                    );
+                }else{
+                    return (
+                        <div onClick={()=>mailOnclick(id)}>
+                            <Text strong>{text}</Text>
+                        </div>
+                    );
+                }
             }
         },
         {
@@ -106,11 +143,19 @@ const Inbox = ({useraddr,setUseraddr,boxData,setBoxData,detailData,setDetailData
             dataIndex: 'datetime',
             render: (text, record, index) => {
                 var id = record.uid
-                return (
-                    <div onClick={()=>mailOnclick(id)}>
-                        {text}
-                    </div>
-                );
+                if(record.seen){
+                    return (
+                        <div onClick={()=>mailOnclick(id)}>
+                            <Text>{text}</Text>
+                        </div>
+                    );
+                }else{
+                    return (
+                        <div onClick={()=>mailOnclick(id)}>
+                            <Text strong>{text}</Text>
+                        </div>
+                    );
+                }
             }
         },
         {
@@ -119,9 +164,16 @@ const Inbox = ({useraddr,setUseraddr,boxData,setBoxData,detailData,setDetailData
             width: 'auto',
             render: (text, record, index) => {
                 var id = record.uid
+                if(record.seen){
+                    return(
+                        <div onClick={()=>mailOnclick(id)}>
+                            <Text>{text}</Text>
+                        </div>
+                    );
+                }
                 return(
                     <div onClick={()=>mailOnclick(id)}>
-                        {text}
+                        <Text strong>{text}</Text>
                     </div>
                 );
             },
@@ -138,9 +190,19 @@ const Inbox = ({useraddr,setUseraddr,boxData,setBoxData,detailData,setDetailData
             onFilter: (value, record) => record.fromEmailAccount.includes(value),
             
         },
+        {
+            dataIndex: 'flagged',
+            width: 'auto',
+            render:(text,record,index) => {
+                let flag = text?1:0
+                return(
+                    <Rating allowClear={true} defaultValue = {flag} count = {1}/>
+                )
+            }
+        }
     ];
     const data = boxData
-    //console.log(data)
+    console.log(data)
     var selectedobj = {}
     const rowSelection = {
         onSelect: (record, selected) => {
@@ -171,7 +233,7 @@ const Inbox = ({useraddr,setUseraddr,boxData,setBoxData,detailData,setDetailData
                 console.log(maillist)
                 api.putMailIntoTrash(params.get('bid'),useraddr,maillist)
                 Toast.success('删除成功')
-                navigate('/main/inbox?='+params.get('bid'))
+                navigate('/main/inbox?bid='+params.get('bid'))
                 //navigate('/main/')
             }
         }       
