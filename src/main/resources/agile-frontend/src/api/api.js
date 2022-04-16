@@ -93,7 +93,7 @@ const getMailDetail = async(folderid, useraddr, messageuid, setDetailData) => {/
 const putMailIntoTrash = (folderid,useraddr,messageidList) => {//删除邮件
     axios({
         method: 'PUT',
-        url:`${folderid}/messages/trash`,
+        url:`${baseUrl}/${folderid}/messages/trash`,
         data:{
             folderId : folderid,
         	emailAddress: useraddr.name + "@" + useraddr.addr,
@@ -116,7 +116,7 @@ const putMailIntoTrash = (folderid,useraddr,messageidList) => {//删除邮件
 const deleteMail = (folderid,useraddr,messageidList) => {//彻底删除邮件
     axios({
         method: 'DELETE',
-        url: `${folderid}/messages`,
+        url: `${baseUrl}/${folderid}/messages`,
         data:{
             folderId : folderid,
         	emailAddress: useraddr.name + "@" + useraddr.addr,
@@ -134,6 +134,31 @@ const deleteMail = (folderid,useraddr,messageidList) => {//彻底删除邮件
 
     })
 }
+const setReadStatusMail = (folderid,seen,useraddr,messageidList) => {
+    axios({
+        method: 'PUT',
+        url:`${baseUrl}/${folderid}/messages/seen/${seen}`,
+        data:{
+            folderId : folderid,
+            seen: seen,
+        	emailAddress: useraddr.name + "@" + useraddr.addr,
+	        msgIds: messageidList
+            }
+    }).then()
+}
+const flagMail = (folderid,flagged,useraddr,messageidList) => {//设为已标记/取消标记
+    axios({
+        method: 'PUT',
+        url:`${baseUrl}/${folderid}/messages/flagged/${flagged}`,
+        data:{
+            folderId : folderid,
+            flagged: flagged,
+        	emailAddress: useraddr.name + "@" + useraddr.addr,
+	        msgIds: messageidList
+        }
+    }).then()
+
+}
 
 export default {
                 loginPost,
@@ -142,5 +167,7 @@ export default {
                 setAuthToken,
                 getMailDetail,
                 putMailIntoTrash,
-                deleteMail
+                deleteMail,
+                flagMail,
+                setReadStatusMail
                 }

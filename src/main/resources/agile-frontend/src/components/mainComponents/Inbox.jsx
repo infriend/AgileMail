@@ -64,18 +64,32 @@ const Inbox = ({useraddr,setUseraddr,boxData,setBoxData,detailData,setDetailData
         const sth = await api.getMailDetail(params.get('bid'),useraddr,id,setDetailData)
         navigate(url)
     }
+    const starOnchange = (val,id) => {
+        //console.log("当前flag:"+ val)
+        let flag = val?true:false
+        api.flagMail(params.get('bid'),flag,useraddr,id)
+    } 
+    const readOnclick = (seen,id) =>{
+        bidcurr = params.get('bid')
+        api.setReadStatusMail(params.get('bid'),!seen,useraddr,id)
+        api.getMailList(bidcurr,useraddr,setBoxData)
+        data = boxData
+    }
     const columns = [
         {
             dataIndex: 'seen',
             width:'auto',
             render: (text,record,index) => {
+                var id = record.uid
                 if(text){
                     return(
-                        <IconInbox size="large" style={{color:'rgba(var(--semi-grey-5), 1)'}}/>
+                        <IconInbox size="large" style={{color:'rgba(var(--semi-grey-5), 1)'}}
+                        onClick={()=>{readOnclick(record.seen,id)}}/>
                     )
                 }else{
                     return(
-                        <IconMailStroked1 size="large" style={{color:'rgba(var(--semi-amber-5), 1)'}}/>
+                        <IconMailStroked1 size="large" style={{color:'rgba(var(--semi-amber-5), 1)'}}
+                        onClick={()=>{readOnclick(record.seen,id)}}/>
                     )
                 }
 
@@ -194,14 +208,16 @@ const Inbox = ({useraddr,setUseraddr,boxData,setBoxData,detailData,setDetailData
             dataIndex: 'flagged',
             width: 'auto',
             render:(text,record,index) => {
+                let id = record.uid
                 let flag = text?1:0
                 return(
-                    <Rating allowClear={true} defaultValue = {flag} count = {1}/>
+                    <Rating allowClear={true} defaultValue={flag} count={1}
+                    onChange={(val)=>{starOnchange(val,id)}}/>
                 )
             }
         }
     ];
-    const data = boxData
+    var data = boxData
     console.log(data)
     var selectedobj = {}
     const rowSelection = {
