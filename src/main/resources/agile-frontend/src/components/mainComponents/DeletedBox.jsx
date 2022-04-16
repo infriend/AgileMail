@@ -1,6 +1,7 @@
 import React ,{useMemo}from 'react';
-import { Col, Layout, Row,Table, Popconfirm, Button, Toast} from '@douyinfe/semi-ui';
+import { Rating,Table, Popconfirm, Button, Toast} from '@douyinfe/semi-ui';
 import { useNavigate,useSearchParams } from 'react-router-dom';
+import { IconInbox } from '@douyinfe/semi-icons';
 import api from '../../api/api'
 const DeletedBox = ({useraddr,setUseraddr,boxData,setBoxData,detailData,setDetailData,folderList,setFolderList}) => {
     const navigate = useNavigate()
@@ -44,20 +45,28 @@ const DeletedBox = ({useraddr,setUseraddr,boxData,setBoxData,detailData,setDetai
     }
     else {
         all = findInf(folderList,params.get('bid'))
-        /*let id = params.get('bid')
-        for(let obj in folderList){
-            if(folderList[obj].folderId === id){
-                all = folderList[obj].message
-            }
-        }*/
     }
     const mailOnclick = async(id) => {
         var url = '/main/readmail?id='+params.get('bid')+"_"+id
         const sth = await api.getMailDetail(params.get('bid'),useraddr,id,setDetailData)
         navigate(url)
     }
+    const starOnchange = (val,id) => {
+        let flag = val?true:false
+        api.flagMail(params.get('bid'),flag,useraddr,id)
+    } 
     
     const columns = [
+        {
+            dataIndex: 'seen',
+            width:'auto',
+            render: (text,record,index) => {
+                return(
+                    <IconInbox size="large" style={{color:'rgba(var(--semi-grey-5), 1)'}}
+                    />
+                )
+            }
+        },
         {
             title: '发信人',
             dataIndex: 'from',
@@ -131,6 +140,18 @@ const DeletedBox = ({useraddr,setUseraddr,boxData,setBoxData,detailData,setDetai
             ],
             onFilter: (value, record) => record.fromEmailAccount.includes(value)
         },
+        {
+            dataIndex: 'flagged',
+            width: 'auto',
+            render:(text,record,index) => {
+                let id = record.uid
+                let flag = text?1:0
+                return(
+                    <Rating allowClear={true} defaultValue={flag} count={1}
+                    onChange={(val)=>{starOnchange(val,id)}}/>
+                )
+            }
+        }
     ];
     const data = boxData
     var selectedobj = {}
