@@ -3,6 +3,13 @@ package edu.agiledev.agilemail.exception;
 import edu.agiledev.agilemail.pojo.model.ReturnCode;
 
 
+/**
+ * 异常基类
+ *
+ * @author Nosolution
+ * @version 1.0
+ * @since 2022/2/12
+ */
 public class BaseException extends RuntimeException {
 
 //    private static final int MISCELLANEOUS_HTTP_WARN_CODE = 199;

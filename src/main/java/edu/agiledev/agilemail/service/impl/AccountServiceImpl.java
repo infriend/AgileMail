@@ -4,6 +4,8 @@ import edu.agiledev.agilemail.config.ApplicationConfiguration;
 import edu.agiledev.agilemail.exception.AuthenticationException;
 import edu.agiledev.agilemail.exception.BaseException;
 import edu.agiledev.agilemail.mappers.AccountMapper;
+import edu.agiledev.agilemail.mappers.AddressbookMapper;
+import edu.agiledev.agilemail.pojo.model.Addressbook;
 import edu.agiledev.agilemail.pojo.model.EmailAccount;
 import edu.agiledev.agilemail.pojo.model.ReturnCode;
 import edu.agiledev.agilemail.security.model.Credentials;
@@ -17,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -43,6 +46,8 @@ public class AccountServiceImpl implements AccountService {
     private final EncryptionUtil encryptionUtil;
     private final ExecutorService checkExecutor;
 
+    @Autowired
+    AddressbookMapper addressbookMapper;
 
     @Autowired
     public AccountServiceImpl(ImapService imapService,
@@ -62,6 +67,7 @@ public class AccountServiceImpl implements AccountService {
 
 
     public void checkAccount(EmailAccount account) {
+        //异步检查，提高速度
         Runnable imapCheckR = () -> imapService.checkAccount(account);
         Future imapCheckF = checkExecutor.submit(imapCheckR);
         Runnable smtpCheckR = () -> smtpService.checkAccount(account);
@@ -70,8 +76,6 @@ public class AccountServiceImpl implements AccountService {
 
         try {
             checkHost(account);
-//            imapService.checkAccount(account);
-//            smtpService.checkAccount(account);
             imapCheckF.get();
             smtpCheckF.get();
         } catch (AuthenticationException e) {
@@ -96,6 +100,11 @@ public class AccountServiceImpl implements AccountService {
 //        credentials.setExpiryDate(ZonedDateTime.now(ZoneOffset.UTC).plus(appConfig.getCredentialsDuration()));
         return credentials;
 
+    }
+
+    @Override
+    public List<Addressbook> getContacts(String userId) {
+        return addressbookMapper.getContactByUserId(userId);
     }
 
     private void checkHost(EmailAccount account) {

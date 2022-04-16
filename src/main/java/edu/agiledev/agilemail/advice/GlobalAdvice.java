@@ -27,7 +27,7 @@ public class GlobalAdvice {
      */
     @ExceptionHandler(BaseException.class)
     public R<String> handleBaseException(BaseException ex) {
-        log.error("handle BaseException [{}]", ex.toString());
+        log.error("Handle BaseException [{}]", ex.toString());
         ex.printStackTrace();
         return R.error(ex.getCode(), ex.getMessage());
     }
@@ -41,7 +41,7 @@ public class GlobalAdvice {
      */
     @ExceptionHandler(Exception.class)
     public R<String> handleException(Exception ex) {
-        log.error("handle Exception [{}]", ex.toString());
+        log.error("Handle Exception [{}]", ex.toString());
         ex.printStackTrace();
         return R.error(ReturnCode.ERROR.getCode(), ex.getMessage());
     }

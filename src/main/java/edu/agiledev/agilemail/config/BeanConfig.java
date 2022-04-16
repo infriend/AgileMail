@@ -21,6 +21,7 @@
 package edu.agiledev.agilemail.config;
 
 import com.sun.mail.util.MailSSLSocketFactory;
+import edu.agiledev.agilemail.pojo.model.SupportDomain;
 import edu.agiledev.agilemail.security.CredentialsTokenProvider;
 import edu.agiledev.agilemail.security.TokenProvider;
 import edu.agiledev.agilemail.utils.EncryptionUtil;
@@ -30,9 +31,16 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import java.security.GeneralSecurityException;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Properties;
 
 /**
- * Created by Marc Nuri <marc@marcnuri.com> on 2018-10-10.
+ * bean配置器
+ *
+ * @author Nosolution
+ * @version 1.0
+ * @since 2022/2/7
  */
 @Configuration
 public class BeanConfig {
@@ -64,4 +72,28 @@ public class BeanConfig {
         CredentialsTokenProvider tokenProvider = new CredentialsTokenProvider(expiration, refresh, secretKey);
         return tokenProvider;
     }
+
+    @Bean
+    public Map<String, SupportDomain> getDomainMap() {
+        Map<String, SupportDomain> domainMap = new HashMap();
+        SupportDomain _163 = new SupportDomain("INBOX", "已发送", "草稿箱", "已删除", "垃圾箱");
+        domainMap.put("163.com", _163);
+        SupportDomain _qq = new SupportDomain("INBOX", "Sent Messages", "Drafts", "Deleted Messages", "Junk");
+        domainMap.put("qq.com", _qq);
+        SupportDomain _smail = new SupportDomain("INBOX", "Sent Messages", "Drafts", "Deleted Messages", "Junk");
+        domainMap.put("smail.nju.edu.cn", _smail);
+        return domainMap;
+    }
+
+    @Bean
+    public Map<String, Properties> getSmtpProperties() {
+        Map<String, Properties> domainMap = new HashMap();
+
+        Properties _163 = new Properties();
+
+
+        return domainMap;
+    }
+
+
 }

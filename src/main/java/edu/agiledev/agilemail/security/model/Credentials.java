@@ -16,7 +16,6 @@ import java.util.Date;
 
 /**
  * 身份信息类，实现Authentication接口可在Spring，Security中使用，保存身份信息
- * TODO：确认接口方面的实现是否妥当
  *
  * @author Nosolution
  * @version 1.0

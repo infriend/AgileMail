@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 import java.io.Serializable;
 
 /**
- * Message attachment
+ * 邮件附件模型
  *
  * @author Nosolution
  * @version 1.0

@@ -113,6 +113,15 @@ public class MessageUtil {
     }
 
 
+    public static BodyPart extractBodyPart(Multipart mp, String id, boolean isContentId)
+            throws MessagingException, IOException {
+
+        return isContentId ?
+                extractEmbeddedImageBodyPart(mp, id) :
+                extractAttachmentBodyPart(mp, id);
+    }
+
+
     /**
      * 将图片cid url(<code>&lt;img src='cid:1234' /&gt;</code>)替换为Base64数据urls
      */
@@ -135,5 +144,65 @@ public class MessageUtil {
         }
         return content;
     }
+
+    /**
+     * 从{@link Multipart}中抽取contentId对应的image的{@link BodyPart}
+     *
+     * @param multipart BodyPart所在
+     * @param contentId BodyPart对应的image的id
+     * @return contentId对应的image的BodyPart，如果没找到则返回null
+     * @throws MessagingException for any IMAP exception
+     * @throws IOException        for IO problems when reading the content
+     */
+    private static BodyPart extractEmbeddedImageBodyPart(Multipart multipart, String contentId)
+            throws MessagingException, IOException {
+
+        for (int it = 0; it < multipart.getCount(); it++) {
+            final BodyPart bp = multipart.getBodyPart(it);
+            if (bp.getContentType().toLowerCase().startsWith(MULTIPART_MIME_TYPE)) {
+                final BodyPart nestedBodyPart = extractEmbeddedImageBodyPart((Multipart) bp.getContent(), contentId);
+                if (nestedBodyPart != null) {
+                    return nestedBodyPart;
+                }
+            }
+            if (bp.getContentType().toLowerCase().startsWith("image/")
+                    && bp instanceof MimeBodyPart
+                    && contentId.equals(((MimeBodyPart) bp).getContentID())) {
+                return bp;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * 从{@link Multipart}中抽取aid对应的attachment的{@link BodyPart}
+     *
+     * @param multipart BodyPart所在
+     * @param aid       attachment对应的BodyPart的id
+     * @return aid对应的附件的BodyPart，如果没找到则返回null
+     * @throws MessagingException IMAP异常
+     * @throws IOException        读取content时发生IO异常时抛出
+     */
+    private static BodyPart extractAttachmentBodyPart(Multipart multipart, String aid)
+            throws MessagingException, IOException {
+
+        for (int it = 0; it < multipart.getCount(); it++) {
+            final BodyPart bp = multipart.getBodyPart(it);
+            if (bp.getDisposition() != null && Part.ATTACHMENT.equalsIgnoreCase(bp.getDisposition())) {
+                // Regular file
+                if (aid.equals(MimeUtility.decodeText(bp.getFileName()))) {
+                    return bp;
+                }
+                // Embedded message
+                if (bp.getContentType().toLowerCase().startsWith("message/")
+                        && bp.getContent() instanceof MimeMessage
+                        && ((MimeMessage) bp.getContent()).getSubject().equals(aid)) {
+                    return bp;
+                }
+            }
+        }
+        return null;
+    }
+
 
 }

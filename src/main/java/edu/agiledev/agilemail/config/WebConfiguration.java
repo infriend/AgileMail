@@ -40,7 +40,11 @@ import java.util.stream.Stream;
 import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_PROTOTYPE;
 
 /**
- * Created by Marc Nuri <marc@marcnuri.com> on 2018-08-09.
+ * web相关配置
+ *
+ * @author Nosolution
+ * @version 1.0
+ * @since 2022/2/7
  */
 @Configuration
 public class WebConfiguration implements WebMvcConfigurer, AsyncConfigurer {
@@ -60,16 +64,16 @@ public class WebConfiguration implements WebMvcConfigurer, AsyncConfigurer {
         configurer.setTaskExecutor(getAsyncExecutor());
     }
 
-     @Override
-     public ThreadPoolTaskExecutor getAsyncExecutor() {
-         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
-         executor.setCorePoolSize(7);
-         executor.setMaxPoolSize(42);
-         executor.setQueueCapacity(11);
-         executor.setThreadNamePrefix("MyExecutor-");
-         executor.initialize();
-         return executor;
-     }
+    @Override
+    public ThreadPoolTaskExecutor getAsyncExecutor() {
+        ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
+        executor.setCorePoolSize(7);
+        executor.setMaxPoolSize(42);
+        executor.setQueueCapacity(11);
+        executor.setThreadNamePrefix("MyExecutor-");
+        executor.initialize();
+        return executor;
+    }
 
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
