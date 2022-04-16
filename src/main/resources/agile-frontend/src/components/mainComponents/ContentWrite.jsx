@@ -1,11 +1,12 @@
 import React, {useState} from 'react';
-import { Col, Form, Row, Button, Upload,Toast, useFormState,Collapsible} from '@douyinfe/semi-ui';
+import { Col, Form, Row, Button, Upload,Toast, useFormState,Collapsible,Typography} from '@douyinfe/semi-ui';
 import api from '../../api/api'
 import Icon, { IconUpload} from '@douyinfe/semi-icons'
 const ContentWrite = ({useraddr,setUseraddr}) => {
     var username = useraddr.name
     const [submitstate, setsubmitstate] = useState();
     useraddr = JSON.parse(localStorage.getItem("userdata"))
+    const { Text } = Typography;
     var d = new Date()
     const time = () =>{
         var time = d.getHours()
@@ -24,6 +25,8 @@ const ContentWrite = ({useraddr,setUseraddr}) => {
         const tempNote ={}
         tempNote.from = useraddr.name+'@'+useraddr.addr
         tempNote.to = values.to
+        tempNote.cc = values.cc
+        tempNote.bcc = values.bcc
         tempNote.subject = values.title
         tempNote.content = values.content
         //console.log(values)
@@ -31,6 +34,7 @@ const ContentWrite = ({useraddr,setUseraddr}) => {
         var issuccess = true;//test
         if (submitstate == "send"){
             //api.emailPost(tempNote.from,tempNote.to,tempNote.subject,tempNote.content)
+            api.sendMail(tempNote)
             if(issuccess)
                 Toast.success('发送成功')
             else
@@ -43,11 +47,40 @@ const ContentWrite = ({useraddr,setUseraddr}) => {
                 Toast.error('发送失败')
         }
     }
+    const ccReturn = (
+
+        <Form.Input field='cc' label='抄送' style={{ width: '100%' }} ></Form.Input>
+    )
+    const bccReturn =(
+        <Form.Input field='bcc' label='密送' style={{ width: '100%' }} ></Form.Input>
+    )
+    const [isOpenCc,setIsOpenCc] = useState()
+    const [isOpenBcc,setIsOpenBcc] = useState()
+    const ccOnclick = () => {
+        setIsOpenCc(!isOpenCc)
+    }
+    const bccOnclick = () => {
+        setIsOpenBcc(!isOpenBcc)
+    }
     const sendOnclick = () => {
         setsubmitstate("send")
     }
     const draftOnclick = () => {
         setsubmitstate("draft")
+    }
+    const ccbuttonName = () => {
+        if(!isOpenCc){
+            return("添加")
+        }else{
+            return("删除")
+        }
+    }
+    const bccbuttonName = () => {
+        if(!isOpenBcc){
+            return("添加")
+        }else{
+            return("删除")
+        }
     }
     return(
         <><div>
@@ -68,12 +101,17 @@ const ContentWrite = ({useraddr,setUseraddr}) => {
                         labelWidth = '70px'
                         onSubmit={mailSubmmit}>
                             <Form.Input field='to' label='收件人' style={{ width: '100%' }} ></Form.Input>
+                            <Text strong>添加发送类型</Text>
+                            <Collapsible isOpen={isOpenCc}>{ccReturn}</Collapsible>
+                            <Collapsible isOpen={isOpenBcc}>{bccReturn}</Collapsible>
+                            <Button theme='borderless' size='small' onClick={ccOnclick}>{ccbuttonName()}抄送</Button>
+                            <Button theme='borderless' size='small' onClick={bccOnclick}>{bccbuttonName()}密送</Button>
                             <Form.Input field='title' label='主题' style={{ width: '100%' }}></Form.Input>
-                            <Form.Upload action='../images'>
+                            <Form.Upload action='../images' field='files'label=' '>
                                 <Button icon={<IconUpload />} theme="light">
                                     添加附件
                                 </Button>
-            </Form.Upload>
+                            </Form.Upload>
                             <Form.TextArea field = 'content' autosize rows={12}></Form.TextArea>
                             <Button type='primary' theme='solid' htmlType='submit'
                             style={{ width: 100, marginTop: 12, marginRight: 30,marginLeft:70 }}

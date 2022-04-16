@@ -34,8 +34,8 @@ const loginPost = (address,domain,passwd,setCode) => {//登录邮箱
             domain: domain
         }
     }).then(response => {
-        const {token} = response.data
-        const code = response.code
+        const token = response.data.data
+        const code = response.data.code
         setCode(code)
         console.log("log in")
         //setCode('1')
@@ -163,19 +163,19 @@ const flagMail = (folderid,flagged,useraddr,messageidList) => {//设为已标记
     }).then()
 
 }
-const sendMail = () => {
+const sendMail = (note) => {
     axios({
         method: 'POST',
         url:`${baseUrl}/email`,
         data:{
-            /*from: string, //发送邮箱
-	        toUser: string,//所有邮件地址请用,隔开，摆在同一个字符串中
-	        ccUser: string, //抄送
-	        bccUser: string, //秘密抄送
-	        subject: string, //主题
-	        content: string, //主要内容
-	        attachment: [string],//string数组
-	        html: 0/1//如果做了html邮件，可以添加这个字段，没做就当它不存在*/
+            from: note.from, //发送邮箱
+	        toUser: note.to,//所有邮件地址请用,隔开，摆在同一个字符串中
+	        ccUser: note.cc, //抄送
+	        bccUser: note.bcc, //秘密抄送
+	        subject: note.subject, //主题
+	        content: note.content, //主要内容
+	        //attachment: [string],//string数组
+	        //html: 0/1//如果做了html邮件，可以添加这个字段，没做就当它不存在
         }
     }).then(response=>{
 
