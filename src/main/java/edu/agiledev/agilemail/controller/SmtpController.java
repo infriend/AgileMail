@@ -1,13 +1,13 @@
 package edu.agiledev.agilemail.controller;
 
-import com.fasterxml.jackson.databind.node.POJONode;
-import edu.agiledev.agilemail.mappers.AddressbookMapper;
 import edu.agiledev.agilemail.pojo.dto.SendInfo;
 import edu.agiledev.agilemail.pojo.model.Addressbook;
 import edu.agiledev.agilemail.pojo.model.EmailAccount;
 import edu.agiledev.agilemail.pojo.model.R;
 import edu.agiledev.agilemail.pojo.model.ReturnCode;
 import edu.agiledev.agilemail.security.model.Credentials;
+import edu.agiledev.agilemail.service.AddressService;
+import edu.agiledev.agilemail.service.FileManageService;
 import edu.agiledev.agilemail.service.SmtpService;
 import edu.agiledev.agilemail.utils.EncodeUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -26,53 +26,25 @@ import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.Iterator;
-import java.util.List;
 
 @RestController
 @Slf4j
-public class SmtpController extends RBaseController{
+public class SmtpController extends RBaseController {
     @Autowired
     private SmtpService smtpService;
 
     @Autowired
-    private AddressbookMapper addressbookMapper;
+    private AddressService addressService;
 
-    @PostMapping("/attachment")
-    public R<String> fileupload(HttpServletRequest request) throws IOException {
-
-        long startTime=System.currentTimeMillis();
-        //将当前上下文初始化给  CommonsMutipartResolver （多部分解析器）
-        CommonsMultipartResolver multipartResolver=new CommonsMultipartResolver(
-                request.getSession().getServletContext());
-        //检查form中是否有enctype="multipart/form-data"
-        if(multipartResolver.isMultipart(request))
-        {
-            //将request变成多部分request
-            MultipartHttpServletRequest multiRequest=(MultipartHttpServletRequest)request;
-            //获取multiRequest 中所有的文件名
-            Iterator iter=multiRequest.getFileNames();
-
-            while(iter.hasNext())
-            {
-                //一次遍历所有文件
-                MultipartFile file=multiRequest.getFile(iter.next().toString());
-                if(file!=null)
-                {
-                    String path="../resources/attachments"+file.getOriginalFilename();
-                    //上传
-                    file.transferTo(new File(path));
-                }
-            }
-        }
-        long  endTime=System.currentTimeMillis();
-        System.out.println("Time: "+String.valueOf(endTime-startTime)+"ms");
-
-        return success("upload succeed");
-    }
+    @Autowired
+    private FileManageService fileManageService;
 
     @PostMapping("/message")
     public R<String> sendMessage(@RequestBody SendInfo sendInfo) throws AddressException {
-        EmailAccount emailAccount = getCurrentAccount(sendInfo.getFrom());
+        Credentials credentials = (Credentials) SecurityContextHolder.getContext().getAuthentication();
+        String userId = credentials.getUserId();
+        EmailAccount emailAccount = accountMapper.getUserEmailAccount(userId, sendInfo.getFrom());
+
         smtpService.sendMessage(
                 emailAccount,
                 sendInfo.getSubject(),
@@ -82,35 +54,24 @@ public class SmtpController extends RBaseController{
                 sendInfo.getBccUser(),
                 sendInfo.getAttachments()
         );
-        Credentials credentials = (Credentials) SecurityContextHolder.getContext().getAuthentication();
-        String userId = credentials.getUserId();
+
         String toUser = sendInfo.getToUser();
 
-        if(null != toUser && !toUser.isEmpty()){
-            InternetAddress[] internetAddressTo = new InternetAddress().parse(toUser);
-            for (InternetAddress address: internetAddressTo){
+        if (null != toUser && !toUser.isEmpty()) {
+            InternetAddress[] internetAddressTo = InternetAddress.parse(toUser);
+            for (InternetAddress address : internetAddressTo) {
                 String mailId = address.getAddress();
-                Addressbook addressbook = addressbookMapper.searchAddressByPrimarykey(new Addressbook(userId, mailId));
-                if (addressbook == null){
-                    addressbookMapper.insert(new Addressbook(userId, mailId));
+                if (!addressService.addressIsSaved(userId, mailId)) {
+                    addressService.saveAddress(userId, mailId);
                 }
             }
-        }
-
-
-        return success("successfully send");
-    }
-
-    @GetMapping("/delete/{filename}")
-    public R<String> deleteAttachment(@PathVariable String filename){
-        File file = new File("../resources/attachments/"+filename);
-        boolean res = file.delete();
-        if (res){
-            return success("attachment delete!");
+            return success("Successfully sent");
         } else {
-            return error(ReturnCode.ERROR, "file not exist!");
+            return error(ReturnCode.ERROR, "To address should NOT be empty");
         }
+
     }
+
 
     @PostMapping("/todraft")
     public R<String> saveToDraft(@RequestBody SendInfo sendInfo) throws MessagingException, UnsupportedEncodingException {
@@ -124,21 +85,16 @@ public class SmtpController extends RBaseController{
                 sendInfo.getBccUser(),
                 sendInfo.getAttachments()
         );
-        return success("draft saved!");
+        return success("Draft saved!");
     }
 
     @PostMapping("{folderId}/{messageUid}/replyto/{replyToAll}")
-    public R<String> replyMessage(@PathVariable("folderID") String folderId,
-                                   @PathVariable("messageUid") Long messageUid,
-                                   @PathVariable("replyToAll") String toAll,
-                                   @RequestBody SendInfo sendInfo){
+    public R<String> replyMessage(@PathVariable("folderId") String folderId,
+                                  @PathVariable("messageUid") Long messageUid,
+                                  @PathVariable("replyToAll") Boolean replyToAll,
+                                  @RequestBody SendInfo sendInfo) {
         EmailAccount emailAccount = getCurrentAccount(sendInfo.getFrom());
-        boolean replyToAll;
-        if (toAll.equals("true")){
-            replyToAll = true;
-        } else {
-            replyToAll = false;
-        }
+
         smtpService.replyMessage(
                 emailAccount,
                 messageUid,
@@ -149,10 +105,48 @@ public class SmtpController extends RBaseController{
                 sendInfo.getCcUser(),
                 sendInfo.getBccUser(),
                 sendInfo.getAttachments(),
-                replyToAll
-                );
+                replyToAll.equals(Boolean.TRUE)
+        );
 
         return success();
+    }
+
+    @PostMapping("/attachment")
+    public R<String> uploadFile(HttpServletRequest request) throws IOException {
+
+        long startTime = System.currentTimeMillis();
+        //将当前上下文初始化给  CommonsMultipartResolver （多部分解析器）
+        CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver(
+                request.getSession().getServletContext());
+        //检查form中是否有enctype="multipart/form-data"
+        if (multipartResolver.isMultipart(request)) {
+            //将request变成多部分request
+            MultipartHttpServletRequest multiRequest = (MultipartHttpServletRequest) request;
+            //获取multiRequest 中所有的文件名
+            Iterator<String> iter = multiRequest.getFileNames();
+
+            while (iter.hasNext()) {
+                //一次遍历所有文件
+                MultipartFile file = multiRequest.getFile(iter.next());
+                if (file != null) {
+                    fileManageService.saveAttachment(file.getOriginalFilename(), file.getInputStream());
+                }
+            }
+        }
+        long endTime = System.currentTimeMillis();
+        log.info("Time: " + (endTime - startTime) + "ms");
+
+        return success("Uploading succeeded");
+    }
+
+    @GetMapping("/delete/{filename}")
+    public R<String> deleteAttachment(@PathVariable String filename) {
+        boolean res = fileManageService.deleteAttachment(filename);
+        if (res) {
+            return success("Attachment deleted!");
+        } else {
+            return error(ReturnCode.ERROR, "File not exist!");
+        }
     }
 
 

@@ -11,12 +11,12 @@ public interface SmtpService {
     void checkAccount(EmailAccount account);
 
     void sendMessage(EmailAccount emailAccount, String subject, String content,
-                     String toUser, String ccUser, String bccUser, String attachments[]);
+                     String toUser, String ccUser, String bccUser, String[] attachments);
 
     void saveToDraft(EmailAccount emailAccount, String subject, String content,
-                     String toUser, String ccUser, String bccUser, String attachments[]) throws MessagingException, UnsupportedEncodingException;
+                     String toUser, String ccUser, String bccUser, String[] attachments) throws MessagingException, UnsupportedEncodingException;
 
     void replyMessage(EmailAccount emailAccount, Long msgUid, URLName folderId,
-                       String subject, String content, String toUser, String ccUser,
-                       String bccUser, String attachments[], boolean replyToAll);
+                      String subject, String content, String toUser, String ccUser,
+                      String bccUser, String[] attachments, boolean replyToAll);
 }

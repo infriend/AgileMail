@@ -9,6 +9,7 @@ import edu.agiledev.agilemail.exception.BaseException;
 import edu.agiledev.agilemail.pojo.model.EmailAccount;
 import edu.agiledev.agilemail.pojo.model.ReturnCode;
 import edu.agiledev.agilemail.pojo.model.SupportDomain;
+import edu.agiledev.agilemail.service.FileManageService;
 import edu.agiledev.agilemail.service.ImapService;
 import edu.agiledev.agilemail.service.SmtpService;
 import lombok.extern.slf4j.Slf4j;
@@ -49,6 +50,9 @@ public class SmtpServiceImpl implements SmtpService {
     @Autowired
     private ImapService imapService;
 
+    @Autowired
+    private FileManageService fileManageService;
+
     private final MailSSLSocketFactory mailSSLSocketFactory;
 
     private Session session;
@@ -62,7 +66,7 @@ public class SmtpServiceImpl implements SmtpService {
 
 
     public void sendMessage(EmailAccount emailAccount, String subject, String content,
-                            String toUser, String ccUser, String bccUser, String attachments[]){
+                            String toUser, String ccUser, String bccUser, String[] attachments) {
         //首先检查to的地址是否合法，接着配置mailsender，最后就发送
         JavaMailSender mailSender = getJavaMailSender(emailAccount);
 
@@ -75,29 +79,29 @@ public class SmtpServiceImpl implements SmtpService {
     @Override
     public void saveToDraft(EmailAccount emailAccount, String subject, String content,
                             String toUser, String ccUser, String bccUser, String[] attachments) throws MessagingException, UnsupportedEncodingException {
-        Session session = getSession(emailAccount);
-        Store store = session.getStore("imap");
-        store.connect("imap."+emailAccount.getDomain(), emailAccount.getUsername(), emailAccount.getPassword());
+//        Session session = getSession(emailAccount);
+//        Store store = session.getStore("imap");
+//        store.connect("imap." + emailAccount.getDomain(), emailAccount.getUsername(), emailAccount.getPassword());
+        IMAPStore store = imapService.getImapStore(emailAccount);
+        Folder folder = store.getFolder(domainMap.get(emailAccount.getDomain()).getDraft());
 
-        Folder folder = (Folder) store.getFolder(domainMap.get(emailAccount.getDomain()).getDraft());
-
-        MimeMessage message = new MimeMessage(session);
+        MimeMessage message = new MimeMessage(getSession(emailAccount));
 
         InternetAddress from = new InternetAddress(emailAccount.getUsername());
         message.setFrom(from);
 
-        if(null != toUser && !toUser.isEmpty()){
-            InternetAddress[] internetAddressTo = new InternetAddress().parse(toUser);
+        if (null != toUser && !toUser.isEmpty()) {
+            InternetAddress[] internetAddressTo = InternetAddress.parse(toUser);
             message.setRecipients(Message.RecipientType.TO, internetAddressTo);
         }
 
-        if(null != ccUser && !ccUser.isEmpty()){
-            InternetAddress[] internetAddressCC = new InternetAddress().parse(ccUser);
+        if (null != ccUser && !ccUser.isEmpty()) {
+            InternetAddress[] internetAddressCC = InternetAddress.parse(ccUser);
             message.setRecipients(Message.RecipientType.CC, internetAddressCC);
         }
 
-        if(null != bccUser && !bccUser.isEmpty()){
-            InternetAddress[] internetAddressBCC = new InternetAddress().parse(bccUser);
+        if (null != bccUser && !bccUser.isEmpty()) {
+            InternetAddress[] internetAddressBCC = InternetAddress.parse(bccUser);
             message.setRecipients(Message.RecipientType.BCC, internetAddressBCC);
         }
 
@@ -115,7 +119,7 @@ public class SmtpServiceImpl implements SmtpService {
         if (null != attachments && attachments.length != 0) {
             for (String f : attachments) {
                 attachmentBodyPart = new MimeBodyPart();
-                File file = new File("../resources/attachments/"+f);
+                File file = fileManageService.getSavedFile(f);
                 DataSource source = new FileDataSource(file);
                 attachmentBodyPart.setDataHandler(new DataHandler(source));
                 //MimeUtility.encodeWord可以避免文件名乱码
@@ -127,19 +131,19 @@ public class SmtpServiceImpl implements SmtpService {
         message.setContent(multipart);
         message.saveChanges();
         message.setFlag(Flags.Flag.DRAFT, true);
-        MimeMessage draftMessages[] = {message};
+        MimeMessage[] draftMessages = {message};
         folder.appendMessages(draftMessages);
 
     }
 
     @Override
     public void replyMessage(EmailAccount emailAccount, Long msgUid, URLName folderId,
-                              String subject, String content, String toUser, String ccUser,
-                              String bccUser, String[] attachments, boolean replyToAll) {
+                             String subject, String content, String toUser, String ccUser,
+                             String bccUser, String[] attachments, boolean replyToAll) {
         IMAPStore store = imapService.getImapStore(emailAccount);
-        try (IMAPFolder folder = imapService.getFolder(store, folderId)){
+        try (IMAPFolder folder = imapService.getFolder(store, folderId)) {
             folder.open(Folder.READ_ONLY);
-            Message message = (IMAPMessage) folder.getMessageByUID(msgUid);
+            Message message = folder.getMessageByUID(msgUid);
 
             if (message == null) {
                 throw new BaseException(ReturnCode.IMAP_MESSAGE_ERROR, "找不到邮件");
@@ -152,7 +156,7 @@ public class SmtpServiceImpl implements SmtpService {
                     attachments, mailSender, replyMessage);
 
 
-        }catch (MessagingException e) {
+        } catch (MessagingException e) {
             throw new BaseException(ReturnCode.IMAP_MESSAGE_ERROR, String.format("imap: 读取文件夹%s失败", folderId), e);
         }
 
@@ -169,20 +173,20 @@ public class SmtpServiceImpl implements SmtpService {
             message.setFrom(from);
 
             // set to
-            if(null != toUser && !toUser.isEmpty()){
-                InternetAddress[] internetAddressTo = new InternetAddress().parse(toUser);
+            if (null != toUser && !toUser.isEmpty()) {
+                InternetAddress[] internetAddressTo = InternetAddress.parse(toUser);
                 helper.setTo(internetAddressTo);
             }
 
             // set cc
-            if(null != ccUser && !ccUser.isEmpty()){
-                InternetAddress[] internetAddressCC = new InternetAddress().parse(ccUser);
+            if (null != ccUser && !ccUser.isEmpty()) {
+                InternetAddress[] internetAddressCC = InternetAddress.parse(ccUser);
                 helper.setCc(internetAddressCC);
             }
 
             // set bcc
-            if(null != bccUser && !bccUser.isEmpty()){
-                InternetAddress[] internetAddressBCC = new InternetAddress().parse(bccUser);
+            if (null != bccUser && !bccUser.isEmpty()) {
+                InternetAddress[] internetAddressBCC = InternetAddress.parse(bccUser);
                 helper.setBcc(internetAddressBCC);
             }
 
@@ -193,9 +197,9 @@ public class SmtpServiceImpl implements SmtpService {
             helper.setSubject(subject);
 
             // set attachment
-            if (null != attachments && attachments.length > 0){
-                for (String file: attachments){
-                    File temp = new File("../resources/attachments/"+ file);
+            if (null != attachments && attachments.length > 0) {
+                for (String file : attachments) {
+                    File temp = fileManageService.getSavedFile(file);
                     helper.addAttachment(temp.getName(), temp);
                 }
             }
@@ -204,14 +208,15 @@ public class SmtpServiceImpl implements SmtpService {
             helper.setText(content);
 
             mailSender.send(message);
-            if (null != attachments && attachments.length > 0){
-                for (String file: attachments){
-                    File temp = new File("../resources/attachments/"+ file);
-                    temp.delete();
+            if (null != attachments && attachments.length > 0) {
+                for (String file : attachments) {
+                    fileManageService.deleteAttachment(file);
+//                    File temp = fileManageService.getSavedFile(file);
+//                    temp.delete();
                 }
             }
-        } catch (MessagingException e){
-            throw new BaseException("send failed!");
+        } catch (MessagingException e) {
+            throw new BaseException("Send failed!");
         }
     }
 
@@ -225,12 +230,11 @@ public class SmtpServiceImpl implements SmtpService {
         }
     }
 
-    private JavaMailSender getJavaMailSender(EmailAccount emailAccount)
-    {
+    private JavaMailSender getJavaMailSender(EmailAccount emailAccount) {
         JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
         String emailDomain = emailAccount.getDomain();
         Properties props = mailSender.getJavaMailProperties();
-        switch (emailDomain){
+        switch (emailDomain) {
             case "163.com":
                 mailSender.setHost("smtp.163.com");
                 mailSender.setPort(25);

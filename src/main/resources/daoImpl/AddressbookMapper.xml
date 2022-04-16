@@ -43,7 +43,7 @@
     </trim>
   </insert>
 
-  <select id="searchAddressByPrimarykey" resultMap="BaseResultMap">
+  <select id="searchAddressByPrimaryKey" resultMap="BaseResultMap">
     select * from sys_addressbook
     where id=#{id,jdbcType=VARCHAR} and contact_email=#{contactEmail,jdbcType=VARCHAR}
   </select>

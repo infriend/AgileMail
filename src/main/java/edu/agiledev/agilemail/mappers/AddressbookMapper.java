@@ -14,7 +14,7 @@ public interface AddressbookMapper {
 
     int insertSelective(Addressbook record);
 
-    Addressbook searchAddressByPrimarykey(Addressbook record);
+    Addressbook searchAddressByPrimaryKey(Addressbook record);
 
     List<Addressbook> getContactByUserId(String userId);
 }
