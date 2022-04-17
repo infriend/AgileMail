@@ -3,15 +3,14 @@ package edu.agiledev.agilemail.pojo.dto;
 import lombok.Data;
 
 /**
- * 邮箱账户DTO
+ * 用户登录DTO
  *
  * @author Nosolution
  * @version 1.0
  * @since 2022/2/14
  */
 @Data
-public class EmailAccountDTO {
-    private String emailAddress;
+public class AccountDTO {
+    private String username;
     private String password;
-    private String domain;
 }

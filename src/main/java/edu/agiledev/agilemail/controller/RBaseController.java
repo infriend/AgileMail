@@ -52,10 +52,15 @@ public class RBaseController {
         return R.error(returnCode);
     }
 
-
-    protected EmailAccount getCurrentAccount(String emailAddress) {
+    protected String getCurrentUserId() {
         Credentials credentials = (Credentials) SecurityContextHolder.getContext().getAuthentication();
         String userId = credentials.getUserId();
+        return userId;
+    }
+
+    protected EmailAccount getCurrentAccount(String emailAddress) {
+//        Credentials credentials = (Credentials) SecurityContextHolder.getContext().getAuthentication();
+        String userId = getCurrentUserId();
         EmailAccount account = accountMapper.getUserEmailAccount(userId, emailAddress);
         return account;
     }

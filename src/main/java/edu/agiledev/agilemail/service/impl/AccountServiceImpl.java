@@ -5,6 +5,7 @@ import edu.agiledev.agilemail.exception.AuthenticationException;
 import edu.agiledev.agilemail.exception.BaseException;
 import edu.agiledev.agilemail.mappers.AccountMapper;
 import edu.agiledev.agilemail.mappers.AddressbookMapper;
+import edu.agiledev.agilemail.pojo.model.Account;
 import edu.agiledev.agilemail.pojo.model.Addressbook;
 import edu.agiledev.agilemail.pojo.model.EmailAccount;
 import edu.agiledev.agilemail.pojo.model.ReturnCode;
@@ -66,7 +67,28 @@ public class AccountServiceImpl implements AccountService {
     }
 
 
-    public void checkAccount(EmailAccount account) {
+    @Override
+    @Transactional
+    public Credentials loginUser(String username, String password) {
+        Account user = accountMapper.searchAccount(username);
+        String encryptedPassword = encryptionUtil.encrypt(password);
+        if (encryptedPassword.equals(password)) {
+            Credentials credentials = new Credentials();
+            credentials.setUserId(user.getId());
+            return credentials;
+        } else {
+            return null;
+        }
+//        accountMapper.insertAccount(accountId, account.getUsername(), encryptedPassword, account.getDomain());
+//        accountMapper.relateAccount(userId, accountId);
+
+//        credentials.setExpiryDate(ZonedDateTime.now(ZoneOffset.UTC).plus(appConfig.getCredentialsDuration()));
+
+
+    }
+
+    @Override
+    public boolean checkAccount(EmailAccount account) {
         //异步检查，提高速度
         Runnable imapCheckR = () -> imapService.checkAccount(account);
         Future imapCheckF = checkExecutor.submit(imapCheckR);
@@ -78,8 +100,10 @@ public class AccountServiceImpl implements AccountService {
             checkHost(account);
             imapCheckF.get();
             smtpCheckF.get();
+            return true;
         } catch (AuthenticationException e) {
-            throw e;
+//            throw e;
+            return false;
         } catch (ExecutionException | InterruptedException e) {
             e.printStackTrace();
             throw new BaseException(ReturnCode.CHECKING_ERROR, "发生运行错误");
@@ -88,18 +112,20 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     @Transactional
-    public Credentials registerUser(EmailAccount account) {
-        String userId = idGenerator.nextIdStr();
-        String accountId = idGenerator.nextIdStr();
-        accountMapper.insertUser(userId);
-        String encryptedPassword = encryptionUtil.encrypt(account.getPassword());
-        accountMapper.insertAccount(accountId, account.getUsername(), encryptedPassword, account.getDomain());
-        accountMapper.relateAccount(userId, accountId);
-        Credentials credentials = new Credentials();
-        credentials.setUserId(userId);
-//        credentials.setExpiryDate(ZonedDateTime.now(ZoneOffset.UTC).plus(appConfig.getCredentialsDuration()));
-        return credentials;
+    public boolean addEmailAccount(String userId, EmailAccount emailAccount) {
+        String emailAccountId = idGenerator.nextIdStr();
+        String encryptedPassword = encryptionUtil.encrypt(emailAccount.getPassword());
+        int res = accountMapper.insertEmailAccount(emailAccountId, emailAccount.getUsername(), encryptedPassword, emailAccount.getDomain());
+        if (res > 0) {
+            res = accountMapper.relateAccount(userId, emailAccountId);
+        }
+        return res > 0;
+    }
 
+    @Override
+    public boolean deleteEmailAccount(String userId, String emailAddress) {
+        int res = accountMapper.deRelateAccount(userId, emailAddress);
+        return res > 0;
     }
 
     @Override

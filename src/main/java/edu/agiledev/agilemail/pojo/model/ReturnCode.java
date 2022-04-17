@@ -13,6 +13,8 @@ public enum ReturnCode {
     SUCCESS(1, "操作成功"),
     ERROR(0, "操作失败"),
 
+    LOGIN_FAILED(1001, "登录失败"),
+
     IMAP_ERROR(2000, "imap错误"),
     IMAP_CONNECTION_ERROR(2001, "imap连接错误"),
     IMAP_FOLDER_ERROR(2002, "imap文件夹操作错误"),

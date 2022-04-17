@@ -24,7 +24,7 @@ class AccountMapperTest {
     @Test
     @Transactional
     void insertAccount() {
-        int row = accountMapper.insertAccount("1529078053739827211", "mapper@test.com", "mapperpassword", "test.com");
+        int row = accountMapper.insertEmailAccount("1529078053739827211", "mapper@test.com", "mapperpassword", "test.com");
         assertThat(row).isEqualTo(1);
     }
 

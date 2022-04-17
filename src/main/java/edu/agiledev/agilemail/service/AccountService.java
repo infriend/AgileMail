@@ -14,18 +14,25 @@ import java.util.List;
  * @since 2022/2/7
  */
 public interface AccountService {
-    /**
-     * 检查账户并且生成证书
-     */
-    void checkAccount(EmailAccount account);
+
 
     /**
      * 向数据库中注册新用户，返回证书
      *
-     * @param account 已经验证后的账户
+     * @param username 用户名
+     * @param password 密码
      * @return 用于本应用的证书
      */
-    Credentials registerUser(EmailAccount account);
+    Credentials loginUser(String username, String password);
+
+    /**
+     * 检查邮箱
+     */
+    boolean checkAccount(EmailAccount account);
+
+    boolean addEmailAccount(String userId, EmailAccount emailAccount);
+
+    boolean deleteEmailAccount(String userId, String emailAddress);
 
     //获得用户通讯录
     List<Addressbook> getContacts(String userId);
