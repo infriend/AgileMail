@@ -60,7 +60,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(WebSecurity web) {
         web.ignoring()
-                .antMatchers(HttpMethod.OPTIONS, "/**")
+//                .antMatchers(HttpMethod.OPTIONS, "/**")
 
                 // allow anonymous resource requests
                 .antMatchers(
@@ -81,17 +81,18 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         final RequestMatcher negatedPublicMatchers = new NegatedRequestMatcher(new OrRequestMatcher(
                 new RegexRequestMatcher(ACTUATOR_REGEX, "GET"),
                 new RegexRequestMatcher(CONFIGURATION_REGEX, "GET"),
-                new RegexRequestMatcher(LOGIN_REGEX, "POST")
+                new RegexRequestMatcher(LOGIN_REGEX, "POST"),
+                new RegexRequestMatcher("/.*", "OPTIONS")
         ));
         httpSecurity
                 .csrf().disable()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
+                .cors()
+                .and()
                 .authorizeRequests()
                 .requestMatchers(negatedPublicMatchers).authenticated()
-                .and()
-                .cors()
                 .and()
                 .logout()
                 .permitAll()
