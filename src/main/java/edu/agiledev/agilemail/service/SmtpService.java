@@ -19,4 +19,8 @@ public interface SmtpService {
     void replyMessage(EmailAccount emailAccount, Long msgUid, URLName folderId,
                       String subject, String content, String toUser, String ccUser,
                       String bccUser, String[] attachments, boolean replyToAll);
+
+    void sendDraftMessage(EmailAccount emailAccount, Long msgUid, URLName folderId,
+                          String subject, String content, String toUser, String ccUser,
+                          String bccUser, String[] attachments);
 }

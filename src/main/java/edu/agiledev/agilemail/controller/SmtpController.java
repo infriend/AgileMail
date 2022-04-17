@@ -88,6 +88,26 @@ public class SmtpController extends RBaseController {
         return success("Draft saved!");
     }
 
+    @PostMapping("/draftemail/{folderId}/{messageUid}")
+    public R<String> sendDraftMail(@RequestBody SendInfo sendInfo,
+                                   @PathVariable("folderId") String folderId,
+                                   @PathVariable("messageUid") Long messageUid){
+        EmailAccount emailAccount = getCurrentAccount(sendInfo.getFrom());
+        smtpService.sendDraftMessage(
+                emailAccount,
+                messageUid,
+                EncodeUtil.toUrl(folderId),
+                sendInfo.getSubject(),
+                sendInfo.getContent(),
+                sendInfo.getToUser(),
+                sendInfo.getCcUser(),
+                sendInfo.getBccUser(),
+                sendInfo.getAttachments()
+        );
+
+        return success("successfully sent message!");
+    }
+
     @PostMapping("{folderId}/{messageUid}/replyto/{replyToAll}")
     public R<String> replyMessage(@PathVariable("folderId") String folderId,
                                   @PathVariable("messageUid") Long messageUid,

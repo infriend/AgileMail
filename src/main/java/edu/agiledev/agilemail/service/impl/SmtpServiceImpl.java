@@ -4,6 +4,7 @@ import com.sun.mail.imap.IMAPFolder;
 import com.sun.mail.imap.IMAPMessage;
 import com.sun.mail.imap.IMAPStore;
 import com.sun.mail.util.MailSSLSocketFactory;
+import edu.agiledev.agilemail.advice.GlobalAdvice;
 import edu.agiledev.agilemail.exception.AuthenticationException;
 import edu.agiledev.agilemail.exception.BaseException;
 import edu.agiledev.agilemail.pojo.model.EmailAccount;
@@ -11,6 +12,7 @@ import edu.agiledev.agilemail.pojo.model.ReturnCode;
 import edu.agiledev.agilemail.pojo.model.SupportDomain;
 import edu.agiledev.agilemail.service.FileManageService;
 import edu.agiledev.agilemail.service.ImapService;
+import edu.agiledev.agilemail.service.MsgModifyService;
 import edu.agiledev.agilemail.service.SmtpService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +33,7 @@ import java.util.Map;
 import java.util.Properties;
 
 import static edu.agiledev.agilemail.exception.AuthenticationException.Type.SMTP;
+import static javax.mail.Folder.READ_WRITE;
 
 /**
  * Description of class
@@ -52,6 +55,9 @@ public class SmtpServiceImpl implements SmtpService {
 
     @Autowired
     private FileManageService fileManageService;
+
+    @Autowired
+    private MsgModifyService msgModifyService;
 
     private final MailSSLSocketFactory mailSSLSocketFactory;
 
@@ -162,6 +168,29 @@ public class SmtpServiceImpl implements SmtpService {
 
     }
 
+    @Override
+    public void sendDraftMessage(EmailAccount emailAccount, Long msgUid, URLName folderId,
+                                 String subject, String content, String toUser, String ccUser,
+                                 String bccUser, String[] attachments) {
+        sendMessage(emailAccount, subject, content, toUser, ccUser, bccUser, attachments);
+
+        IMAPStore store = imapService.getImapStore(emailAccount);
+        try (IMAPFolder folder = imapService.getFolder(store, folderId)) {
+            folder.open(READ_WRITE);
+            Message message = folder.getMessageByUID(msgUid);
+
+            if (message == null) {
+                throw new BaseException(ReturnCode.IMAP_MESSAGE_ERROR, "找不到邮件");
+            }
+            message.setFlag(Flags.Flag.DELETED, true);
+            message.saveChanges();
+            folder.close(true);
+
+        } catch (MessagingException e) {
+            throw new BaseException(ReturnCode.IMAP_MESSAGE_ERROR, String.format("imap: 读取文件夹%s失败", folderId), e);
+        }
+    }
+
     private void messageSender(EmailAccount emailAccount, String subject, String content, String toUser,
                                String ccUser, String bccUser, String[] attachments,
                                JavaMailSender mailSender, MimeMessage message) {
@@ -249,6 +278,8 @@ public class SmtpServiceImpl implements SmtpService {
                 mailSender.setPort(993);
                 props.put("mail.smtp.ssl.enable", true);
                 break;
+            default:
+                throw new BaseException("不支持的邮箱！");
         }
         props.put("mail.transport.protocol", "smtp");
         props.put("mail.default-encoding", "UTF-8");
