@@ -11,7 +11,7 @@
  Target Server Version : 50736
  File Encoding         : 65001
 
- Date: 17/04/2022 18:31:27
+ Date: 17/04/2022 22:10:48
 */
 
 SET NAMES utf8mb4;
@@ -24,7 +24,10 @@ DROP TABLE IF EXISTS `sys_addressbook`;
 CREATE TABLE `sys_addressbook`  (
   `id` varchar(36) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
   `contact_email` varchar(36) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
-  PRIMARY KEY (`contact_email`, `id`) USING BTREE
+  `name` varchar(36) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL,
+  `user_id` varchar(36) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL,
+  PRIMARY KEY (`id`) USING BTREE,
+  UNIQUE INDEX `contact_email`(`contact_email`, `id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
@@ -57,14 +60,16 @@ DROP TABLE IF EXISTS `sys_user`;
 CREATE TABLE `sys_user`  (
   `id` varchar(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '用户id',
   `del_flag` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '0' COMMENT '删除标识',
+  `passwd` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
+  `username` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '用户名',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '用户表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sys_user
 -- ----------------------------
-INSERT INTO `sys_user` VALUES ('1529235917448024071', '0');
-INSERT INTO `sys_user` VALUES ('1529235917448024072', '0');
+INSERT INTO `sys_user` VALUES ('1529235917448024071', '0', NULL, '');
+INSERT INTO `sys_user` VALUES ('1529235917448024072', '0', NULL, '');
 
 -- ----------------------------
 -- Table structure for sys_user_email
