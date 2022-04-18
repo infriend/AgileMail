@@ -11,5 +11,5 @@ public interface AddressService {
 
     boolean addressIsSaved(String userId, String mailId);
 
-    boolean saveAddress(String userId, String mailId);
+    boolean saveAddress(String userId, String mailId, String name);
 }

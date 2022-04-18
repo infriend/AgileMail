@@ -62,7 +62,7 @@ public class SmtpController extends RBaseController {
             for (InternetAddress address : internetAddressTo) {
                 String mailId = address.getAddress();
                 if (!addressService.addressIsSaved(userId, mailId)) {
-                    addressService.saveAddress(userId, mailId);
+                    addressService.saveAddress(userId, mailId, address.getPersonal());
                 }
             }
             return success("Successfully sent");

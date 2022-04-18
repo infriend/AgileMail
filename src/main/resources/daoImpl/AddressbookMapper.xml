@@ -4,40 +4,40 @@
   <resultMap id="BaseResultMap" type="edu.agiledev.agilemail.pojo.model.Addressbook">
     <!--@mbg.generated-->
     <!--@Table sys_addressbook-->
-    <id column="uid" jdbcType="VARCHAR" property="uid" />
+    <id column="user_id" jdbcType="VARCHAR" property="userId" />
     <result column="id" jdbcType="VARCHAR" property="id" />
     <result column="contact_email" jdbcType="VARCHAR" property="contactEmail" />
     <result column="name" jdbcType="VARCHAR" property="name" />
   </resultMap>
   <sql id="Base_Column_List">
     <!--@mbg.generated-->
-    `uid`, id, contact_email, `name`
+    `user_id`, id, contact_email, `name`
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
     <!--@mbg.generated-->
     select 
     <include refid="Base_Column_List" />
     from sys_addressbook
-    where `uid` = #{uid,jdbcType=VARCHAR}
+    where `user_id` = #{uid,jdbcType=VARCHAR}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
     <!--@mbg.generated-->
     delete from sys_addressbook
-    where `uid` = #{uid,jdbcType=VARCHAR}
+    where `user_id` = #{uid,jdbcType=VARCHAR}
   </delete>
   <insert id="insert" parameterType="edu.agiledev.agilemail.pojo.model.Addressbook">
     <!--@mbg.generated-->
-    insert into sys_addressbook (`uid`, id, contact_email, 
+    insert into sys_addressbook (`user_id`, id, contact_email,
       `name`)
-    values (#{uid,jdbcType=VARCHAR}, #{id,jdbcType=VARCHAR}, #{contactEmail,jdbcType=VARCHAR}, 
+    values (#{userId,jdbcType=VARCHAR}, #{id,jdbcType=VARCHAR}, #{contactEmail,jdbcType=VARCHAR},
       #{name,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="edu.agiledev.agilemail.pojo.model.Addressbook">
     <!--@mbg.generated-->
     insert into sys_addressbook
     <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="uid != null">
-        `uid`,
+      <if test="userId != null">
+        `user_id`,
       </if>
       <if test="id != null">
         id,
@@ -50,8 +50,8 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="uid != null">
-        #{uid,jdbcType=VARCHAR},
+      <if test="userId != null">
+        #{userId,jdbcType=VARCHAR},
       </if>
       <if test="id != null">
         #{id,jdbcType=VARCHAR},
@@ -78,7 +78,7 @@
         `name` = #{name,jdbcType=VARCHAR},
       </if>
     </set>
-    where `uid` = #{uid,jdbcType=VARCHAR}
+    where `user_id` = #{userId,jdbcType=VARCHAR}
   </update>
   <update id="updateByPrimaryKey" parameterType="edu.agiledev.agilemail.pojo.model.Addressbook">
     <!--@mbg.generated-->
@@ -86,7 +86,7 @@
     set id = #{id,jdbcType=VARCHAR},
       contact_email = #{contactEmail,jdbcType=VARCHAR},
       `name` = #{name,jdbcType=VARCHAR}
-    where `uid` = #{uid,jdbcType=VARCHAR}
+    where `user_id` = #{userId,jdbcType=VARCHAR}
   </update>
 
   <select id="searchAddressByIdAndEmail" resultMap="BaseResultMap">
@@ -96,6 +96,6 @@
 
   <select id="getContactByUserId" resultMap="BaseResultMap">
     select * from sys_addressbook
-    where id=#{userId,jdbcType=VARCHAR}
+    where user_id=#{userId,jdbcType=VARCHAR}
   </select>
 </mapper>
