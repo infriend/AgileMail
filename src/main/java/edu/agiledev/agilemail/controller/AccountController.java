@@ -109,6 +109,15 @@ public class AccountController extends RBaseController {
         return success(accountService.getContacts(userId));
     }
 
+    @PutMapping("/contact/{contactUid}/trash")
+    public R<String> deleteContacts(@PathVariable("contactUid") String contactUid) {
+        if (accountService.deleteContacts(contactUid)){
+            return success("successfully delete");
+        } else {
+            return error(ReturnCode.ERROR, "delete failed");
+        }
+    }
+
     private Credentials authenticate(String username, String password) {
 //        accountService.checkAccount(account);
         Credentials credentials = accountService.loginUser(username, password);

@@ -148,6 +148,16 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
+    public boolean deleteContacts(String uid) {
+        int res = addressbookMapper.deleteByPrimaryKey(uid);
+        if (res == 1){
+            return true;
+        }else {
+            return false;
+        }
+    }
+
+    @Override
     public boolean addUser(AccountDTO accountDTO) {
         Account user = accountMapper.searchAccount(accountDTO.getUsername());
         if (user != null) {
@@ -164,6 +174,8 @@ public class AccountServiceImpl implements AccountService {
 
         return true;
     }
+
+
 
     private void checkHost(EmailAccount account) {
         if (appConfig.getHostBlackList().contains(account.getDomain())) {

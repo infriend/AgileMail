@@ -41,5 +41,7 @@ public interface AccountService {
     //获得用户通讯录
     List<Addressbook> getContacts(String userId);
 
+    boolean deleteContacts(String uid);
+
     boolean addUser(AccountDTO accountDTO);
 }
