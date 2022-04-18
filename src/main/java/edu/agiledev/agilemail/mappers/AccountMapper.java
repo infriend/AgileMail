@@ -21,7 +21,7 @@ public interface AccountMapper {
 
     Account searchAccount(@Param("username") String username);
 
-    int insertUser(@Param("userId") String userId);
+    int insertUserAccount(@Param("userId") String userId, @Param("username") String username, @Param("password") String password);
 
     int insertEmailAccount(@Param("emailAccountId") String emailAccountId,
                            @Param("emailAddress") String emailAddress,
@@ -35,8 +35,6 @@ public interface AccountMapper {
     int deRelateAccount(@Param("userId") String userId, @Param("emailAddress") String emailAddress);
 
     int deleteEmailAccount(@Param("emailAddress") String emailAddress);
-
-    EmailAccount getUserFirstEmailAccount(@Param("userId") String userId);
 
     EmailAccount getUserEmailAccount(@Param("userId") String userId, @Param("emailAddress") String emailAddress);
 

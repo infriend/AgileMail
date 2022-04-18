@@ -22,16 +22,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.mail.*;
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -187,7 +184,7 @@ public class MsgReadServiceImpl implements MsgReadService {
 
         for (AMessage message : messages) {
             CheckMessageVo messageVo = CheckMessageVo.from(message);
-            messageVo.setFromEmailAccount(account.getUsername());
+            messageVo.setFromEmailAccount(account.getAddress());
             checkMessageVos.add(messageVo);
         }
 

@@ -74,7 +74,7 @@ public class AccountServiceImpl implements AccountService {
     public Credentials loginUser(String username, String password) {
         Account user = accountMapper.searchAccount(username);
         String encryptedPassword = encryptionUtil.encrypt(password);
-        if (encryptedPassword.equals(password)) {
+        if (encryptedPassword.equals(user.getPassword())) {
             Credentials credentials = new Credentials();
             credentials.setUserId(user.getId());
             return credentials;
@@ -115,7 +115,7 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public List<EmailInfoVO> getAccountEmailList(String userId) {
         List<EmailAccount> emailAccountList = accountMapper.searchAccountEmailList(userId);
-        final List<EmailInfoVO> res = emailAccountList.stream().map(o -> new EmailInfoVO(o.getUsername(), o.getDomain())).collect(Collectors.toList());
+        final List<EmailInfoVO> res = emailAccountList.stream().map(o -> new EmailInfoVO(o.getAddress(), o.getDomain())).collect(Collectors.toList());
         return res;
     }
 
@@ -124,7 +124,7 @@ public class AccountServiceImpl implements AccountService {
     public boolean addEmailAccount(String userId, EmailAccount emailAccount) {
         String emailAccountId = idGenerator.nextIdStr();
         String encryptedPassword = encryptionUtil.encrypt(emailAccount.getPassword());
-        int res = accountMapper.insertEmailAccount(emailAccountId, emailAccount.getUsername(), encryptedPassword, emailAccount.getDomain());
+        int res = accountMapper.insertEmailAccount(emailAccountId, emailAccount.getAddress(), encryptedPassword, emailAccount.getDomain());
         if (res > 0) {
             res = accountMapper.relateAccount(userId, emailAccountId);
         }

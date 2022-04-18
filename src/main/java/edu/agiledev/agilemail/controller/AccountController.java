@@ -16,11 +16,9 @@ import edu.agiledev.agilemail.utils.EncryptionUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 
 
 /**
@@ -73,7 +71,7 @@ public class AccountController extends RBaseController {
     @PostMapping("/account/email")
     public R<String> relateAccountEmail(@RequestBody EmailAccountDTO emailAccountDTO) {
         EmailAccount emailAccount = new EmailAccount();
-        emailAccount.setUsername(emailAccountDTO.getEmailAddress());
+        emailAccount.setAddress(emailAccountDTO.getEmailAddress());
         emailAccount.setPassword(emailAccountDTO.getPassword());
         emailAccount.setDomain(emailAccountDTO.getDomain());
         boolean success = accountService.checkAccount(emailAccount);

@@ -12,7 +12,7 @@ import lombok.Data;
 @Data
 public class EmailAccount {
     private String id;
-    private String username;
+    private String address;
     private String password;
     private String domain;
 
@@ -20,8 +20,8 @@ public class EmailAccount {
 
     }
 
-    public EmailAccount(String username, String password, String domain) {
-        setUsername(username);
+    public EmailAccount(String address, String password, String domain) {
+        setAddress(address);
         setPassword(password);
         setDomain(domain);
     }

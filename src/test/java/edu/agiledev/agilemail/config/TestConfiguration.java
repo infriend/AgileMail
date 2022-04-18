@@ -48,7 +48,7 @@ public class TestConfiguration {
 
         }
 
-        return accountFolderIdMap.get(account.getUsername());
+        return accountFolderIdMap.get(account.getAddress());
     }
 
 }

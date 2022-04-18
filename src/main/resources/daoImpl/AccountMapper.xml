@@ -5,23 +5,23 @@
 <mapper namespace="edu.agiledev.agilemail.mappers.AccountMapper">
 
     <select id="searchAccount" resultType="edu.agiledev.agilemail.pojo.model.Account">
-        SELECT se.id, se.username, se.password
+        SELECT id, username, passwd as password
         FROM sys_user
         WHERE sys_user.username = #{username} LIMIT 1
     </select>
 
-    <insert id="insertUser" useGeneratedKeys="false" keyProperty="id">
-        INSERT INTO sys_user(id)
-        VALUES (#{userId});
+    <insert id="insertUserAccount" useGeneratedKeys="false" keyProperty="id">
+        INSERT INTO sys_user(id, username, passwd)
+        VALUES (#{userId}, #{username}, #{password});
     </insert>
 
     <insert id="insertEmailAccount" useGeneratedKeys="false" keyProperty="id">
-        INSERT INTO sys_email_account (id, username, password, domain)
+        INSERT INTO sys_email_account (id, address, password, domain)
         VALUES (#{emailAccountId}, #{emailAddress}, #{password}, #{domain})
     </insert>
 
     <select id="searchAccountEmailList" resultType="edu.agiledev.agilemail.pojo.model.EmailAccount">
-        SELECT sea.id, sea.username, sea.password, sea.domain
+        SELECT sea.id, sea.address, sea.password, sea.domain
         FROM sys_email_account sea,
              sys_user_email sue
         WHERE sue.user_id = #{userId}
@@ -35,37 +35,27 @@
     </insert>
 
     <delete id="deRelateAccount">
-        DELETE
-        FROM sys_user_email
-        WHERE user_id, email_id IN(
-        SELECT sue.user_id, sue.email_id FROM sys_email_account sea, sys_user_email sue
-        WHERE sea.username = #{emailAddress}
+        DELETE sue
+        FROM sys_user_email sue, sys_email_account sea
+        WHERE sea.address = #{emailAddress}
           AND sea.id = sue.email_id
           AND sue.user_id = #{userId}
-          AND sea.del_flag = '0')
+          AND sea.del_flag = '0';
     </delete>
 
     <update id="deleteEmailAccount">
         UPDATE sys_email_account
         SET del_flag = '1'
-        WHERE username = #{emailAddress}
+        WHERE address = #{emailAddress}
     </update>
 
-    <select id="getUserFirstEmailAccount" resultType="edu.agiledev.agilemail.pojo.model.EmailAccount">
-        SELECT se.id, se.username, se.password, se.domain
-        FROM sys_user_email sue,
-             sys_email_account se
-        WHERE sue.email_id = se.id
-          AND sue.user_id = #{userId} LIMIT 1
-    </select>
-
     <select id="getUserEmailAccount" resultType="edu.agiledev.agilemail.pojo.model.EmailAccount">
-        SELECT se.id, se.username, se.password, se.domain
+        SELECT se.id, se.address, se.password, se.domain
         FROM sys_user_email sue,
              sys_email_account se
         WHERE sue.email_id = se.id
           AND sue.user_id = #{userId}
-          AND se.username = #{emailAddress}
+          AND se.address = #{emailAddress}
     </select>
 
 

@@ -1,10 +1,8 @@
 package edu.agiledev.agilemail.service.impl;
 
 import com.sun.mail.imap.IMAPFolder;
-import com.sun.mail.imap.IMAPMessage;
 import com.sun.mail.imap.IMAPStore;
 import com.sun.mail.util.MailSSLSocketFactory;
-import edu.agiledev.agilemail.advice.GlobalAdvice;
 import edu.agiledev.agilemail.exception.AuthenticationException;
 import edu.agiledev.agilemail.exception.BaseException;
 import edu.agiledev.agilemail.pojo.model.EmailAccount;
@@ -93,7 +91,7 @@ public class SmtpServiceImpl implements SmtpService {
 
         MimeMessage message = new MimeMessage(getSession(emailAccount));
 
-        InternetAddress from = new InternetAddress(emailAccount.getUsername());
+        InternetAddress from = new InternetAddress(emailAccount.getAddress());
         message.setFrom(from);
 
         if (null != toUser && !toUser.isEmpty()) {
@@ -198,7 +196,7 @@ public class SmtpServiceImpl implements SmtpService {
             MimeMessageHelper helper = new MimeMessageHelper(message, true);
 
             // set from
-            InternetAddress from = new InternetAddress(emailAccount.getUsername());
+            InternetAddress from = new InternetAddress(emailAccount.getAddress());
             message.setFrom(from);
 
             // set to
@@ -285,7 +283,7 @@ public class SmtpServiceImpl implements SmtpService {
         props.put("mail.default-encoding", "UTF-8");
         mailSender.setJavaMailProperties(props);
 
-        mailSender.setUsername(emailAccount.getUsername());
+        mailSender.setUsername(emailAccount.getAddress());
         mailSender.setPassword(emailAccount.getPassword());
 
         return mailSender;
@@ -298,7 +296,7 @@ public class SmtpServiceImpl implements SmtpService {
             smtpTransport.connect(
                     smtpHost,
                     465,
-                    account.getUsername(),
+                    account.getAddress(),
                     account.getPassword());
             log.debug("Opened new SMTP transport");
         }

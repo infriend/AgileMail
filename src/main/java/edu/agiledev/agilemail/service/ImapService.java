@@ -74,7 +74,7 @@ public class ImapService {
             try {
                 final Session session = Session.getInstance(initMailProperties(mailSSLSocketFactory, account.getDomain()), null);
                 imapStore = (IMAPStore) session.getStore("imap");
-                imapStore.connect(account.getUsername(), account.getPassword());
+                imapStore.connect(account.getAddress(), account.getPassword());
 
                 HashMap IAM = new HashMap();
                 //带上IMAP ID信息，由key和value组成，例如name，version，vendor，support-email等。
@@ -140,7 +140,7 @@ public class ImapService {
 
 
     private void configReceiver(EmailAccount account) {
-        receiver = new ImapMailReceiver(String.format("imap://%s:%s@imap.%s/INBOX", account.getUsername(), account.getPassword(), account.getDomain()));
+        receiver = new ImapMailReceiver(String.format("imap://%s:%s@imap.%s/INBOX", account.getAddress(), account.getPassword(), account.getDomain()));
     }
 
 
