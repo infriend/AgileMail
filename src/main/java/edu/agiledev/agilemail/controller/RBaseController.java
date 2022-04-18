@@ -6,6 +6,7 @@ import edu.agiledev.agilemail.pojo.model.EmailAccount;
 import edu.agiledev.agilemail.pojo.model.R;
 import edu.agiledev.agilemail.pojo.model.ReturnCode;
 import edu.agiledev.agilemail.security.model.Credentials;
+import edu.agiledev.agilemail.utils.EncryptionUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 
@@ -20,6 +21,9 @@ public class RBaseController {
 
     @Autowired
     AccountMapper accountMapper;
+
+    @Autowired
+    EncryptionUtil encryptionUtil;
 
     protected <T> R<T> success() {
         return R.success();
@@ -62,6 +66,7 @@ public class RBaseController {
 //        Credentials credentials = (Credentials) SecurityContextHolder.getContext().getAuthentication();
         String userId = getCurrentUserId();
         EmailAccount account = accountMapper.getUserEmailAccount(userId, emailAddress);
+        account.setPassword(encryptionUtil.decrypt(account.getPassword()));
         return account;
     }
 }
