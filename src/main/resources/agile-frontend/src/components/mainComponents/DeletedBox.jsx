@@ -5,7 +5,7 @@ import { IconInbox } from '@douyinfe/semi-icons';
 import api from '../../api/api'
 const DeletedBox = ({useraddr,setUseraddr,boxData,setBoxData,detailData,setDetailData,folderList,setFolderList}) => {
     const navigate = useNavigate()
-    useraddr = JSON.parse(localStorage.getItem("userdata"))
+    //useraddr = JSON.parse(localStorage.getItem("userdata"))
     var all = 0
     var bidcurr
     const [params] = useSearchParams()

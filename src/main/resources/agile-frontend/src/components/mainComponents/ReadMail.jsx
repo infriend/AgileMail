@@ -5,7 +5,7 @@ import { useSearchParams} from 'react-router-dom';
 const Readmail = ({useraddr,setUseraddr,boxData,setBoxData,detailData,setDetailData,folderList,setFolderList}) =>{
     const { Section, Input } = Form;
     const {Text,Paragraph} = Typography
-    useraddr = JSON.parse(localStorage.getItem("userdata"))
+    //useraddr = JSON.parse(localStorage.getItem("userdata"))
     folderList = JSON.parse(localStorage.getItem("folderList"))
     const [params] = useSearchParams()
     var data = JSON.parse(localStorage.getItem("mailDetail"))

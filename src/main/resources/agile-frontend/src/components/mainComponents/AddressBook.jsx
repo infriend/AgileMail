@@ -5,7 +5,7 @@ import { useNavigate,useSearchParams } from 'react-router-dom';
 const AddressBook= ({useraddr,setUseraddr,addrData,setAddrData}) => {
     const navigate = useNavigate()
     const [params] = useSearchParams()
-    useraddr = JSON.parse(localStorage.getItem("userdata"))
+    //useraddr = JSON.parse(localStorage.getItem("userdata"))
     var all
     if(addrData === undefined) {
         all = 0
@@ -79,6 +79,7 @@ const AddressBook= ({useraddr,setUseraddr,addrData,setAddrData}) => {
     }
     const submitContact = () => {
         console.log("value")
+        console.log(useraddr)
         console.log(addContactMail);
     }
     const pagination = useMemo(() => ({

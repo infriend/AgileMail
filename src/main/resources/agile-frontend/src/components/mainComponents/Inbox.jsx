@@ -6,7 +6,8 @@ import { IconMailStroked1,IconInbox } from '@douyinfe/semi-icons';
 const Inbox = ({useraddr,setUseraddr,boxData,setBoxData,detailData,setDetailData,folderList,setFolderList}) => {
     const navigate = useNavigate()
     const { Text } = Typography;
-    useraddr = JSON.parse(localStorage.getItem("userdata"))
+    //useraddr = localStorage.getItem("currmail")
+    //console.log(useraddr)
     const [params] = useSearchParams()
     var all = 0,notRead = 0,recent = 0
     var bidcurr
@@ -51,6 +52,7 @@ const Inbox = ({useraddr,setUseraddr,boxData,setBoxData,detailData,setDetailData
         api.getMailList(bidcurr,useraddr,setBoxData)
     }
     else {
+        
         let ans = findInf(folderList,params.get('bid'))
         all = ans.all
         recent = ans.recent
@@ -217,7 +219,8 @@ const Inbox = ({useraddr,setUseraddr,boxData,setBoxData,detailData,setDetailData
         }
     ];
     var data = boxData
-    console.log(folderList)
+    
+    //console.log(folderList)
     //var selectedobj = {}
     const [selectedobj,setSelectedObj] =useState()
     const rowSelection = {

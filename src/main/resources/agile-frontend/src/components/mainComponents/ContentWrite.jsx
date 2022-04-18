@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import { Col, Form, Row, Button, Upload,Toast, useFormState,Collapsible,Typography} from '@douyinfe/semi-ui';
 import api from '../../api/api'
 import Icon, { IconUpload} from '@douyinfe/semi-icons'
-const ContentWrite = ({useraddr,setUseraddr}) => {
+const ContentWrite = ({useraddr,setUseraddr,assoData,setAssoData}) => {
     var username = useraddr.name
     const [submitstate, setsubmitstate] = useState();
     useraddr = JSON.parse(localStorage.getItem("userdata"))
@@ -23,7 +23,7 @@ const ContentWrite = ({useraddr,setUseraddr}) => {
     }
     const mailSubmmit = (values) =>{
         const tempNote ={}
-        tempNote.from = useraddr.name+'@'+useraddr.addr
+        tempNote.from = assoData
         tempNote.to = values.to
         tempNote.cc = values.cc
         tempNote.bcc = values.bcc

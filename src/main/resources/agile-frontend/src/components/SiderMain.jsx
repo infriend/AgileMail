@@ -1,12 +1,13 @@
 import React, {useState} from 'react';
 import { Col, Layout, Row } from '@douyinfe/semi-ui';
 import {Nav } from '@douyinfe/semi-ui';
-import Icon, { IconMailStroked1, IconUserGroup, IconSetting,IconEdit} from '@douyinfe/semi-icons'
+import Icon, { IconMailStroked1, IconUserGroup, IconSetting,IconEdit,IconPaperclip} from '@douyinfe/semi-icons'
 import { useNavigate } from 'react-router-dom';
 import api from '../api/api'
 const SiderMain = ({useraddr,setUseraddr,addrData,setAddrData,boxData,setBoxData,folderList, setFolderList}) => {
     const navigate = useNavigate()
-    useraddr = JSON.parse(localStorage.getItem("userdata"))
+    //useraddr = JSON.parse(localStorage.getItem("userdata"))
+    console.log(useraddr)
     var itemlist = [{ itemKey: 'writemail', text: '写信', icon: <IconEdit size="large" />},
     { itemKey: 'addressbook', text: '通讯录', icon: <IconUserGroup size="large" /> }]
     const turnIntoItem = (target) =>{
@@ -36,6 +37,7 @@ const SiderMain = ({useraddr,setUseraddr,addrData,setAddrData,boxData,setBoxData
         let temp = itemlist[1]
         itemlist[1] = itemlist[2]
         itemlist[2] = temp
+        itemlist.push({itemKey: 'associateMail', text: '设置关联邮箱', icon: <IconPaperclip size="large" />})
         //console.log(itemlist)
     }
     const siderOnSelect = (data) =>{
@@ -45,6 +47,8 @@ const SiderMain = ({useraddr,setUseraddr,addrData,setAddrData,boxData,setBoxData
             tempaddr = data.itemKey
         }else if(data.itemKey === 'writemail'){//api还没弄好
             tempaddr = 'writemail'
+        }else if(data.itemKey === 'associateMail'){
+            tempaddr = 'associateMail'
         }
         else if(data.itemKey.indexOf('INBOX') != -1){
             let arr = data.itemKey.split("_")

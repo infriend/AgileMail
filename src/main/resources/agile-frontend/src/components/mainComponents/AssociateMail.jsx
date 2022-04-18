@@ -16,7 +16,7 @@ const AssociateMail= ({useraddr,setUseraddr,assoData,setAssoData}) => {
 
     const columns = [
         {
-            title: '姓名',
+            title: '昵称',
             dataIndex: 'name',
             width: 'auto',
 
@@ -24,23 +24,7 @@ const AssociateMail= ({useraddr,setUseraddr,assoData,setAssoData}) => {
         {
             title: '邮箱',
             dataIndex: 'emailAddress',
-            width:500,
-        },
-        {
-            title: '来自邮箱',
-            dataIndex: 'fromEmailAccount',
             width:'auto',
-            filters: [
-                {
-                    text: 'GMail',
-                    value: '@gmail.com',
-                },
-                {
-                    text: '163mail',
-                    value: '@163.com',
-                },
-            ],
-            onFilter: (value, record) => record.fromEmailAccount.includes(value)
         },
     ];
     const data = assoData
@@ -86,7 +70,7 @@ const AssociateMail= ({useraddr,setUseraddr,assoData,setAssoData}) => {
     }), []);
     return(
         <><div>
-            <h4>通讯录，一共{all}位联系人</h4>
+            <h4>关联邮箱，一共{all}个关联邮箱</h4>
         </div>
             <div
                 style={{
@@ -98,24 +82,24 @@ const AssociateMail= ({useraddr,setUseraddr,assoData,setAssoData}) => {
             >
                 <Table columns={columns} dataSource={data} rowSelection={rowSelection} pagination={pagination} rowKey="uid"/>
                 <Popconfirm
-                    title="确定是否要彻底删除联系人？"
+                    title="确定是否要彻底删除关联邮箱？"
                     content="此修改将不可逆"
                     onConfirm={onconfirm}
                     onCancel={() => Toast.warning('取消删除！')}
                 >
-                <Button type='primary' theme='solid' style={{ width: 100, marginTop: 12, marginRight: 30,marginLeft:30 }}>删除联系人</Button>
+                <Button type='primary' theme='solid' style={{ width: 100, marginTop: 12, marginRight: 30,marginLeft:30 }}>删除关联邮箱</Button>
                 </Popconfirm>
                 <Popconfirm
                 
-                title="添加联系人："
+                title="添加关联邮箱："
                 content={ <Form onValueChange={values=>{setAddContactMail(values)}}>
-                    <Form.Input label={{ text: (<span>姓名</span>), required: true }}field='contactName' showClear />
-                    <Form.Input label={{ text: (<span>邮箱</span>), required: true }}field='contactAddr' showClear />
+                    <Form.Input label={{ text: (<span>邮箱地址</span>), required: true }}field='addMailAddr' showClear />
+                    <Form.Input label={{ text: (<span>密码</span>), required: true }}field='addMailPasswd' showClear />
                 </Form>}
                 onConfirm={submitContact}
                 //onCancel={() => Toast.warning('取消删除！')}
             >
-                <Button style={{marginTop: 12,width:100}}>添加联系人</Button>
+                <Button style={{marginTop: 12,width:100}}>添加邮箱</Button>
             </Popconfirm>
             </div></>
     )

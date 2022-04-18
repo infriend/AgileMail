@@ -14,13 +14,14 @@ const HeaderMain = ({useraddr,setUseraddr,assoData,setAssoData}) => {
     }
     const templist =JSON.parse(localStorage.getItem("associatedList"))
     const assolist = templist.map(turnIntoList)
-    console.log(assolist)
+    console.log(assoData)
     var username = useraddr.name
     const navigate = useNavigate()
     const selectOnchange = (value) => {
         localStorage.setItem("currmail",value)
         setAssoData(value)
-        console.log(value)
+        navigate('/main/')
+        //console.log(value)
     }
     return(
         <div>

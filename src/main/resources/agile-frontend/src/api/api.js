@@ -1,8 +1,8 @@
 //import * as AxiosLogger from 'axios-logger'
 import axios from 'axios'
-const baseUrl = 'http://localhost:8081'
+//const baseUrl = 'http://localhost:8081'
 //const baseUrl = '172.19.240.244:8081'
-// const baseUrl = 'http://localhost:3001'//json server
+ const baseUrl = 'http://localhost:3001'//json server
 const setAuthToken = (token) => {
     if (token) {
       // headers 每个请求都需要用到的
@@ -67,8 +67,11 @@ const getAssociatedAddrList = (setAssoData) => { //获取用户关联的邮箱�
     }).then(response=>{
         const data = response.data
         //console.log(data)
-        setAssoData(data)
-        localStorage.setItem("associatedList",JSON.stringify(data))
+        //setAssoData(data)
+        let addr = data[0].emailAddress
+        setAssoData(addr)
+        localStorage.setItem("associatedList",JSON.stringify(data))//在localstroage中存入总的list
+
     })
 }
 const associateNewAddr = (mailaddr,maildomain,mailpasswd,setCode) => {//关联新邮箱
@@ -103,7 +106,7 @@ const getFolderList = async (useraddr,setFolderList) => {//获取folder信息
         method:'GET',
         url: `${baseUrl}/folder`,
         data:{
-            emailAddress : useraddr.name+"@"+useraddr.addr
+            emailAddress : useraddr
         }
 
     }).then( response => {
@@ -120,9 +123,10 @@ const getMailList = (folderid,useraddr,setBoxData) => {//查看文件夹邮件�
         url:`${baseUrl}/list`,
         data:{
             folderId:folderid,
-            emailAddress : useraddr.name+"@"+useraddr.addr
+            emailAddress : useraddr
         }
     }).then(response => {
+        console.log("change")
         const data = response.data
         setBoxData(data)
     })
@@ -134,7 +138,7 @@ const getMailDetail = async(folderid, useraddr, messageuid, setDetailData) => {/
         url: `${baseUrl}/testDetail`,
         data: {
             folderId: folderid,
-            emailAddress: useraddr.name + "@" + useraddr.addr,
+            emailAddress: useraddr,
             messageUid: messageuid
         }
     }).then(response => {
@@ -158,7 +162,7 @@ const moveMail = (folderid,toFolderId, messageidList,useraddr) =>{//移动邮件
             folderId: folderid,
             toFolderId: toFolderId,
             msgIds: messageidList,
-            emailAddress: useraddr.name + "@" + useraddr.addr
+            emailAddress: useraddr
         }
     }).then()
 
@@ -169,7 +173,7 @@ const putMailIntoTrash = (folderid,useraddr,messageidList) => {//删除邮件
         url:`${baseUrl}/${folderid}/messages/trash`,
         data:{
             folderId : folderid,
-        	emailAddress: useraddr.name + "@" + useraddr.addr,
+        	emailAddress: useraddr,
 	        msgIds: messageidList
         }
     }).then(response => {
@@ -192,7 +196,7 @@ const deleteMail = (folderid,useraddr,messageidList) => {//彻底删除邮件
         url: `${baseUrl}/${folderid}/messages`,
         data:{
             folderId : folderid,
-        	emailAddress: useraddr.name + "@" + useraddr.addr,
+        	emailAddress: useraddr,
 	        msgIds: messageidList
         }
     }).then(response => {
@@ -214,7 +218,7 @@ const setReadStatusMail = (folderid,seen,useraddr,messageidList) => {//设为已
         data:{
             folderId : folderid,
             seen: seen,
-        	emailAddress: useraddr.name + "@" + useraddr.addr,
+        	emailAddress: useraddr,
 	        msgIds: messageidList
             }
     }).then()
@@ -226,7 +230,7 @@ const flagMail = (folderid,flagged,useraddr,messageidList) => {//设为已标记
         data:{
             folderId : folderid,
             flagged: flagged,
-        	emailAddress: useraddr.name + "@" + useraddr.addr,
+        	emailAddress: useraddr,
 	        msgIds: messageidList
         }
     }).then()
