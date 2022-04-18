@@ -8,9 +8,10 @@ const Readmail = ({useraddr,setUseraddr,boxData,setBoxData,detailData,setDetailD
     //useraddr = JSON.parse(localStorage.getItem("userdata"))
     folderList = JSON.parse(localStorage.getItem("folderList"))
     const [params] = useSearchParams()
-    var data = JSON.parse(localStorage.getItem("mailDetail"))
+    var data = localStorage.getItem("mailDetail")
     console.log("data"+data)
-    if(data.length === 0 && detailData == undefined){
+    console.log(detailData)
+    if(data.length === 0 || detailData == undefined){
         console.log("gengxin")
         console.log(data)
         var idlist = params.get('id').split("_")

@@ -80,7 +80,7 @@ const getAssociatedAddrList = (setAssoData) => { //获取用户关联的邮箱�
 const associateNewAddr = (mailaddr,maildomain,mailpasswd,setCode) => {//关联新邮箱
     axios({
         method: 'POST',
-        url:`${baseUrl}/account/email/list`,
+        url:`${baseUrl}/account/email`,
         data :{
             emailAddress: mailaddr,
             password: mailpasswd, 
@@ -91,7 +91,7 @@ const associateNewAddr = (mailaddr,maildomain,mailpasswd,setCode) => {//关联�
         //setCode(code)
     })
 }
-const deleteAssociatedAddr = (mailaddr,setCode) => {
+const deleteAssociatedAddr = (mailaddr) => {
     axios({
         method: 'DELETE',
         url:`${baseUrl}/account/email`,
@@ -99,8 +99,6 @@ const deleteAssociatedAddr = (mailaddr,setCode) => {
             emailAddress: mailaddr
         }
     }).then(response=>{//没有body
-        const code = response.data.code
-        setCode(code)
     })
 }
 //-----读取文件夹与邮件接口-----
@@ -133,6 +131,7 @@ const getMailList = (folderid,useraddr,setBoxData) => {//查看文件夹邮件�
     }).then(response => {
         console.log("change")
         const data = response.data.data
+
         console.log(data)
         setBoxData(data)
     })
@@ -142,17 +141,15 @@ const getMailDetail = async(folderid, useraddr, messageuid, setDetailData) => {/
         method: 'GET',
         url: `${baseUrl}/${folderid}/message/${messageuid}`,
        // url: `${baseUrl}/testDetail`,
-        data: {
-            folderId: folderid,
+        params: {
             emailAddress: useraddr,
-            messageUid: messageuid
         }
     }).then(response => {
         const data = response.data;
-        console.log("fromapi");   
+        console.log(response);   
         localStorage.setItem("mailDetail", JSON.stringify(data[0]))
         console.log(localStorage.getItem("mailDetail"))
-        console.log("fromapi2");  
+        //console.log("fromapi2");  
         //setDetailData(data[0]);     
     });
 }

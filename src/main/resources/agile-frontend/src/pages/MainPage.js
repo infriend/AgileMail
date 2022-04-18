@@ -30,7 +30,7 @@ const MainPage = ({useraddr,setUseraddr}) =>{
     return (
         <Layout className="mainPage" style={{ border: '1px solid var(--semi-color-border)',height: '100%',weight:'100%',position:'absolute'}}>
             <Header style={{ backgroundColor: 'var(--semi-color-bg-1)' }}>
-                <HeaderMain useraddr = {useraddr} setUseraddr = {setUseraddr}assoData={assoData} setAssoData ={setAssoData} />
+                <HeaderMain useraddr = {useraddr} setUseraddr = {setUseraddr}assoData={assoData} setAssoData ={setAssoData} folderList={folderList} setFolderList = {setFolderList}/>
             </Header>
             <Layout >
                 <Sider style={{ backgroundColor: 'var(--semi-color-bg-1)' }}>

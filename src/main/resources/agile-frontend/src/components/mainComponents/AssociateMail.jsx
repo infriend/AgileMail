@@ -58,16 +58,16 @@ const AssociateMail= ({useraddr,setUseraddr}) => {
             Toast.error('删除列表为空！')
         }else{
             let contactlist = selectedobj.map(target => {
-            return target.uid
+            return target.emailAddress
             })
             if(contactlist.length === 0){
             Toast.error('删除列表为空！')
             }else{
-                //console.log(contactlist)
+                console.log(contactlist)
                 //此处应有删除联系人的api
-                //api.
+                api.deleteAssociatedAddr(contactlist)
                 Toast.success('删除成功')
-                navigate('/main/addressbook')
+                navigate('/main/associateMail')
             }
         } 
     }

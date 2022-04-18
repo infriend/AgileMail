@@ -12,7 +12,7 @@ const AlreadySend = ({useraddr,setUseraddr,boxData,setBoxData,detailData,setDeta
     const findName = (list,bid) =>{
         let resname
         for(let obj in list){
-            console.log(list[obj])
+            //console.log(list[obj])
             if(list[obj].children.length !== 0){
                 console.log("children")
                 resname = findName(list[obj].children,bid)

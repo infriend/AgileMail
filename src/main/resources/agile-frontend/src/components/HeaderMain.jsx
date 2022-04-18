@@ -2,7 +2,8 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button,Select,Nav } from '@douyinfe/semi-ui';
 import Icon, { IconUndo, IconSemiLogo, IconHelpCircle} from '@douyinfe/semi-icons'
-const HeaderMain = ({useraddr,setUseraddr,assoData,setAssoData}) => {
+import api from '../api/api';
+const HeaderMain = ({useraddr,setUseraddr,assoData,setAssoData,folderList,setFolderList}) => {
     useraddr = JSON.parse(localStorage.getItem("userdata"))
     assoData = localStorage.getItem("currmail")
     //console.log(assoData)
@@ -25,6 +26,7 @@ const HeaderMain = ({useraddr,setUseraddr,assoData,setAssoData}) => {
     const selectOnchange = (value) => {
         localStorage.setItem("currmail",value)
         setAssoData(value)
+        api.getFolderList(useraddr,setFolderList)
         navigate('/main/')
         //console.log(value)
     }
