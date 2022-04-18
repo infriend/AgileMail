@@ -193,6 +193,25 @@ const moveMail = (folderid,toFolderId, messageidList,useraddr) =>{
     }).then()
 
 }
+
+const registerPost = (username,passwd) => {//注册
+    //let t = 'QWZ3ASASD'
+    axios({
+        method:'POST',
+        url : `${baseUrl}/registerd`,
+        data :{
+            username: username,
+            password: passwd
+        }
+    }).then(response => {
+        const msg = response.data.data
+        const code = response.data.code
+        console.log(msg)
+        //setAuthToken(t)
+    })
+}
+
+
 export default {
                 loginPost,
                 getFolderList,
@@ -204,5 +223,6 @@ export default {
                 flagMail,
                 setReadStatusMail,
                 sendMail,
-                moveMail
+                moveMail,
+                registerPost
                 }

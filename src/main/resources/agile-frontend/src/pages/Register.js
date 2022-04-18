@@ -1,8 +1,23 @@
 import React, { useRef, useState } from 'react'
-//import '../css/Register.css'
-const Register = () =>{
+import {Layout} from '@douyinfe/semi-ui'
+import Register from "../components/Register"
+import '../css/loginpage.css'
+const RegisterPage = ({useraddr,setUseraddr}) =>{
+    if (useraddr === undefined){
+        useraddr = localStorage.getItem("userdata")
+    }
+    const { Content } = Layout;
+    useraddr = useraddr
     return(
-        <div>register</div>
+        <Layout className="wrap"
+                style={{
+                    backgroundImage:"url("+ require("../images/backgroundImage.jpg")+")",backgroundSize:"cover"}
+                }
+        >
+            <Content >
+                <Register className="middle" useraddr={useraddr} setUseraddr={setUseraddr}/>
+            </Content>
+        </Layout>
     )
 }
-export default Register
+export default RegisterPage
