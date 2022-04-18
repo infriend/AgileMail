@@ -132,15 +132,16 @@ const getMailList = (folderid,useraddr,setBoxData) => {//查看文件夹邮件�
         }
     }).then(response => {
         console.log("change")
-        const data = response.data
+        const data = response.data.data
+        console.log(data)
         setBoxData(data)
     })
 }
 const getMailDetail = async(folderid, useraddr, messageuid, setDetailData) => {//查看邮件
     await axios({
         method: 'GET',
-        //url: `${baseUrl}/${folderId}/message/${messageuid}`,
-        url: `${baseUrl}/testDetail`,
+        url: `${baseUrl}/${folderid}/message/${messageuid}`,
+       // url: `${baseUrl}/testDetail`,
         data: {
             folderId: folderid,
             emailAddress: useraddr,

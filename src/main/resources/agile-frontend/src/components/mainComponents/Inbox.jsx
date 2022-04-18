@@ -103,6 +103,7 @@ const Inbox = ({useraddr,setUseraddr,boxData,setBoxData,detailData,setDetailData
             width: 'auto',
             render: (text, record, index) => {
                 var id = record.uid
+                //console.log(text)
                 if(record.seen){//false表示最近还没看过
                     return (
                         <div onClick={()=>mailOnclick(id)} >
@@ -111,6 +112,7 @@ const Inbox = ({useraddr,setUseraddr,boxData,setBoxData,detailData,setDetailData
                     );
                 }else{
                     return (
+
                         <div onClick={()=>mailOnclick(id)} >
                             <Text strong>{text[0]}</Text>
                         </div>
@@ -219,7 +221,7 @@ const Inbox = ({useraddr,setUseraddr,boxData,setBoxData,detailData,setDetailData
         }
     ];
     var data = boxData
-    
+    console.log(data)
     //console.log(folderList)
     //var selectedobj = {}
     const [selectedobj,setSelectedObj] =useState()
