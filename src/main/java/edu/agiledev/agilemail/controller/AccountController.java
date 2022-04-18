@@ -60,6 +60,12 @@ public class AccountController extends RBaseController {
         return success(token);
     }
 
+    @PostMapping("/register")
+    public R<String> register(@RequestBody AccountDTO accountDTO){
+        accountService.addUser(accountDTO);
+        return success("register success");
+    }
+
     @GetMapping("/account/email/list")
     public R<List<EmailInfoVO>> getAccountEmailList() {
         String userId = getCurrentUserId();

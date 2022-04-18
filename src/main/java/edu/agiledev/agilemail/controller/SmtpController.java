@@ -39,7 +39,7 @@ public class SmtpController extends RBaseController {
     @Autowired
     private FileManageService fileManageService;
 
-    @PostMapping("/message")
+    @PostMapping("/email")
     public R<String> sendMessage(@RequestBody SendInfo sendInfo) throws AddressException {
         Credentials credentials = (Credentials) SecurityContextHolder.getContext().getAuthentication();
         String userId = credentials.getUserId();

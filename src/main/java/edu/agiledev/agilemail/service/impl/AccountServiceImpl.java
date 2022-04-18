@@ -5,10 +5,9 @@ import edu.agiledev.agilemail.exception.AuthenticationException;
 import edu.agiledev.agilemail.exception.BaseException;
 import edu.agiledev.agilemail.mappers.AccountMapper;
 import edu.agiledev.agilemail.mappers.AddressbookMapper;
-import edu.agiledev.agilemail.pojo.model.Account;
-import edu.agiledev.agilemail.pojo.model.Addressbook;
-import edu.agiledev.agilemail.pojo.model.EmailAccount;
-import edu.agiledev.agilemail.pojo.model.ReturnCode;
+import edu.agiledev.agilemail.mappers.SysUserMapper;
+import edu.agiledev.agilemail.pojo.dto.AccountDTO;
+import edu.agiledev.agilemail.pojo.model.*;
 import edu.agiledev.agilemail.pojo.vo.EmailInfoVO;
 import edu.agiledev.agilemail.security.model.Credentials;
 import edu.agiledev.agilemail.service.AccountService;
@@ -50,7 +49,13 @@ public class AccountServiceImpl implements AccountService {
     private final ExecutorService checkExecutor;
 
     @Autowired
+    SnowFlakeIdGenerator snowFlakeIdGenerator;
+
+    @Autowired
     AddressbookMapper addressbookMapper;
+
+    @Autowired
+    SysUserMapper sysUserMapper;
 
     @Autowired
     public AccountServiceImpl(ImapService imapService,
@@ -140,6 +145,24 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public List<Addressbook> getContacts(String userId) {
         return addressbookMapper.getContactByUserId(userId);
+    }
+
+    @Override
+    public boolean addUser(AccountDTO accountDTO) {
+        Account user = accountMapper.searchAccount(accountDTO.getUsername());
+        if (user != null) {
+            throw new BaseException("用户名重复");
+        } else {
+            String id = snowFlakeIdGenerator.nextIdStr();
+            SysUser sysUser = new SysUser();
+            sysUser.setId(id);
+            sysUser.setPasswd(encryptionUtil.encrypt(accountDTO.getPassword()));
+            sysUser.setDelFlag("0");
+
+            sysUserMapper.insert(sysUser);
+        }
+
+        return true;
     }
 
     private void checkHost(EmailAccount account) {
