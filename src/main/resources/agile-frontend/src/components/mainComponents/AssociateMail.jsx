@@ -27,7 +27,14 @@ const AssociateMail= ({useraddr,setUseraddr}) => {
 
         }
     ];
-    const data = JSON.parse(localStorage.getItem("associatedList"))
+    var t = JSON.parse(localStorage.getItem("associatedList"))
+    var data
+    if(t != undefined && t != null && t.length !=undefined){
+        data = JSON.parse(localStorage.getItem("associatedList"))
+    }else{
+        data = []
+    }
+    
     if(data !== undefined){
         all = data.length
     }
@@ -66,6 +73,8 @@ const AssociateMail= ({useraddr,setUseraddr}) => {
     }
     const submitContact = () => {
         console.log("value")
+        let domain = addContactMail.split("@")[1]
+        api.associateNewAddr(addContactMail.addMailAddr,domain,addContactMail.addMailPasswd)
         console.log(addContactMail);
     }
     const pagination = useMemo(() => ({

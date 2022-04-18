@@ -32,8 +32,8 @@ const SiderMain = ({useraddr,setUseraddr,addrData,setAddrData,boxData,setBoxData
         }else
             api.getFolderList(useraddr,setFolderList)
     }else{
-        console.log(folderList)
-        if(folderList !== undefined && folderList !== null){
+        console.log(folderList.length)
+        if(folderList.length !== undefined && folderList !== null){
             //console.log(folderList)
             itemlist.push(...folderList.map(turnIntoItem))
             if(folderList.length > 0){

@@ -2,8 +2,8 @@
 import axios from 'axios'
 //const baseUrl = 'http://localhost:8081'
 //const baseUrl = '172.19.240.244:3000'
-const baseUrl = 'http://172.19.240.244:8081'
- // const baseUrl = 'http://localhost:3001'//json server
+//const baseUrl = 'http://172.19.240.244:8081'
+ const baseUrl = 'http://localhost:3001'//json server
 const setAuthToken = (token) => {
     if (token) {
       // headers 每个请求都需要用到的

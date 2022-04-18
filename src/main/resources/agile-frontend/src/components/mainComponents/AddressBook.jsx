@@ -10,7 +10,7 @@ const AddressBook= ({useraddr,setUseraddr,addrData,setAddrData}) => {
     if(addrData === undefined) {
         all = 0
         //api.getAddrBook(useraddr,addrData,setAddrData)
-        api.getContact(setAddrData)
+        //api.getContact(setAddrData)
         }
     else all = addrData.length
 
