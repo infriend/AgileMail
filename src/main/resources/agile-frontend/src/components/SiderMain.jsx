@@ -32,12 +32,15 @@ const SiderMain = ({useraddr,setUseraddr,addrData,setAddrData,boxData,setBoxData
         }else
             api.getFolderList(useraddr,setFolderList)
     }else{
-        //console.log(folderList)
-        itemlist.push(...folderList.map(turnIntoItem))
-        if(itemlist.length > 2){
-            let temp = itemlist[1]
-            itemlist[1] = itemlist[2]
-            itemlist[2] = temp
+        console.log(folderList)
+        if(folderList !== undefined && folderList !== null){
+            //console.log(folderList)
+            itemlist.push(...folderList.map(turnIntoItem))
+            if(folderList.length > 0){
+                let temp = itemlist[1]
+                itemlist[1] = itemlist[2]
+                itemlist[2] = temp
+            }
         }
         itemlist.push({itemKey: 'associateMail', text: '设置关联邮箱', icon: <IconPaperclip size="large" />})
         //console.log(itemlist)
