@@ -20,7 +20,7 @@ import java.io.InputStream;
 @Service
 public class FileManageServiceImpl implements FileManageService {
 
-    private final static String ATTACHMENT_DIR = "../resources/attachments/";
+    private final static String ATTACHMENT_DIR = "./src/main/resources/attachments/";
 
     @Override
     public File getSavedFile(String filename) {

@@ -36,6 +36,7 @@ build/
 
 src/main/resources/application-private.yml
 src/main/resources/public
+src/main/resources/attachments
 
 src/test/java/edu/agiledev/agilemail/**/Private*.java
 src/test/resources/attach
