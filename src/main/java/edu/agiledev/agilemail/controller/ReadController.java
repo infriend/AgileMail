@@ -56,9 +56,9 @@ public class ReadController extends RBaseController {
     @GetMapping("/{folderId}/message/{messageUid}")
     public R<DetailMessageVo> getMessageDetail(@PathVariable(value = "folderId") String folderId,
                                                @PathVariable(value = "messageUid") Long messageUid,
-                                               @RequestBody AddressBase emailAddressDTO) {
+                                               @RequestParam String emailAddress) {
 
-        EmailAccount account = getCurrentAccount(emailAddressDTO.getEmailAddress());
+        EmailAccount account = getCurrentAccount(emailAddress);
         DetailMessageVo res = msgReadService.readMessage(account, messageUid, EncodeUtil.toUrl(folderId));
         return success(res);
     }
@@ -67,14 +67,15 @@ public class ReadController extends RBaseController {
     public R<String> getAttachment(@PathVariable("folderId") String folderId,
                                    @PathVariable("messageUid") Long messageUid,
                                    @PathVariable("aid") String aid,
-                                   @RequestBody EmailAddressAttachDTO emailAddressAttach,
+                                   @RequestParam String emailAddress,
+                                   @RequestParam Boolean contentId,
                                    HttpServletResponse response) {
 
-        EmailAccount account = getCurrentAccount(emailAddressAttach.getEmailAddress());
+        EmailAccount account = getCurrentAccount(emailAddress);
         final String contentType;
         try {
             contentType = msgReadService.readAttachment(account, EncodeUtil.toUrl(folderId), messageUid, aid,
-                    emailAddressAttach.getContentId().equals(Boolean.TRUE), response.getOutputStream());
+                    contentId.equals(Boolean.TRUE), response.getOutputStream());
             response.setContentType(contentType);
         } catch (IOException e) {
             e.printStackTrace();
