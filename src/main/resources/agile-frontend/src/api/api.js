@@ -45,7 +45,7 @@ const registerPost = (username,passwd,setCode) => {//注册
     //let t = 'QWZ3ASASD'
     axios({
         method:'POST',
-        url : `${baseUrl}/registerd`,
+        url : `${baseUrl}/register`,
         data :{
             username: username,
             password: passwd

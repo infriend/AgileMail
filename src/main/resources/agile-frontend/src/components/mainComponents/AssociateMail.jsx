@@ -2,33 +2,36 @@ import React ,{useMemo,useState}from 'react';
 import { Popconfirm,Table, Button,Toast,Modal, Form} from '@douyinfe/semi-ui';
 import api from '../../api/api'
 import { useNavigate,useSearchParams } from 'react-router-dom';
-const AssociateMail= ({useraddr,setUseraddr,assoData,setAssoData}) => {
+const AssociateMail= ({useraddr,setUseraddr}) => {
     const navigate = useNavigate()
     const [params] = useSearchParams()
-    useraddr = JSON.parse(localStorage.getItem("userdata"))
+    //useraddr = JSON.parse(localStorage.getItem("userdata"))
     var all
-    if(assoData === undefined) {
+    /*if(assoData === undefined) {
         all = 0
         //api.getAddrBook(useraddr,addrData,setAddrData)
         //api.getContact(setAddrData)
         }
-    //else all = addrData.length
+    //else all = addrData.length*/
 
     const columns = [
-        {
-            title: '昵称',
-            dataIndex: 'name',
-            width: 'auto',
-
-        },
         {
             title: '邮箱',
             dataIndex: 'emailAddress',
             width:'auto',
         },
+        {
+            title: '域名',
+            dataIndex: 'domain',
+            width: 'auto',
+
+        }
     ];
-    const data = assoData
-    //console.log(addrData)
+    const data = JSON.parse(localStorage.getItem("associatedList"))
+    if(data !== undefined){
+        all = data.length
+    }
+    //console.log(data)
     const [selectedobj,setSelectedObj] =useState()
     const [addContactMail, setAddContactMail] = useState()
     const rowSelection = {
@@ -80,7 +83,7 @@ const AssociateMail= ({useraddr,setUseraddr,assoData,setAssoData}) => {
                     padding: '16px',
                 }}
             >
-                <Table columns={columns} dataSource={data} rowSelection={rowSelection} pagination={pagination} rowKey="uid"/>
+                <Table columns={columns} dataSource={data} rowSelection={rowSelection} pagination={pagination} rowKey="emailAddress"/>
                 <Popconfirm
                     title="确定是否要彻底删除关联邮箱？"
                     content="此修改将不可逆"
