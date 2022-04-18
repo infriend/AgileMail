@@ -7,10 +7,12 @@ import edu.agiledev.agilemail.mappers.AccountMapper;
 import edu.agiledev.agilemail.mappers.AddressbookMapper;
 import edu.agiledev.agilemail.mappers.SysUserMapper;
 import edu.agiledev.agilemail.pojo.dto.AccountDTO;
+import edu.agiledev.agilemail.pojo.dto.ContactsDTO;
 import edu.agiledev.agilemail.pojo.model.*;
 import edu.agiledev.agilemail.pojo.vo.EmailInfoVO;
 import edu.agiledev.agilemail.security.model.Credentials;
 import edu.agiledev.agilemail.service.AccountService;
+import edu.agiledev.agilemail.service.AddressService;
 import edu.agiledev.agilemail.service.ImapService;
 import edu.agiledev.agilemail.service.SmtpService;
 import edu.agiledev.agilemail.utils.EncryptionUtil;
@@ -56,6 +58,9 @@ public class AccountServiceImpl implements AccountService {
 
     @Autowired
     SysUserMapper sysUserMapper;
+
+    @Autowired
+    AddressService addressService;
 
     @Autowired
     public AccountServiceImpl(ImapService imapService,
@@ -164,7 +169,8 @@ public class AccountServiceImpl implements AccountService {
             throw new BaseException("用户名重复");
         } else {
             String id = snowFlakeIdGenerator.nextIdStr();
-            accountMapper.insertUserAccount(id, accountDTO.getUsername(), encryptionUtil.encrypt(accountDTO.getPassword()));
+            accountMapper.insertUserAccount(id, accountDTO.getUsername(),
+                    encryptionUtil.encrypt(accountDTO.getPassword()));
 //            SysUser sysUser = new SysUser();
 //            sysUser.setId(id);
 //            sysUser.setUsername(accountDTO.getUsername());
@@ -177,6 +183,15 @@ public class AccountServiceImpl implements AccountService {
         return true;
     }
 
+    @Override
+    public boolean addContacts(ContactsDTO contactsDTO) {
+        if (addressService.addressIsSaved(contactsDTO.getUserId(), contactsDTO.getContactEmail())){
+            throw new BaseException("联系人邮箱已保存，不可重复存储！");
+        } else {
+            return addressService.saveAddress(contactsDTO.getUserId(), contactsDTO.getContactEmail(),
+                    contactsDTO.getName());
+        }
+    }
 
 
     private void checkHost(EmailAccount account) {

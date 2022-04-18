@@ -2,6 +2,7 @@ package edu.agiledev.agilemail.controller;
 
 import edu.agiledev.agilemail.exception.BaseException;
 import edu.agiledev.agilemail.pojo.dto.AddressBase;
+import edu.agiledev.agilemail.pojo.dto.ContactsDTO;
 import edu.agiledev.agilemail.pojo.dto.EmailAccountDTO;
 import edu.agiledev.agilemail.pojo.model.Addressbook;
 import edu.agiledev.agilemail.pojo.model.EmailAccount;
@@ -114,6 +115,15 @@ public class AccountController extends RBaseController {
             return success("successfully delete");
         } else {
             return error(ReturnCode.ERROR, "delete failed");
+        }
+    }
+
+    @PostMapping("/contact")
+    public R<String> addContacts(@RequestBody ContactsDTO contactsDTO){
+        if (accountService.addContacts(contactsDTO)){
+            return success("successfully add");
+        } else {
+            return error(ReturnCode.ERROR,"add failed");
         }
     }
 
