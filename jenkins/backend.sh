@@ -20,7 +20,7 @@ mvn clean package -DskipTests
 echo " "
 # stop backend
 echo "Stopping backend process"
-ps aux | grep -i "$target" | grep -v grep | awk '{print $2}' | xargs kill
+ps aux | grep -i "$target" | grep -v grep | awk '{print $2}' | xargs kill || true
 sleep 3
 echo " "
 
