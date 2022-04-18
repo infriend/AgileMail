@@ -47,10 +47,6 @@ public class AccountController extends RBaseController {
 
     @PostMapping("/login")
     public R<String> login(@RequestBody AccountDTO accountDTO) {
-//        EmailAccount account = new EmailAccount();
-//        account.setUsername(accountDTO.getUsername());
-//        account.setPassword(accountDTO.getPassword());
-//        account.setDomain(accountDTO.getDomain() == null ? getDomain(accountDTO.getUsername()) : accountDTO.getDomain());
 
         Credentials credentials = authenticate(accountDTO.getUsername(), accountDTO.getPassword());
         if (credentials == null) {
@@ -84,8 +80,11 @@ public class AccountController extends RBaseController {
         if (success) {
             String userId = getCurrentUserId();
             success = accountService.addEmailAccount(userId, emailAccount);
+            return success ? success() : error(ReturnCode.ERROR, "添加邮箱账户失败");
+        } else {
+            return error(ReturnCode.ERROR, "邮箱账户连接失败");
         }
-        return success ? success() : error();
+
     }
 
     @DeleteMapping("/account/email")
@@ -93,7 +92,7 @@ public class AccountController extends RBaseController {
         String emailAddress = emailAddressDTO.getEmailAddress();
         String userId = getCurrentUserId();
         boolean success = accountService.deleteEmailAccount(userId, emailAddress);
-        return success ? success() : error();
+        return success ? success() : error(ReturnCode.ERROR, "删除邮箱账户失败");
     }
 
     @GetMapping("/isOnline")
