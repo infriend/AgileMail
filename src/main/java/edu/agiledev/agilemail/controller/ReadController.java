@@ -1,6 +1,7 @@
 package edu.agiledev.agilemail.controller;
 
 import edu.agiledev.agilemail.exception.BaseException;
+import edu.agiledev.agilemail.pojo.dto.AddressBase;
 import edu.agiledev.agilemail.pojo.dto.EmailAddressAttachDTO;
 import edu.agiledev.agilemail.pojo.model.EmailAccount;
 import edu.agiledev.agilemail.pojo.model.R;
@@ -18,6 +19,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.net.URLEncoder;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 邮件读取请求Controller
@@ -54,9 +56,9 @@ public class ReadController extends RBaseController {
     @GetMapping("/{folderId}/message/{messageUid}")
     public R<DetailMessageVo> getMessageDetail(@PathVariable(value = "folderId") String folderId,
                                                @PathVariable(value = "messageUid") Long messageUid,
-                                               @RequestBody String emailAddress) {
+                                               @RequestBody AddressBase emailAddressDTO) {
 
-        EmailAccount account = getCurrentAccount(emailAddress);
+        EmailAccount account = getCurrentAccount(emailAddressDTO.getEmailAddress());
         DetailMessageVo res = msgReadService.readMessage(account, messageUid, EncodeUtil.toUrl(folderId));
         return success(res);
     }

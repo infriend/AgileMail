@@ -1,6 +1,7 @@
 package edu.agiledev.agilemail.controller;
 
 import edu.agiledev.agilemail.exception.BaseException;
+import edu.agiledev.agilemail.pojo.dto.AddressBase;
 import edu.agiledev.agilemail.pojo.dto.EmailAccountDTO;
 import edu.agiledev.agilemail.pojo.model.Addressbook;
 import edu.agiledev.agilemail.pojo.model.EmailAccount;
@@ -15,9 +16,11 @@ import edu.agiledev.agilemail.utils.EncryptionUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -82,7 +85,8 @@ public class AccountController extends RBaseController {
     }
 
     @DeleteMapping("/account/email")
-    public R<String> deRelateAccountEmail(@RequestBody String emailAddress) {
+    public R<String> deRelateAccountEmail(@RequestBody AddressBase emailAddressDTO) {
+        String emailAddress = emailAddressDTO.getEmailAddress();
         String userId = getCurrentUserId();
         boolean success = accountService.deleteEmailAccount(userId, emailAddress);
         return success ? success() : error();

@@ -25,13 +25,15 @@ public class AddressServiceImpl implements AddressService {
 
     @Override
     public boolean addressIsSaved(String userId, String mailId) {
-        Addressbook addressbook = addressbookMapper.searchAddressByPrimaryKey(new Addressbook(userId, mailId));
+        Addressbook addressbook = addressbookMapper.searchAddressByIdAndEmail(userId, mailId);
         return addressbook != null;
     }
 
     @Override
     public boolean saveAddress(String userId, String mailId) {
-        int res = addressbookMapper.insert(new Addressbook(userId, mailId));
-        return res > 0;
+//        int res = addressbookMapper.insert(new Addressbook(userId, mailId));
+//        return res > 0;
+        //TODO: 需要适配
+        return true;
     }
 }
