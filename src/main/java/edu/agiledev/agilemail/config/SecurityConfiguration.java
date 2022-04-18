@@ -46,6 +46,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     private static final String ACTUATOR_REGEX = "(/api)?/actuator/health";
     private static final String CONFIGURATION_REGEX = "(/api)?/v1/application/configuration";
     private static final String LOGIN_REGEX = "(/api)?/login";
+    private static final String REGISTER_REGEX = "(/api)?/register";
     private final CredentialsAuthService authenticationService;
     private final TokenProvider tokenProvider;
 
@@ -82,6 +83,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 new RegexRequestMatcher(ACTUATOR_REGEX, "GET"),
                 new RegexRequestMatcher(CONFIGURATION_REGEX, "GET"),
                 new RegexRequestMatcher(LOGIN_REGEX, "POST"),
+                new RegexRequestMatcher(REGISTER_REGEX, "POST"),
                 new RegexRequestMatcher("/.*", "OPTIONS")
         ));
         httpSecurity

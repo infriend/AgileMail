@@ -1,5 +1,6 @@
 package edu.agiledev.agilemail.service;
 
+import edu.agiledev.agilemail.pojo.dto.AccountDTO;
 import edu.agiledev.agilemail.pojo.model.Addressbook;
 import edu.agiledev.agilemail.pojo.vo.EmailInfoVO;
 import edu.agiledev.agilemail.security.model.Credentials;
@@ -40,4 +41,7 @@ public interface AccountService {
     //获得用户通讯录
     List<Addressbook> getContacts(String userId);
 
+    boolean deleteContacts(String uid);
+
+    boolean addUser(AccountDTO accountDTO);
 }

@@ -60,6 +60,12 @@ public class AccountController extends RBaseController {
         return success(token);
     }
 
+    @PostMapping("/register")
+    public R<String> register(@RequestBody AccountDTO accountDTO){
+        accountService.addUser(accountDTO);
+        return success("register success");
+    }
+
     @GetMapping("/account/email/list")
     public R<List<EmailInfoVO>> getAccountEmailList() {
         String userId = getCurrentUserId();
@@ -101,6 +107,15 @@ public class AccountController extends RBaseController {
         Credentials credentials = (Credentials) SecurityContextHolder.getContext().getAuthentication();
         String userId = credentials.getUserId();
         return success(accountService.getContacts(userId));
+    }
+
+    @PutMapping("/contact/{contactUid}/trash")
+    public R<String> deleteContacts(@PathVariable("contactUid") String contactUid) {
+        if (accountService.deleteContacts(contactUid)){
+            return success("successfully delete");
+        } else {
+            return error(ReturnCode.ERROR, "delete failed");
+        }
     }
 
     private Credentials authenticate(String username, String password) {
