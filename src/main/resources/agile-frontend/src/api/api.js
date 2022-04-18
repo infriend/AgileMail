@@ -105,6 +105,7 @@ const deleteAssociatedAddr = (mailaddr,setCode) => {
 }
 //-----读取文件夹与邮件接口-----
 const getFolderList = async (useraddr,setFolderList) => {//获取folder信息
+    console.log(useraddr)
     await axios({
         method:'GET',
         url: `${baseUrl}/folder`,

@@ -12,8 +12,7 @@ const MainPage = ({useraddr,setUseraddr}) =>{
     const [folderList, setFolderList] = useState();
     const [assoData,setAssoData] = useState();//这个是当前的邮箱地址
     if(folderList === undefined){
-        api.getFolderList(useraddr,setFolderList)
-
+        api.getFolderList(localStorage.getItem("currmail"),setFolderList)
     }else{
         //console.log(folderList)
     }

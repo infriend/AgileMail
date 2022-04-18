@@ -33,13 +33,14 @@ const SiderMain = ({useraddr,setUseraddr,addrData,setAddrData,boxData,setBoxData
             folderList = JSON.parse(localStorage.getItem("folderList"))
         }else{
             console.log(useraddr)
-            api.getFolderList(useraddr,setFolderList)
+            api.getFolderList(localStorage.getItem("currmail"),setFolderList)
         }
         folderList = JSON.parse(localStorage.getItem("folderList"))
             
     }else{
+        console.log(folderList)
         console.log(folderList.length)
-        if(folderList.length !== undefined && folderList !== null){
+        if(folderList.length !== undefined && folderList !== null && Array.isArray(folderList)){
             //console.log(folderList)
             itemlist.push(...folderList.map(turnIntoItem))
             if(folderList.length > 0){
