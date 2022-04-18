@@ -149,7 +149,7 @@ public class SmtpController extends RBaseController {
             MultipartHttpServletRequest multiRequest = (MultipartHttpServletRequest) request;
             //获取multiRequest 中所有的文件名
             Iterator<String> iter = multiRequest.getFileNames();
-            
+
             if (!iter.hasNext()){
                 return error(ReturnCode.ERROR, "没有文件上传！");
             }
@@ -167,7 +167,7 @@ public class SmtpController extends RBaseController {
         return success("Uploading succeeded");
     }
 
-    @GetMapping("/delete/{filename}")
+    @DeleteMapping("/attachment/{filename}")
     public R<String> deleteAttachment(@PathVariable String filename) {
         boolean res = fileManageService.deleteAttachment(filename);
         if (res) {
