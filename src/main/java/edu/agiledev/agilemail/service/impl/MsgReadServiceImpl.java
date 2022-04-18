@@ -62,8 +62,8 @@ public class MsgReadServiceImpl implements MsgReadService {
     public List<FolderVO> getFolders(EmailAccount account) {
         IMAPStore store = imapService.getImapStore(account);
         SupportDomain domainInfo = domainMap.get(account.getDomain());
-        try {
-            IMAPFolder root = (IMAPFolder) store.getDefaultFolder();
+        try (IMAPFolder root = (IMAPFolder) store.getDefaultFolder()) {
+
             List<AFolder> folders = Stream.of(root.list())
                     .map(IMAPFolder.class::cast)
                     .map(mf -> AFolder.from(mf, true))
