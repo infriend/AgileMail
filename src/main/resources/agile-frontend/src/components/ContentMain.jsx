@@ -9,6 +9,7 @@ import AlreadySend from './mainComponents/AlreadySend';
 import DeletedBox from './mainComponents/DeletedBox';
 import ReadMail from './mainComponents/ReadMail';
 import { Routes, Route,Outlet } from "react-router-dom"
+import AssociateMail from './mainComponents/AssociateMail';
 const ContentMain = ({useraddr,setUseraddr,addrData,setAddrData,boxData,setBoxData,
     detailData,setDetailData,folderList,setFolderList}) => {
     if (useraddr === undefined){
@@ -29,6 +30,8 @@ const ContentMain = ({useraddr,setUseraddr,addrData,setAddrData,boxData,setBoxDa
                                                          />} />
             <Route path='/addressbook' element={<AddressBook useraddr = {useraddr} setUseraddr = {setUseraddr} 
                                                         addrData={addrData} setAddrData={setAddrData}/>} />
+            <Route path='/associateMail' element={<AssociateMail useraddr = {useraddr} setUseraddr = {setUseraddr} 
+                                                        addrData={addrData} setAddrData={setAddrData}/>} />                                                        
             <Route path='/draft' element={<DraftBox useraddr = {useraddr} setUseraddr = {setUseraddr}
                                                         boxData={boxData} setBoxData={setBoxData}
                                                         folderList={folderList} setFolderList = {setFolderList}

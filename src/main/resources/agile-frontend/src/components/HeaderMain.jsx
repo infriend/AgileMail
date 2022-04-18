@@ -1,13 +1,27 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Button,Avatar,Nav } from '@douyinfe/semi-ui';
+import { Button,Select,Nav } from '@douyinfe/semi-ui';
 import Icon, { IconUndo, IconSemiLogo, IconHelpCircle} from '@douyinfe/semi-icons'
-const HeaderMain = ({useraddr,setUseraddr}) => {
+const HeaderMain = ({useraddr,setUseraddr,assoData,setAssoData}) => {
     useraddr = JSON.parse(localStorage.getItem("userdata"))
-    //console.log(useraddr)
+    assoData = localStorage.getItem("currmail")
+    //console.log(assoData)
+    const turnIntoList = (target) => {
+        return{
+            value:target.emailAddress,
+            label:target.emailAddress,
+        }
+    }
+    const templist =JSON.parse(localStorage.getItem("associatedList"))
+    const assolist = templist.map(turnIntoList)
+    console.log(assolist)
     var username = useraddr.name
-    var addr = useraddr.addr
     const navigate = useNavigate()
+    const selectOnchange = (value) => {
+        localStorage.setItem("currmail",value)
+        setAssoData(value)
+        console.log(value)
+    }
     return(
         <div>
         <Nav mode="horizontal" defaultSelectedKeys={['Home']}>
@@ -29,7 +43,10 @@ const HeaderMain = ({useraddr,setUseraddr}) => {
                 >
                     邮箱首页
                 </span>
-                <span style={{ marginRight: '24px' }}>{username}，当前邮箱//下拉列表{/*@{addr}*/}</span>
+                <span style={{ marginRight: '24px' }}>{username}，当前邮箱为：
+                <Select placeholder='请选择当前邮箱' style={{ width: 180 }}
+                optionList={assolist} defaultValue={assolist[0].value} onChange={selectOnchange}/>
+                </span>
                
             </span>
             <Nav.Footer>

@@ -16,7 +16,13 @@ const Register = ({useraddr,setUseraddr}) => {
         position: 'topRight',
         content: '用户名或密码为空',
         title: '注册失败',
-    };;
+    };
+    let opts3 = {
+        duration: 1,
+        position: 'topRight',
+        content: '请登录用户名',
+        title: '注册成功',
+    };
     const navigate = useNavigate()
     let success = true;//测试用
     var t3 = window.innerWidth
@@ -36,6 +42,7 @@ const Register = ({useraddr,setUseraddr}) => {
                 success = false
             success = true;//for test only
             if(success){
+                Notification.info({ ...opts3, position: 'top' }) 
                 navigate('/')
             }
              else   
@@ -56,7 +63,7 @@ const Register = ({useraddr,setUseraddr}) => {
                     <Col span={8} offset={8}>
                         <Card style={{ maxWidth: '330%' }} 
                             title={<Meta
-                                title={<Title heading={4} style={{ margin: '8px 0' }}>Agile-Mail Login</Title>}
+                                title={<Title heading={4} style={{ margin: '8px 0' }}>Agile-Mail Register</Title>}
                                 avatar={<Avatar
                                     alt='Card meta img'
                                     size="default"

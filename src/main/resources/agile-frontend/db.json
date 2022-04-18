@@ -26,6 +26,20 @@
     }
   
   ],
+  "assoaccount":[
+    {
+      "emailAddress": "aaaa@gmail.com",
+      "domain": "gmail.com"
+    },
+    {
+      "emailAddress": "bbbb@gmail.com",
+      "domain": "gmail.com"
+    },
+    {
+      "emailAddress": "cccc@163.com",
+      "domain": "163.com"
+    }
+  ],
   "folder": [
     {
       "folderId": "1",

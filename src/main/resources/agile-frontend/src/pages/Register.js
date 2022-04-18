@@ -11,7 +11,7 @@ const RegisterPage = ({useraddr,setUseraddr}) =>{
     return(
         <Layout className="wrap"
                 style={{
-                    backgroundImage:"url("+ require("../images/backgroundImage.jpg")+")",backgroundSize:"cover"}
+                    backgroundImage:"url("+ require("../images/backgroundImage2.jpg")+")",backgroundSize:"cover"}
                 }
         >
             <Content >

@@ -22,39 +22,91 @@ axios.interceptors.request.use(
     },
     err => Promise.reject(err)
   );
-  
-const loginPost = (address,domain,passwd,setCode) => {//登录邮箱 
+  //---------注册登录----------
+const loginPost = (username,domain,passwd,setCode) => {//登录邮箱 
     //let t = 'QWZ3ASASD'
     axios({
         method:'POST',
         url : `${baseUrl}/login`,
         data :{
-            emailAddress: address,
+            username: username,
 	        password: passwd,
-            domain: domain
+            
         }
     }).then(response => {
         const token = response.data.data
         const code = response.data.code
         setCode(code)
-        console.log("log in")
-        //setCode('1')
         localStorage.setItem("loginToken",token)
-        //localStorage.setItem("loginToken",t)
-        console.log(localStorage)
         setAuthToken(token)
+    })
+}
+const registerPost = (username,passwd,setCode) => {//注册
+    //let t = 'QWZ3ASASD'
+    axios({
+        method:'POST',
+        url : `${baseUrl}/registerd`,
+        data :{
+            username: username,
+            password: passwd
+        }
+    }).then(response => {
+        const msg = response.data.data
+        const code = response.data.code
+        setCode(code)
+        console.log(msg)
         //setAuthToken(t)
     })
 }
-const getFolderList = (useraddr,setFolderList) => {//获取folder信息
+//-------关联邮箱接口-----------
+const getAssociatedAddrList = (setAssoData) => { //获取用户关联的邮箱列表
     axios({
+        method: 'GET',
+        //url:`${baseUrl}/account/email/list`
+        url:`${baseUrl}/assoaccount`
+    }).then(response=>{
+        const data = response.data
+        //console.log(data)
+        setAssoData(data)
+        localStorage.setItem("associatedList",JSON.stringify(data))
+    })
+}
+const associateNewAddr = (mailaddr,maildomain,mailpasswd,setCode) => {//关联新邮箱
+    axios({
+        method: 'GET',
+        url:`${baseUrl}/account/email/list`,
+        data :{
+            emailAddress: mailaddr,
+            password: mailpasswd, 
+            domain: maildomain
+        }
+    }).then(response=>{//没有body
+        const code = response.data.code
+        setCode(code)
+    })
+}
+const deleteAssociatedAddr = (mailaddr,setCode) => {
+    axios({
+        method: 'DELETE',
+        url:`${baseUrl}/account/email`,
+        data:{
+            emailAddress: mailaddr
+        }
+    }).then(response=>{//没有body
+        const code = response.data.code
+        setCode(code)
+    })
+}
+//-----读取文件夹与邮件接口-----
+const getFolderList = async (useraddr,setFolderList) => {//获取folder信息
+    await axios({
         method:'GET',
         url: `${baseUrl}/folder`,
         data:{
             emailAddress : useraddr.name+"@"+useraddr.addr
         }
 
-    }).then(response => {
+    }).then( response => {
         const inf = response.data//inf是一个数组
         setFolderList(inf)
         localStorage.setItem("folderList",JSON.stringify(inf))
@@ -93,6 +145,23 @@ const getMailDetail = async(folderid, useraddr, messageuid, setDetailData) => {/
         console.log("fromapi2");  
         //setDetailData(data[0]);     
     });
+}
+const getAttachment = () => {//获取附件
+
+}
+//------修改文件夹与邮件接口-------
+const moveMail = (folderid,toFolderId, messageidList,useraddr) =>{//移动邮件
+    axios({
+        method: 'PUT',
+        url:`${baseUrl}/${folderid}/messages/folder/${toFolderId}`,
+        data:{
+            folderId: folderid,
+            toFolderId: toFolderId,
+            msgIds: messageidList,
+            emailAddress: useraddr.name + "@" + useraddr.addr
+        }
+    }).then()
+
 }
 const putMailIntoTrash = (folderid,useraddr,messageidList) => {//删除邮件
     axios({
@@ -138,7 +207,7 @@ const deleteMail = (folderid,useraddr,messageidList) => {//彻底删除邮件
 
     })
 }
-const setReadStatusMail = (folderid,seen,useraddr,messageidList) => {
+const setReadStatusMail = (folderid,seen,useraddr,messageidList) => {//设为已读/未读
     axios({
         method: 'PUT',
         url:`${baseUrl}/${folderid}/messages/seen/${seen}`,
@@ -163,6 +232,7 @@ const flagMail = (folderid,flagged,useraddr,messageidList) => {//设为已标记
     }).then()
 
 }
+//----------发信接口----------------
 const sendMail = (note) => {
     axios({
         method: 'POST',
@@ -181,36 +251,25 @@ const sendMail = (note) => {
         const data = response.data
     })
 }
-const moveMail = (folderid,toFolderId, messageidList,useraddr) =>{
+const sendDraft = (note) => {
     axios({
-        method: 'PUT',
-        url:`${baseUrl}/${folderid}/messages/folder/${toFolderId}`,
+        method: 'POST',
+        url:`${baseUrl}/email`,
         data:{
-            folderId: folderid,
-            toFolderId: toFolderId,
-            msgIds: messageidList,
-            emailAddress: useraddr.name + "@" + useraddr.addr
+            from: note.from, //发送邮箱
+	        toUser: note.to,//所有邮件地址请用,隔开，摆在同一个字符串中
+	        ccUser: note.cc, //抄送
+	        bccUser: note.bcc, //秘密抄送
+	        subject: note.subject, //主题
+	        content: note.content, //主要内容
+	        //attachment: [string],//string数组
+	        //html: 0/1//如果做了html邮件，可以添加这个字段，没做就当它不存在
         }
-    }).then()
-
-}
-
-const registerPost = (username,passwd) => {//注册
-    //let t = 'QWZ3ASASD'
-    axios({
-        method:'POST',
-        url : `${baseUrl}/registerd`,
-        data :{
-            username: username,
-            password: passwd
-        }
-    }).then(response => {
-        const msg = response.data.data
-        const code = response.data.code
-        console.log(msg)
-        //setAuthToken(t)
+    }).then(response=>{
+        const data = response.data
     })
 }
+
 const getContact = (setAddrData) => {//临时接口，获取联系人名单
     axios({
         method: 'GET',
@@ -224,17 +283,26 @@ const getContact = (setAddrData) => {//临时接口，获取联系人名单
     })
 }
 export default {
+                setAuthToken,
                 loginPost,
+                registerPost,
+
+                getAssociatedAddrList,
+                associateNewAddr,
+                deleteAssociatedAddr,
+
                 getFolderList,
                 getMailList,
-                setAuthToken,
+                getAttachment,
                 getMailDetail,
+
+                moveMail, 
                 putMailIntoTrash,
                 deleteMail,
                 flagMail,
                 setReadStatusMail,
+
                 sendMail,
-                moveMail,
-                registerPost,
+                sendDraft,
                 getContact
                 }

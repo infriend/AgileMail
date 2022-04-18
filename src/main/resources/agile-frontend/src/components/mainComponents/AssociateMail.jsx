@@ -2,17 +2,17 @@ import React ,{useMemo,useState}from 'react';
 import { Popconfirm,Table, Button,Toast,Modal, Form} from '@douyinfe/semi-ui';
 import api from '../../api/api'
 import { useNavigate,useSearchParams } from 'react-router-dom';
-const AddressBook= ({useraddr,setUseraddr,addrData,setAddrData}) => {
+const AssociateMail= ({useraddr,setUseraddr,assoData,setAssoData}) => {
     const navigate = useNavigate()
     const [params] = useSearchParams()
     useraddr = JSON.parse(localStorage.getItem("userdata"))
     var all
-    if(addrData === undefined) {
+    if(assoData === undefined) {
         all = 0
         //api.getAddrBook(useraddr,addrData,setAddrData)
-        api.getContact(setAddrData)
+        //api.getContact(setAddrData)
         }
-    else all = addrData.length
+    //else all = addrData.length
 
     const columns = [
         {
@@ -43,7 +43,7 @@ const AddressBook= ({useraddr,setUseraddr,addrData,setAddrData}) => {
             onFilter: (value, record) => record.fromEmailAccount.includes(value)
         },
     ];
-    const data = addrData
+    const data = assoData
     //console.log(addrData)
     const [selectedobj,setSelectedObj] =useState()
     const [addContactMail, setAddContactMail] = useState()
@@ -120,4 +120,4 @@ const AddressBook= ({useraddr,setUseraddr,addrData,setAddrData}) => {
             </div></>
     )
 }
-export default AddressBook
+export default AssociateMail

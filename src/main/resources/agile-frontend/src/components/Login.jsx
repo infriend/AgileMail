@@ -17,19 +17,13 @@ const Login = ({useraddr,setUseraddr}) => {
         content: '用户名或密码为空',
         title: '登录失败',
     };
-    let opts3 = {
-        duration: 3,
-        position: 'topRight',
-        content: '请选择邮箱类型',
-        title: '登录失败',
-    };
     const navigate = useNavigate()
     let success = true;//测试用
     var t3 = window.innerWidth
     const t1 = t3 *0.18
     const t2 = t3 * 0.12
     console.log(t3)
-    const loginSubmmit = (values) => {
+    const loginSubmmit = async (values) => {
         console.log(values)
         /*if(values.mail===undefined){
             Notification.info({ ...opts3, position: 'top' })  
@@ -46,11 +40,8 @@ const Login = ({useraddr,setUseraddr}) => {
                 success = false
             success = true;//for test only
             if(success){
-               // const userdata = {name:values.username,addr:values.mail}
                const userdata = {name:values.username,addr:"qweqwe"}
                 localStorage.setItem("userdata",JSON.stringify(userdata))
-                //localStorage.setItem("testToken","asEFSDFSDF")//TEST
-                //api.setAuthToken("asEFSDFSDF")
                 setUseraddr(userdata)
                 navigate('/main/')
             }

@@ -10,14 +10,16 @@ import {
 } from "react-router-dom"
 const App = () =>{
   const [useraddr,setUseraddr] = useState({
-    name:'',addr:''})
+    name:'',
+    addr:''
+  })
   //console.log("app:"+useraddr.name+" "+useraddr.addr)
   return(
     <><>
       <BrowserRouter>
         <Routes>
-          <Route path='/' element = {<LoginPage useraddr={useraddr} setUseraddr={setUseraddr}/>} />
-          <Route path='/main/*' element = {<MainPage useraddr={useraddr} setUseraddr={setUseraddr}/>} />
+          <Route path='/' element = {<LoginPage useraddr={useraddr} setUseraddr={setUseraddr} />} />
+          <Route path='/main/*' element = {<MainPage useraddr={useraddr} setUseraddr={setUseraddr} />} />
           <Route path='/register' element = {<Register useraddr={useraddr} setUseraddr={setUseraddr}/>} />
           <Route path='/helpcenter' element= {<HelpCenter />} />
         </Routes>
