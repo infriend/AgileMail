@@ -5,13 +5,13 @@ import org.apache.ibatis.annotations.Mapper;import org.apache.ibatis.annotations
 
 @Mapper
 public interface AddressbookMapper {
-    int deleteByPrimaryKey(String uid);
+    int deleteByPrimaryKey(String id);
 
     int insert(Addressbook record);
 
     int insertSelective(Addressbook record);
 
-    Addressbook selectByPrimaryKey(String uid);
+    Addressbook selectByPrimaryKey(String id);
 
     int updateByPrimaryKeySelective(Addressbook record);
 

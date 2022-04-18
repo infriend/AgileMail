@@ -18,12 +18,12 @@
     select 
     <include refid="Base_Column_List" />
     from sys_addressbook
-    where `user_id` = #{uid,jdbcType=VARCHAR}
+    where `id` = #{id,jdbcType=VARCHAR}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
     <!--@mbg.generated-->
     delete from sys_addressbook
-    where `user_id` = #{uid,jdbcType=VARCHAR}
+    where `id` = #{id,jdbcType=VARCHAR}
   </delete>
   <insert id="insert" parameterType="edu.agiledev.agilemail.pojo.model.Addressbook">
     <!--@mbg.generated-->

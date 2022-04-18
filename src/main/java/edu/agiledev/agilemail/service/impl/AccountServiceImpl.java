@@ -163,8 +163,8 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public boolean deleteContacts(String uid) {
-        int res = addressbookMapper.deleteByPrimaryKey(uid);
+    public boolean deleteContacts(String id) {
+        int res = addressbookMapper.deleteByPrimaryKey(id);
         return res == 1;
     }
 
