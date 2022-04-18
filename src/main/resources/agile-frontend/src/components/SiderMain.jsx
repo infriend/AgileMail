@@ -34,9 +34,11 @@ const SiderMain = ({useraddr,setUseraddr,addrData,setAddrData,boxData,setBoxData
     }else{
         //console.log(folderList)
         itemlist.push(...folderList.map(turnIntoItem))
-        let temp = itemlist[1]
-        itemlist[1] = itemlist[2]
-        itemlist[2] = temp
+        if(itemlist.length > 2){
+            let temp = itemlist[1]
+            itemlist[1] = itemlist[2]
+            itemlist[2] = temp
+        }
         itemlist.push({itemKey: 'associateMail', text: '设置关联邮箱', icon: <IconPaperclip size="large" />})
         //console.log(itemlist)
     }

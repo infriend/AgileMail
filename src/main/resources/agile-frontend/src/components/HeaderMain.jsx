@@ -13,7 +13,12 @@ const HeaderMain = ({useraddr,setUseraddr,assoData,setAssoData}) => {
         }
     }
     const templist =JSON.parse(localStorage.getItem("associatedList"))
-    const assolist = templist.map(turnIntoList)
+    var assolist
+    if(templist !== undefined && templist !== null && templist.length > 0){
+        assolist = templist.map(turnIntoList)
+    }else{
+        assolist = [{value:'',label:''}]
+    }
     console.log(assoData)
     var username = useraddr.name
     const navigate = useNavigate()

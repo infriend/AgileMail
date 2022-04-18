@@ -18,9 +18,12 @@ const MainPage = ({useraddr,setUseraddr}) =>{
         //console.log(folderList)
     }
     if(assoData === undefined){
+        console.log(1)
         api.getAssociatedAddrList(setAssoData)
     }else{
+        console.log(2)
         localStorage.setItem("currmail",assoData)
+        console.log(assoData)
     }
     const [detailData,setDetailData] = useState();
     //console.log("main:"+useraddr.name)

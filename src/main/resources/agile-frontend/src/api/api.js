@@ -66,17 +66,20 @@ const getAssociatedAddrList = (setAssoData) => { //获取用户关联的邮箱�
         url:`${baseUrl}/assoaccount`
     }).then(response=>{
         const data = response.data
-        //console.log(data)
+        //console.log(data.length)
         //setAssoData(data)
-        let addr = data[0].emailAddress
-        setAssoData(addr)
+        if(data.length > 0){
+            let addr = data[0].emailAddress
+            setAssoData(addr)
+        }
+
         localStorage.setItem("associatedList",JSON.stringify(data))//在localstroage中存入总的list
 
     })
 }
 const associateNewAddr = (mailaddr,maildomain,mailpasswd,setCode) => {//关联新邮箱
     axios({
-        method: 'GET',
+        method: 'POST',
         url:`${baseUrl}/account/email/list`,
         data :{
             emailAddress: mailaddr,
