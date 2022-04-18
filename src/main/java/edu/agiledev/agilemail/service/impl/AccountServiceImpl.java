@@ -164,12 +164,14 @@ public class AccountServiceImpl implements AccountService {
             throw new BaseException("用户名重复");
         } else {
             String id = snowFlakeIdGenerator.nextIdStr();
-            SysUser sysUser = new SysUser();
-            sysUser.setId(id);
-            sysUser.setPasswd(encryptionUtil.encrypt(accountDTO.getPassword()));
-            sysUser.setDelFlag("0");
-
-            sysUserMapper.insert(sysUser);
+            accountMapper.insertUserAccount(id, accountDTO.getUsername(), encryptionUtil.encrypt(accountDTO.getPassword()));
+//            SysUser sysUser = new SysUser();
+//            sysUser.setId(id);
+//            sysUser.setUsername(accountDTO.getUsername());
+//            sysUser.setPasswd();
+//            sysUser.setDelFlag("0");
+//
+//            sysUserMapper.insert(sysUser);
         }
 
         return true;

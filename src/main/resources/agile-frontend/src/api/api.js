@@ -1,8 +1,8 @@
 //import * as AxiosLogger from 'axios-logger'
 import axios from 'axios'
-//const baseUrl = 'http://localhost:8081'
+const baseUrl = 'http://localhost:8081'
 //const baseUrl = '172.19.240.244:8081'
- const baseUrl = 'http://localhost:3001'//json server
+//  const baseUrl = 'http://localhost:3001'//json server
 const setAuthToken = (token) => {
     if (token) {
       // headers 每个请求都需要用到的
@@ -45,7 +45,7 @@ const registerPost = (username,passwd,setCode) => {//注册
     //let t = 'QWZ3ASASD'
     axios({
         method:'POST',
-        url : `${baseUrl}/registerd`,
+        url : `${baseUrl}/register`,
         data :{
             username: username,
             password: passwd
@@ -62,8 +62,8 @@ const registerPost = (username,passwd,setCode) => {//注册
 const getAssociatedAddrList = (setAssoData) => { //获取用户关联的邮箱列表
     axios({
         method: 'GET',
-        //url:`${baseUrl}/account/email/list`
-        url:`${baseUrl}/assoaccount`
+        url:`${baseUrl}/account/email/list`
+        // url:`${baseUrl}/assoaccount`
     }).then(response=>{
         const data = response.data
         //console.log(data)
@@ -105,7 +105,7 @@ const getFolderList = async (useraddr,setFolderList) => {//获取folder信息
     await axios({
         method:'GET',
         url: `${baseUrl}/folder`,
-        data:{
+        params:{
             emailAddress : useraddr
         }
 
@@ -119,10 +119,10 @@ const getFolderList = async (useraddr,setFolderList) => {//获取folder信息
 const getMailList = (folderid,useraddr,setBoxData) => {//查看文件夹邮件列表
     axios({
         method:'GET',
-        //url:`${baseUrl}/${folderid}/list`,
-        url:`${baseUrl}/list`,
-        data:{
-            folderId:folderid,
+        url:`${baseUrl}/${folderid}/list`,
+        // url:`${baseUrl}/list`,
+        params:{
+            // folderId:folderid,
             emailAddress : useraddr
         }
     }).then(response => {

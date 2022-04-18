@@ -14,7 +14,7 @@
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
     <!--@mbg.generated-->
-    select 
+    select
     <include refid="Base_Column_List" />
     from sys_user
     where id = #{id,jdbcType=VARCHAR}
@@ -26,9 +26,9 @@
   </delete>
   <insert id="insert" parameterType="edu.agiledev.agilemail.pojo.model.SysUser">
     <!--@mbg.generated-->
-    insert into sys_user (id, del_flag, passwd
+    insert into sys_user (id, username,  passwd, del_flag
       )
-    values (#{id,jdbcType=VARCHAR}, #{delFlag,jdbcType=CHAR}, #{passwd,jdbcType=VARCHAR}
+    values (#{id,jdbcType=VARCHAR}, #{username, jdbcType=VARCHAR}, #{passwd,jdbcType=VARCHAR}, #{delFlag,jdbcType=CHAR}
       )
   </insert>
   <insert id="insertSelective" parameterType="edu.agiledev.agilemail.pojo.model.SysUser">

@@ -17,5 +17,7 @@ public class SysUser {
     */
     private String delFlag;
 
+    private String username;
+
     private String passwd;
 }
