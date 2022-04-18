@@ -2,8 +2,8 @@
 import axios from 'axios'
 //const baseUrl = 'http://localhost:8081'
 //const baseUrl = '172.19.240.244:3000'
-//const baseUrl = 'http://172.19.240.244:8081'
- const baseUrl = 'http://localhost:3001'//json server
+const baseUrl = 'http://172.19.240.244:8081'
+// const baseUrl = 'http://localhost:3001'//json server
 const setAuthToken = (token) => {
     if (token) {
       // headers 每个请求都需要用到的
@@ -66,14 +66,13 @@ const getAssociatedAddrList = (setAssoData) => { //获取用户关联的邮箱�
         url:`${baseUrl}/account/email/list`
         // url:`${baseUrl}/assoaccount`
     }).then(response=>{
-        const data = response.data
-        //console.log(data.length)
+        const data = response.data.data
+        //console.log(response)
         //setAssoData(data)
         if(data.length > 0){
             let addr = data[0].emailAddress
             setAssoData(addr)
         }
-
         localStorage.setItem("associatedList",JSON.stringify(data))//在localstroage中存入总的list
 
     })
@@ -88,8 +87,8 @@ const associateNewAddr = (mailaddr,maildomain,mailpasswd,setCode) => {//关联�
             domain: maildomain
         }
     }).then(response=>{//没有body
-        const code = response.data.code
-        setCode(code)
+        //const code = response.data.code
+        //setCode(code)
     })
 }
 const deleteAssociatedAddr = (mailaddr,setCode) => {
@@ -114,7 +113,8 @@ const getFolderList = async (useraddr,setFolderList) => {//获取folder信息
         }
 
     }).then( response => {
-        const inf = response.data//inf是一个数组
+        const inf = response.data.data//inf是一个数组
+        console.log(inf)
         setFolderList(inf)
         localStorage.setItem("folderList",JSON.stringify(inf))
     })

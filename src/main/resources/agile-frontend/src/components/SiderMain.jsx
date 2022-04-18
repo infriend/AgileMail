@@ -26,11 +26,17 @@ const SiderMain = ({useraddr,setUseraddr,addrData,setAddrData,boxData,setBoxData
             }
         }
     }
-    if(folderList === undefined){
-        if (localStorage.getItem("folderList") != null){
+    if(folderList === undefined|| folderList === null ||folderList.length === null){
+        let fl = localStorage.getItem("folderList")
+        console.log(fl)
+        if (fl != null){
             folderList = JSON.parse(localStorage.getItem("folderList"))
-        }else
+        }else{
+            console.log(useraddr)
             api.getFolderList(useraddr,setFolderList)
+        }
+        folderList = JSON.parse(localStorage.getItem("folderList"))
+            
     }else{
         console.log(folderList.length)
         if(folderList.length !== undefined && folderList !== null){
@@ -45,6 +51,10 @@ const SiderMain = ({useraddr,setUseraddr,addrData,setAddrData,boxData,setBoxData
         itemlist.push({itemKey: 'associateMail', text: '设置关联邮箱', icon: <IconPaperclip size="large" />})
         //console.log(itemlist)
     }
+    if(itemlist.length < 3){
+        itemlist.push({itemKey: 'associateMail', text: '设置关联邮箱', icon: <IconPaperclip size="large" />})
+    }
+    console.log(folderList)
     const siderOnSelect = (data) =>{
         console.log(data)
         let tempaddr = ''

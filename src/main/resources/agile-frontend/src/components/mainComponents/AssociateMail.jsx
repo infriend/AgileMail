@@ -30,7 +30,7 @@ const AssociateMail= ({useraddr,setUseraddr}) => {
     var t = JSON.parse(localStorage.getItem("associatedList"))
     var data
     if(t != undefined && t != null && t.length !=undefined){
-        data = JSON.parse(localStorage.getItem("associatedList"))
+        data = t
     }else{
         data = []
     }
@@ -73,7 +73,8 @@ const AssociateMail= ({useraddr,setUseraddr}) => {
     }
     const submitContact = () => {
         console.log("value")
-        let domain = addContactMail.split("@")[1]
+        let domain = addContactMail.addMailAddr.split("@")[1]
+        console.log(domain)
         api.associateNewAddr(addContactMail.addMailAddr,domain,addContactMail.addMailPasswd)
         console.log(addContactMail);
     }
