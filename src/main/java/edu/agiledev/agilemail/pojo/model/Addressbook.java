@@ -4,18 +4,19 @@ import lombok.Data;
 
 @Data
 public class Addressbook {
-    private String userId;
-
     private String id;
-
-    private String contactEmail;
 
     private String name;
 
-    public Addressbook(String id, String userId, String contactEmail, String name) {
-        this.userId = userId;
+    private String contactEmail;
+
+    private String userId;
+
+
+    public Addressbook(String id, String name, String contactEmail, String userId) {
         this.id = id;
-        this.contactEmail = contactEmail;
         this.name = name;
+        this.contactEmail = contactEmail;
+        this.userId = userId;
     }
 }

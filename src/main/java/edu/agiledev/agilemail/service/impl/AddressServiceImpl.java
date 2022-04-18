@@ -34,11 +34,11 @@ public class AddressServiceImpl implements AddressService {
     }
 
     @Override
-    public boolean saveAddress(String userId, String mailId, String name) {
+    public boolean saveAddress(String userId, String emailAddress, String name) {
 //        int res = addressbookMapper.insert(new Addressbook(userId, mailId));
 //        return res > 0;
         String id = snowFlakeIdGenerator.nextIdStr();
-        int res = addressbookMapper.insert(new Addressbook(id, userId, mailId, name));
+        int res = addressbookMapper.insert(new Addressbook(id, name, emailAddress, userId));
 
         return true;
     }
