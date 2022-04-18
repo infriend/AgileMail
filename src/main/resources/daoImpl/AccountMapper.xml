@@ -20,6 +20,15 @@
         VALUES (#{emailAccountId}, #{emailAddress}, #{password}, #{domain})
     </insert>
 
+    <select id="searchAccountEmailList" resultType="edu.agiledev.agilemail.pojo.model.EmailAccount">
+        SELECT sea.id, sea.username, sea.password, sea.domain
+        FROM sys_email_account sea,
+             sys_user_email sue
+        WHERE sue.user_id = #{userId}
+          AND sea.id = sue.email_id
+          AND sea.del_flag = '0'
+    </select>
+
     <insert id="relateAccount" useGeneratedKeys="false" keyProperty="id">
         INSERT INTO sys_user_email(user_id, email_id)
         VALUES (#{userId}, #{emailAccountId});

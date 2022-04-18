@@ -7,6 +7,7 @@ import edu.agiledev.agilemail.pojo.model.EmailAccount;
 import edu.agiledev.agilemail.pojo.model.R;
 import edu.agiledev.agilemail.pojo.dto.AccountDTO;
 import edu.agiledev.agilemail.pojo.model.ReturnCode;
+import edu.agiledev.agilemail.pojo.vo.EmailInfoVO;
 import edu.agiledev.agilemail.security.TokenProvider;
 import edu.agiledev.agilemail.security.model.Credentials;
 import edu.agiledev.agilemail.service.AccountService;
@@ -56,6 +57,13 @@ public class AccountController extends RBaseController {
         }
         String token = tokenProvider.generateToken(credentials);
         return success(token);
+    }
+
+    @GetMapping("/account/email/list")
+    public R<List<EmailInfoVO>> getAccountEmailList() {
+        String userId = getCurrentUserId();
+        final List<EmailInfoVO> res = accountService.getAccountEmailList(userId);
+        return success(res);
     }
 
 

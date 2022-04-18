@@ -9,6 +9,7 @@ import edu.agiledev.agilemail.pojo.model.Account;
 import edu.agiledev.agilemail.pojo.model.Addressbook;
 import edu.agiledev.agilemail.pojo.model.EmailAccount;
 import edu.agiledev.agilemail.pojo.model.ReturnCode;
+import edu.agiledev.agilemail.pojo.vo.EmailInfoVO;
 import edu.agiledev.agilemail.security.model.Credentials;
 import edu.agiledev.agilemail.service.AccountService;
 import edu.agiledev.agilemail.service.ImapService;
@@ -25,6 +26,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.util.stream.Collectors;
 
 import static edu.agiledev.agilemail.exception.AuthenticationException.Type.BLACKLISTED;
 
@@ -108,6 +110,13 @@ public class AccountServiceImpl implements AccountService {
             e.printStackTrace();
             throw new BaseException(ReturnCode.CHECKING_ERROR, "发生运行错误");
         }
+    }
+
+    @Override
+    public List<EmailInfoVO> getAccountEmailList(String userId) {
+        List<EmailAccount> emailAccountList = accountMapper.searchAccountEmailList(userId);
+        final List<EmailInfoVO> res = emailAccountList.stream().map(o -> new EmailInfoVO(o.getUsername(), o.getDomain())).collect(Collectors.toList());
+        return res;
     }
 
     @Override

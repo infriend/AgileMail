@@ -6,6 +6,8 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 /**
  * 账户相关表Mapper
  *
@@ -25,6 +27,8 @@ public interface AccountMapper {
                            @Param("emailAddress") String emailAddress,
                            @Param("password") String password,
                            @Param("domain") String domain);
+
+    List<EmailAccount> searchAccountEmailList(@Param("userId") String userId);
 
     int relateAccount(@Param("userId") String userId, @Param("emailAccountId") String emailAccountId);
 

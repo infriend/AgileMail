@@ -1,6 +1,7 @@
 package edu.agiledev.agilemail.service;
 
 import edu.agiledev.agilemail.pojo.model.Addressbook;
+import edu.agiledev.agilemail.pojo.vo.EmailInfoVO;
 import edu.agiledev.agilemail.security.model.Credentials;
 import edu.agiledev.agilemail.pojo.model.EmailAccount;
 
@@ -29,6 +30,8 @@ public interface AccountService {
      * 检查邮箱
      */
     boolean checkAccount(EmailAccount account);
+
+    List<EmailInfoVO> getAccountEmailList(String userId);
 
     boolean addEmailAccount(String userId, EmailAccount emailAccount);
 
