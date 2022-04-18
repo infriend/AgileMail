@@ -48,7 +48,7 @@ const InitialMain = ({useraddr,setUseraddr}) => {
                         </Button>
                         <Button type="primary"  
                         style={{ padding: '6px 24px' }}
-                        onClick={() => navigate('/main/inbox')}>
+                        onClick={() => navigate('/main/inbox?bid=1')}>
                                 收件箱
                         </Button>
                     </div>

@@ -8,10 +8,7 @@ import api from '../api/api'
 const MainPage = ({useraddr,setUseraddr}) =>{
     const { Header, Footer, Sider, Content } = Layout;
     const [boxData,setBoxData] = useState();
-    const [addrData, setAddrData] = useState({
-        total:'',
-        contactList:[]
-    });
+    const [addrData, setAddrData] = useState();
     const [folderList, setFolderList] = useState();
     if(folderList === undefined){
         api.getFolderList(useraddr,setFolderList)

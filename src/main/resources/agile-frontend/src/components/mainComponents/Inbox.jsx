@@ -1,9 +1,8 @@
-import React ,{useMemo,useRef,useEffect}from 'react';
+import React ,{useMemo,useRef,useEffect,useState}from 'react';
 import { Rating,Table, Button,Toast,Popconfirm,Typography,Cascader } from '@douyinfe/semi-ui';
 import api from '../../api/api'
 import { useNavigate,useSearchParams } from 'react-router-dom';
 import { IconMailStroked1,IconInbox } from '@douyinfe/semi-icons';
-import { useState } from 'react';
 const Inbox = ({useraddr,setUseraddr,boxData,setBoxData,detailData,setDetailData,folderList,setFolderList}) => {
     const navigate = useNavigate()
     const { Text } = Typography;
@@ -257,18 +256,20 @@ const Inbox = ({useraddr,setUseraddr,boxData,setBoxData,detailData,setDetailData
         }       
     }
     const turnIntoTree = (target) => {
-        if(target.folderId === params.get('bid')){
-            return{
-                label : target.name,
-                value : target.folderId,
-                disabled: true,
+        if (target.children.length < 1){//不跟有子节点
+            if(target.folderId === params.get('bid')){//bid相同直接禁用
+                return{
+                    label : target.name,
+                    value : target.folderId,
+                    disabled: true,
+                }
+            }else{
+                return{
+                    label : target.name,
+                    value : target.folderId
+                }
             }
-        }else{
-        if (target.children.length < 1){
-            return{
-                label : target.name,
-                value : target.folderId
-            }
+
         }else{
             return{
                 label : target.name,
@@ -276,7 +277,7 @@ const Inbox = ({useraddr,setUseraddr,boxData,setBoxData,detailData,setDetailData
                 children : target.children.map(turnIntoTree)
             }
         }
-    }
+    
     }
     const treeData = (folderList.map(turnIntoTree))
     const [val,setVal] = useState()

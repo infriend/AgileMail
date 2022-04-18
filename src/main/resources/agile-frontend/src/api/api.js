@@ -178,6 +178,7 @@ const sendMail = (note) => {
 	        //html: 0/1//如果做了html邮件，可以添加这个字段，没做就当它不存在
         }
     }).then(response=>{
+        const data = response.data
     })
 }
 const moveMail = (folderid,toFolderId, messageidList,useraddr) =>{
@@ -210,8 +211,18 @@ const registerPost = (username,passwd) => {//注册
         //setAuthToken(t)
     })
 }
+const getContact = (setAddrData) => {//临时接口，获取联系人名单
+    axios({
+        method: 'GET',
+        url:`${baseUrl}/contact`,
+        data:{
 
-
+        }
+    }).then(response=>{
+        const data = response.data
+        setAddrData(data)
+    })
+}
 export default {
                 loginPost,
                 getFolderList,
@@ -224,5 +235,6 @@ export default {
                 setReadStatusMail,
                 sendMail,
                 moveMail,
-                registerPost
+                registerPost,
+                getContact
                 }

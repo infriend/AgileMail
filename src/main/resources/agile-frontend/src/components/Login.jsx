@@ -31,21 +31,23 @@ const Login = ({useraddr,setUseraddr}) => {
     console.log(t3)
     const loginSubmmit = (values) => {
         console.log(values)
-        if(values.mail===undefined){
+        /*if(values.mail===undefined){
             Notification.info({ ...opts3, position: 'top' })  
         }
-        else if(values.username=== undefined||values.passwd===undefined){
+        else */if(values.username=== undefined||values.passwd===undefined){
             Notification.info({ ...opts2, position: 'top' })  
             return; 
         }else{
-            api.loginPost(values.username,values.mail,values.passwd,setCode)
+            //api.loginPost(values.username,values.mail,values.passwd,setCode)
+            api.loginPost(values.username,"qweqwe",values.passwd,setCode)
             if(code === '1' ) 
                 success = true 
             else 
                 success = false
             success = true;//for test only
             if(success){
-                const userdata = {name:values.username,addr:values.mail}
+               // const userdata = {name:values.username,addr:values.mail}
+               const userdata = {name:values.username,addr:"qweqwe"}
                 localStorage.setItem("userdata",JSON.stringify(userdata))
                 //localStorage.setItem("testToken","asEFSDFSDF")//TEST
                 //api.setAuthToken("asEFSDFSDF")
@@ -85,12 +87,13 @@ const Login = ({useraddr,setUseraddr}) => {
                                     <Col>
                                     <div>
                                         <Form.InputGroup label={{ text: (<span>用户名</span>), required: true }} labelPosition='top'>
-                                            <Form.Input field='username' placeholder='请输入用户名' style={{ width: t1 }} showClear />
-                                            <Form.Select field='mail' defaultValue='@gmail.com' style={{ width: t2 }}>
+                                            <Form.Input field='username' placeholder='请输入用户名' style={{ width: t3 }} showClear />
+                                            {/*<Form.Select field='mail' defaultValue='@gmail.com' style={{ width: t2 }}>
                                                 <Select.Option value='gmail.com'>@gmail.com</Select.Option>
                                                 <Select.Option value='163.com'>@163.com</Select.Option>
                                                 <Select.Option value='qq.com'>@qq.com</Select.Option>
-                                            </Form.Select>
+                                </Form.Select>
+                                <Form.Input field='mail' disabled initValue={'@agile.com'} style={{ width: t2 }} /> */} 
                                         </Form.InputGroup>
                                        </div> 
                                     </Col>

@@ -29,7 +29,7 @@ const HeaderMain = ({useraddr,setUseraddr}) => {
                 >
                     邮箱首页
                 </span>
-                <span style={{ marginRight: '24px' }}>{username}@{addr}</span>
+                <span style={{ marginRight: '24px' }}>{username}，当前邮箱//下拉列表{/*@{addr}*/}</span>
                
             </span>
             <Nav.Footer>

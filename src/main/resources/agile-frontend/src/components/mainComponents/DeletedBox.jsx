@@ -1,5 +1,5 @@
-import React ,{useMemo}from 'react';
-import { Rating,Table, Popconfirm, Button, Toast} from '@douyinfe/semi-ui';
+import React ,{useMemo,useState}from 'react';
+import { Rating,Table, Popconfirm, Button, Toast,Cascader} from '@douyinfe/semi-ui';
 import { useNavigate,useSearchParams } from 'react-router-dom';
 import { IconInbox } from '@douyinfe/semi-icons';
 import api from '../../api/api'
@@ -13,9 +13,9 @@ const DeletedBox = ({useraddr,setUseraddr,boxData,setBoxData,detailData,setDetai
     const findName = (list,bid) =>{
         let resname
         for(let obj in list){
-            console.log(list[obj])
+            //console.log(list[obj])
             if(list[obj].children.length !== 0){
-                console.log("children")
+                //console.log("children")
                 resname = findName(list[obj].children,bid)
                 if(resname !== undefined)
                     return resname
@@ -154,20 +154,53 @@ const DeletedBox = ({useraddr,setUseraddr,boxData,setBoxData,detailData,setDetai
         }
     ];
     const data = boxData
-    var selectedobj = {}
+    const [selectedobj,setSelectedObj] =useState()
     const rowSelection = {
         onSelect: (record, selected) => {
-            //console.log(`select row: ${selected}`, record);
         },
         onSelectAll: (selected, selectedRows) => {
-            //console.log(`select all rows: ${selected}`, selectedRows);
         },
         onChange: (selectedRowKeys, selectedRows) => {
-            //console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
-            selectedobj = selectedRows
+            setSelectedObj(selectedRows)
         },
     };
+        const turnIntoTree = (target) => {
+        if (target.children.length < 1){//不跟有子节点
+            if(target.folderId === params.get('bid')){//bid相同直接禁用
+                return{
+                    label : target.name,
+                    value : target.folderId,
+                    disabled: true,
+                }
+            }else{
+                return{
+                    label : target.name,
+                    value : target.folderId
+                }
+            }
 
+        }else{
+            return{
+                label : target.name,
+                value : target.folderId,
+                children : target.children.map(turnIntoTree)
+            }
+        }
+    }
+    const treeData = (folderList.map(turnIntoTree))
+    const [val,setVal] = useState()
+    const onChange = (value) => {
+        //console.log(value)
+        setVal(value)
+    }
+    const onconfirm2 = (obj) => {
+        let maillist = obj.map(target => {
+            return target.uid
+            })
+       // console.log(val[val.length-1])
+        //console.log(maillist)
+        api.moveMail(params.get('bid'),val[val.length-1],maillist,useraddr)
+    }
     const pagination = useMemo(() => ({
         pageSize: 7
     }), []);
@@ -210,7 +243,21 @@ const DeletedBox = ({useraddr,setUseraddr,boxData,setBoxData,detailData,setDetai
                 >
                 <Button type='primary' theme='solid' style={{ width: 100, marginTop: 12, marginRight: 30,marginLeft:30 }}>彻底删除</Button>
                 </Popconfirm>
-                <Button style={{marginTop: 12,width:100}}>转发</Button>
+                <Popconfirm
+                
+                title="移动邮件至："
+                content={        <Cascader
+                    style={{ width: 300 }}
+                    treeData={treeData}
+                    placeholder="请选择移动邮件的位置"
+                    value={val}
+                    onChange={e => onChange(e)}
+                />}
+                onConfirm={()=>onconfirm2(selectedobj)}
+                //onCancel={() => Toast.warning('取消删除！')}
+            >
+                <Button style={{marginTop: 12,width:100}}>移动邮件</Button>
+            </Popconfirm>
             </div></>
     )
 }

@@ -1,12 +1,16 @@
 import React ,{useMemo,useState}from 'react';
-import { Col, Layout, Row,Table, Button,Toast,Modal} from '@douyinfe/semi-ui';
+import { Popconfirm,Table, Button,Toast,Modal, Form} from '@douyinfe/semi-ui';
 import api from '../../api/api'
+import { useNavigate,useSearchParams } from 'react-router-dom';
 const AddressBook= ({useraddr,setUseraddr,addrData,setAddrData}) => {
+    const navigate = useNavigate()
+    const [params] = useSearchParams()
     useraddr = JSON.parse(localStorage.getItem("userdata"))
     var all
-    if(addrData == undefined) {
+    if(addrData === undefined) {
         all = 0
         //api.getAddrBook(useraddr,addrData,setAddrData)
+        api.getContact(setAddrData)
         }
     else all = addrData.length
 
@@ -39,34 +43,41 @@ const AddressBook= ({useraddr,setUseraddr,addrData,setAddrData}) => {
             onFilter: (value, record) => record.fromEmailAccount.includes(value)
         },
     ];
-    const data = addrData.contactList
-    console.log(data)
-    var selectedobj = {}
+    const data = addrData
+    //console.log(addrData)
+    const [selectedobj,setSelectedObj] =useState()
     const rowSelection = {
         onSelect: (record, selected) => {
-            console.log(`select row: ${selected}`, record);
+            //console.log(`select row: ${selected}`, record);
         },
         onSelectAll: (selected, selectedRows) => {
-            console.log(`select all rows: ${selected}`, selectedRows);
+            //console.log(`select all rows: ${selected}`, selectedRows);
         },
         onChange: (selectedRowKeys, selectedRows) => {
-            console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
-            selectedobj = selectedRows
+            //console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
+            setSelectedObj(selectedRows)
         },
     };
-    const deletedOnclick = () =>{
-        var issuccess = true//test
-        if(issuccess){
-            console.log(selectedobj);
-            for(var i = 0; i < selectedobj.length; i++){
-                //api.deleteAddrListPost(useraddr,selectedobj[i])
+    const onconfirm = () => {
+        if(selectedobj.length === undefined){
+            Toast.error('删除列表为空！')
+        }else{
+            let contactlist = selectedobj.map(target => {
+            return target.uid
+            })
+            if(contactlist.length === 0){
+            Toast.error('删除列表为空！')
+            }else{
+                //console.log(contactlist)
+                //此处应有删除联系人的api
+                //api.
+                Toast.success('删除成功')
+                navigate('/main/addressbook')
             }
-            Toast.success('删除成功')
-            //api.getAddrBook(useraddr,addrData,setAddrData)
-        }
-            
-        else
-            Toast.error('删除失败')
+        } 
+    }
+    const submitContact = (value) => {
+        console.log("value")
     }
     const pagination = useMemo(() => ({
         pageSize: 7
@@ -83,10 +94,27 @@ const AddressBook= ({useraddr,setUseraddr,addrData,setAddrData}) => {
                     padding: '16px',
                 }}
             >
-                <Table columns={columns} dataSource={data} rowSelection={rowSelection} pagination={pagination} rowKey="id"/>
-                <Button type='primary' theme='solid' style={{ width: 100, marginTop: 12, marginRight: 30,marginLeft:30 }}
-                onClick={deletedOnclick}>删除联系人</Button>
+                <Table columns={columns} dataSource={data} rowSelection={rowSelection} pagination={pagination} rowKey="uid"/>
+                <Popconfirm
+                    title="确定是否要彻底删除联系人？"
+                    content="此修改将不可逆"
+                    onConfirm={onconfirm}
+                    onCancel={() => Toast.warning('取消删除！')}
+                >
+                <Button type='primary' theme='solid' style={{ width: 100, marginTop: 12, marginRight: 30,marginLeft:30 }}>删除联系人</Button>
+                </Popconfirm>
+                <Popconfirm
+                
+                title="添加联系人："
+                content={ <Form onSubmit={submitContact}>
+                    <Form.Input label={{ text: (<span>姓名</span>), required: true }}field='contactName' showClear />
+                    <Form.Input label={{ text: (<span>邮箱</span>), required: true }}field='contactAddr' showClear />
+                </Form>}
+                onConfirm={submitContact}
+                //onCancel={() => Toast.warning('取消删除！')}
+            >
                 <Button style={{marginTop: 12,width:100}}>添加联系人</Button>
+            </Popconfirm>
             </div></>
     )
 }
