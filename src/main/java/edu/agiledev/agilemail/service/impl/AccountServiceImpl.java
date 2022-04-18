@@ -153,13 +153,19 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public boolean deleteContacts(String uid) {
-        int res = addressbookMapper.deleteByPrimaryKey(uid);
-        if (res == 1){
-            return true;
-        }else {
-            return false;
+    public boolean addContacts(String userId, ContactsDTO contactsDTO) {
+        if (addressService.addressIsSaved(userId, contactsDTO.getContactEmail())) {
+            throw new BaseException("联系人邮箱已保存，不可重复存储！");
+        } else {
+            return addressService.saveAddress(userId, contactsDTO.getContactEmail(),
+                    contactsDTO.getName());
         }
+    }
+
+    @Override
+    public boolean deleteContacts(String id) {
+        int res = addressbookMapper.deleteByPrimaryKey(id);
+        return res == 1;
     }
 
     @Override
@@ -181,16 +187,6 @@ public class AccountServiceImpl implements AccountService {
         }
 
         return true;
-    }
-
-    @Override
-    public boolean addContacts(ContactsDTO contactsDTO) {
-        if (addressService.addressIsSaved(contactsDTO.getUserId(), contactsDTO.getContactEmail())){
-            throw new BaseException("联系人邮箱已保存，不可重复存储！");
-        } else {
-            return addressService.saveAddress(contactsDTO.getUserId(), contactsDTO.getContactEmail(),
-                    contactsDTO.getName());
-        }
     }
 
 

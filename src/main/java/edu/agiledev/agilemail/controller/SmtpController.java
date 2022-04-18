@@ -10,6 +10,7 @@ import edu.agiledev.agilemail.service.AddressService;
 import edu.agiledev.agilemail.service.FileManageService;
 import edu.agiledev.agilemail.service.SmtpService;
 import edu.agiledev.agilemail.utils.EncodeUtil;
+import edu.agiledev.agilemail.utils.EncryptionUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -39,11 +40,15 @@ public class SmtpController extends RBaseController {
     @Autowired
     private FileManageService fileManageService;
 
+    @Autowired
+    private EncryptionUtil encryptionUtil;
+
     @PostMapping("/email")
     public R<String> sendMessage(@RequestBody SendInfo sendInfo) throws AddressException {
         Credentials credentials = (Credentials) SecurityContextHolder.getContext().getAuthentication();
         String userId = credentials.getUserId();
         EmailAccount emailAccount = accountMapper.getUserEmailAccount(userId, sendInfo.getFrom());
+        emailAccount.setPassword(encryptionUtil.decrypt(emailAccount.getPassword()));
 
         smtpService.sendMessage(
                 emailAccount,
@@ -91,7 +96,7 @@ public class SmtpController extends RBaseController {
     @PostMapping("/draftemail/{folderId}/{messageUid}")
     public R<String> sendDraftMail(@RequestBody SendInfo sendInfo,
                                    @PathVariable("folderId") String folderId,
-                                   @PathVariable("messageUid") Long messageUid){
+                                   @PathVariable("messageUid") Long messageUid) {
         EmailAccount emailAccount = getCurrentAccount(sendInfo.getFrom());
         smtpService.sendDraftMessage(
                 emailAccount,

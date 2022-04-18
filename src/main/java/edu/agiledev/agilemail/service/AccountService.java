@@ -42,9 +42,11 @@ public interface AccountService {
     //获得用户通讯录
     List<Addressbook> getContacts(String userId);
 
+    boolean addContacts(String userId, ContactsDTO contactsDTO);
+
     boolean deleteContacts(String uid);
 
     boolean addUser(AccountDTO accountDTO);
 
-    boolean addContacts(ContactsDTO contactsDTO);
+
 }

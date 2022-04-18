@@ -58,7 +58,7 @@ public class AccountController extends RBaseController {
     }
 
     @PostMapping("/register")
-    public R<String> register(@RequestBody AccountDTO accountDTO){
+    public R<String> register(@RequestBody AccountDTO accountDTO) {
         accountService.addUser(accountDTO);
         return success("register success");
     }
@@ -109,9 +109,9 @@ public class AccountController extends RBaseController {
         return success(accountService.getContacts(userId));
     }
 
-    @PutMapping("/contact/{contactUid}/trash")
+    @DeleteMapping("/contact/{contactUid}")
     public R<String> deleteContacts(@PathVariable("contactUid") String contactUid) {
-        if (accountService.deleteContacts(contactUid)){
+        if (accountService.deleteContacts(contactUid)) {
             return success("successfully delete");
         } else {
             return error(ReturnCode.ERROR, "delete failed");
@@ -119,11 +119,12 @@ public class AccountController extends RBaseController {
     }
 
     @PostMapping("/contact")
-    public R<String> addContacts(@RequestBody ContactsDTO contactsDTO){
-        if (accountService.addContacts(contactsDTO)){
+    public R<String> addContacts(@RequestBody ContactsDTO contactsDTO) {
+        String userId = getCurrentUserId();
+        if (accountService.addContacts(userId, contactsDTO)) {
             return success("successfully add");
         } else {
-            return error(ReturnCode.ERROR,"add failed");
+            return error(ReturnCode.ERROR, "add failed");
         }
     }
 

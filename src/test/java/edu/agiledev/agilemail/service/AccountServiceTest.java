@@ -1,6 +1,7 @@
 package edu.agiledev.agilemail.service;
 
 import edu.agiledev.agilemail.config.TestConfiguration;
+import edu.agiledev.agilemail.pojo.dto.ContactsDTO;
 import edu.agiledev.agilemail.pojo.model.EmailAccount;
 import edu.agiledev.agilemail.pojo.vo.EmailInfoVO;
 import edu.agiledev.agilemail.security.model.Credentials;
@@ -9,6 +10,7 @@ import edu.agiledev.agilemail.utils.SnowFlakeIdGenerator;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.core.parameters.P;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -82,5 +84,19 @@ class AccountServiceTest {
 
     @Test
     void getContacts() {
+
+    }
+
+    @Test
+    void addContacts(){
+        ContactsDTO contactsDTO = new ContactsDTO();
+        contactsDTO.setContactEmail("695520903@qq.com");
+        contactsDTO.setName("aaa");
+        accountService.addContacts("1529235917448024071", contactsDTO);
+    }
+
+    @Test
+    void deleteContacts(){
+        accountService.deleteContacts("1552430393121181696");
     }
 }
