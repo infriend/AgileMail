@@ -70,24 +70,24 @@ public class ImapService {
      * @return 已连通的Store对象
      */
     public IMAPStore getImapStore(EmailAccount account) {
-        if (imapStore == null || !imapStore.isConnected()) {
-            try {
-                final Session session = Session.getInstance(initMailProperties(mailSSLSocketFactory, account.getDomain()), null);
-                imapStore = (IMAPStore) session.getStore("imap");
-                imapStore.connect(account.getAddress(), account.getPassword());
+//        if (imapStore == null || !imapStore.isConnected()) {
+        try {
+            final Session session = Session.getInstance(initMailProperties(mailSSLSocketFactory, account.getDomain()), null);
+            imapStore = (IMAPStore) session.getStore("imap");
+            imapStore.connect(account.getAddress(), account.getPassword());
 
-                HashMap IAM = new HashMap();
-                //带上IMAP ID信息，由key和value组成，例如name，version，vendor，support-email等。
-                IAM.put("name", "njuagile");
-                IAM.put("version", "1.0.0");
-                IAM.put("vendor", "test_client");
-                imapStore.id(IAM);
+            HashMap IAM = new HashMap();
+            //带上IMAP ID信息，由key和value组成，例如name，version，vendor，support-email等。
+            IAM.put("name", "njuagile");
+            IAM.put("version", "1.0.0");
+            IAM.put("vendor", "test_client");
+            imapStore.id(IAM);
 
-                log.debug("Opened new ImapStore session");
-            } catch (MessagingException e) {
-                throw new BaseException(ReturnCode.IMAP_CONNECTION_ERROR, "imap: 连接失败", e);
-            }
+            log.debug("Opened new ImapStore session");
+        } catch (MessagingException e) {
+            throw new BaseException(ReturnCode.IMAP_CONNECTION_ERROR, "imap: 连接失败", e);
         }
+//        }
         return imapStore;
     }
 
@@ -195,7 +195,7 @@ public class ImapService {
         return String.format("%s%s", folder.getFile(), folder.getRef() == null ? "" : "#" + folder.getRef());
     }
 
-    private static Properties   initMailProperties(MailSSLSocketFactory mailSSLSocketFactory, String domain) {
+    private static Properties initMailProperties(MailSSLSocketFactory mailSSLSocketFactory, String domain) {
         final Properties prop = new Properties();
         switch (domain) {
             case "gmail.com":
