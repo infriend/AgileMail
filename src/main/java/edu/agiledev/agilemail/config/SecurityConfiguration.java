@@ -83,8 +83,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 new RegexRequestMatcher(ACTUATOR_REGEX, "GET"),
                 new RegexRequestMatcher(CONFIGURATION_REGEX, "GET"),
                 new RegexRequestMatcher(LOGIN_REGEX, "POST"),
-                new RegexRequestMatcher(REGISTER_REGEX, "POST"),
-                new RegexRequestMatcher("/.*", "OPTIONS")
+                new RegexRequestMatcher(REGISTER_REGEX, "POST")
         ));
         httpSecurity
                 .csrf().disable()
