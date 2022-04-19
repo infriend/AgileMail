@@ -107,7 +107,7 @@ const AssociateMail= ({useraddr,setUseraddr}) => {
                 title="添加关联邮箱："
                 content={ <Form onValueChange={values=>{setAddContactMail(values)}}>
                     <Form.Input label={{ text: (<span>邮箱地址</span>), required: true }}field='addMailAddr' showClear />
-                    <Form.Input label={{ text: (<span>密码</span>), required: true }}field='addMailPasswd' showClear />
+                    <Form.Input label={{ text: (<span>密码</span>), required: true }}field='addMailPasswd' mode="password" showClear />
                 </Form>}
                 onConfirm={submitContact}
                 //onCancel={() => Toast.warning('取消删除！')}
