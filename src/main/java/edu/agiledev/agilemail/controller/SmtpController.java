@@ -67,7 +67,8 @@ public class SmtpController extends RBaseController {
             for (InternetAddress address : internetAddressTo) {
                 String mailId = address.getAddress();
                 if (!addressService.addressIsSaved(userId, mailId)) {
-                    addressService.saveAddress(userId, mailId, address.getPersonal());
+                    String name = address.getPersonal() == null ? mailId.substring(0, mailId.indexOf('@')) : address.getPersonal();
+                    addressService.saveAddress(userId, mailId, name);
                 }
             }
             return success("Successfully sent");
@@ -150,7 +151,7 @@ public class SmtpController extends RBaseController {
             //获取multiRequest 中所有的文件名
             Iterator<String> iter = multiRequest.getFileNames();
 
-            if (!iter.hasNext()){
+            if (!iter.hasNext()) {
                 return error(ReturnCode.ERROR, "没有文件上传！");
             }
             while (iter.hasNext()) {

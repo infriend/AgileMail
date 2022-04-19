@@ -91,7 +91,7 @@
 
   <select id="searchAddressByIdAndEmail" resultMap="BaseResultMap">
     select * from sys_addressbook
-    where id=#{userId,jdbcType=VARCHAR} and contact_email=#{mailId,jdbcType=VARCHAR}
+    where user_id=#{userId,jdbcType=VARCHAR} and contact_email=#{mailId,jdbcType=VARCHAR}
   </select>
 
   <select id="getContactByUserId" resultMap="BaseResultMap">
