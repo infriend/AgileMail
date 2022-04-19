@@ -155,14 +155,16 @@ const DraftBox = ({useraddr,setUseraddr,boxData,setBoxData,detailData,setDetailD
         }
     ];
     const data = boxData
-    const [selectedobj,setSelectedObj] =useState()
+    //const [selectedobj,setSelectedObj] =useState()
+    var selectedobj = {}
     const rowSelection = {
         onSelect: (record, selected) => {
         },
         onSelectAll: (selected, selectedRows) => {
         },
         onChange: (selectedRowKeys, selectedRows) => {
-            setSelectedObj(selectedRows)
+            selectedobj = selectedRows
+            //setSelectedObj(selectedRows)
         },
     };
     const deleteOnclick = ()=> {

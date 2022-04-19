@@ -6,10 +6,11 @@ import { useNavigate } from 'react-router-dom';
 import api from '../api/api'
 const SiderMain = ({useraddr,setUseraddr,addrData,setAddrData,boxData,setBoxData,folderList, setFolderList}) => {
     const navigate = useNavigate()
-    //useraddr = JSON.parse(localStorage.getItem("userdata"))
-    console.log(useraddr)
+    useraddr = localStorage.getItem("currmail")
+    //console.log(useraddr)
     var itemlist = [{ itemKey: 'writemail', text: '写信', icon: <IconEdit size="large" />},
     { itemKey: 'addressbook', text: '通讯录', icon: <IconUserGroup size="large" /> }]
+    folderList = JSON.parse(localStorage.getItem("folderList"))
     const turnIntoItem = (target) =>{
         if (target.children.length < 1){
             return{
@@ -32,16 +33,13 @@ const SiderMain = ({useraddr,setUseraddr,addrData,setAddrData,boxData,setBoxData
         if (fl != null){
             folderList = JSON.parse(localStorage.getItem("folderList"))
         }else{
-            console.log(useraddr)
             api.getFolderList(localStorage.getItem("currmail"),setFolderList)
         }
         folderList = JSON.parse(localStorage.getItem("folderList"))
             
     }else{
-        console.log(folderList)
-        console.log(folderList.length)
+        folderList = JSON.parse(localStorage.getItem("folderList"))
         if(folderList.length !== undefined && folderList !== null && Array.isArray(folderList)){
-            //console.log(folderList)
             itemlist.push(...folderList.map(turnIntoItem))
             if(folderList.length > 0){
                 let temp = itemlist[1]
@@ -50,7 +48,6 @@ const SiderMain = ({useraddr,setUseraddr,addrData,setAddrData,boxData,setBoxData
             }
         }
         itemlist.push({itemKey: 'associateMail', text: '设置关联邮箱', icon: <IconPaperclip size="large" />})
-        //console.log(itemlist)
     }
     if(itemlist.length < 3){
         itemlist.push({itemKey: 'associateMail', text: '设置关联邮箱', icon: <IconPaperclip size="large" />})
@@ -82,7 +79,7 @@ const SiderMain = ({useraddr,setUseraddr,addrData,setAddrData,boxData,setBoxData
             let arr = data.itemKey.split("_")
             tempaddr = 'deleted?bid='+arr[1]
             api.getMailList(arr[1],useraddr,setBoxData)
-        }else if(data.itemKey.indexOf('OTHER') != -1){
+        }else {
             let arr = data.itemKey.split("_")
             tempaddr = 'inbox?bid='+arr[1]
             api.getMailList(arr[1],useraddr,setBoxData)
@@ -94,17 +91,7 @@ const SiderMain = ({useraddr,setUseraddr,addrData,setAddrData,boxData,setBoxData
         <Nav
         style={{ maxWidth: 220, height: '100%' }}
         defaultSelectedKeys={['Home']}
-        items={/*[
-            { itemKey: 'writemail', text: '写信', icon: <IconEdit size="large" />},
-            { itemKey: 'inbox', text: '收信', icon: <IconMailStroked1 size="large" /> },
-            { itemKey: 'addressbook', text: '通讯录', icon: <IconUserGroup size="large" /> },
-            {
-                text: '邮箱管理',
-                icon: <IconSetting />,
-                itemKey: 'management',
-                items: [{itemKey:'draft',text: '草稿箱'}, {itemKey:'alreadySent',text: '已发送'},{itemKey:'deleted',text: '已删除'}],
-            },   
-        ]*/itemlist}
+        items={itemlist}
         onSelect={siderOnSelect}
         onClick={data => {console.log(data.itemKey)}}
         footer={{

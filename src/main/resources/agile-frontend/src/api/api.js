@@ -102,9 +102,9 @@ const deleteAssociatedAddr = (mailaddr) => {
     })
 }
 //-----读取文件夹与邮件接口-----
-const getFolderList = async (useraddr,setFolderList) => {//获取folder信息
+const getFolderList = (useraddr,setFolderList) => {//获取folder信息
     console.log(useraddr)
-    await axios({
+    axios({
         method:'GET',
         url: `${baseUrl}/folder`,
         params:{
@@ -129,10 +129,10 @@ const getMailList = (folderid,useraddr,setBoxData) => {//查看文件夹邮件�
             emailAddress : useraddr
         }
     }).then(response => {
-        console.log("change")
+        //console.log("change")
         const data = response.data.data
 
-        console.log(data)
+        //console.log(data)
         setBoxData(data)
     })
 }
@@ -145,9 +145,9 @@ const getMailDetail = async(folderid, useraddr, messageuid, setDetailData) => {/
             emailAddress: useraddr,
         }
     }).then(response => {
-        const data = response.data;
-        console.log(response);   
-        localStorage.setItem("mailDetail", JSON.stringify(data[0]))
+        const data = response.data.data;
+        console.log(data);   
+        localStorage.setItem("mailDetail", JSON.stringify(data))
         console.log(localStorage.getItem("mailDetail"))
         //console.log("fromapi2");  
         //setDetailData(data[0]);     
@@ -241,6 +241,7 @@ const flagMail = (folderid,flagged,useraddr,messageidList) => {//设为已标记
 }
 //----------发信接口----------------
 const sendMail = (note) => {
+    console.log(note)
     axios({
         method: 'POST',
         url:`${baseUrl}/email`,
@@ -255,7 +256,8 @@ const sendMail = (note) => {
 	        //html: 0/1//如果做了html邮件，可以添加这个字段，没做就当它不存在
         }
     }).then(response=>{
-        const data = response.data
+        const data = response
+        console.log(response)
     })
 }
 const sendDraft = (note) => {

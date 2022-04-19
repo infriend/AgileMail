@@ -6,6 +6,7 @@ import { IconMailStroked1,IconInbox } from '@douyinfe/semi-icons';
 const Inbox = ({useraddr,setUseraddr,boxData,setBoxData,detailData,setDetailData,folderList,setFolderList}) => {
     const navigate = useNavigate()
     const { Text } = Typography;
+    console.log(useraddr)
     //useraddr = localStorage.getItem("currmail")
     //console.log(useraddr)
     const [params] = useSearchParams()
@@ -175,7 +176,7 @@ const Inbox = ({useraddr,setUseraddr,boxData,setBoxData,detailData,setDetailData
                 }
             }
         },
-        {
+        /*{
             title: '收信邮箱',
             dataIndex: 'fromEmailAccount',
             width: 'auto',
@@ -206,7 +207,7 @@ const Inbox = ({useraddr,setUseraddr,boxData,setBoxData,detailData,setDetailData
             ],
             onFilter: (value, record) => record.fromEmailAccount.includes(value),
             
-        },
+        },*/
         {
             dataIndex: 'flagged',
             width: 'auto',
@@ -223,8 +224,8 @@ const Inbox = ({useraddr,setUseraddr,boxData,setBoxData,detailData,setDetailData
     var data = boxData
     console.log(data)
     //console.log(folderList)
-    //var selectedobj = {}
-    const [selectedobj,setSelectedObj] =useState()
+    var selectedobj = {}
+    //const [selectedobj,setSelectedObj] =useState()
     const rowSelection = {
         onSelect: (record, selected) => {
             //console.log(`select row: ${selected}`, record);
@@ -234,8 +235,8 @@ const Inbox = ({useraddr,setUseraddr,boxData,setBoxData,detailData,setDetailData
         },
         onChange: (selectedRowKeys, selectedRows) => {
             //console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
-            //selectedobj = selectedRows
-            setSelectedObj(selectedRows)
+            selectedobj = selectedRows
+            //setSelectedObj(selectedRows)
             //console.log(selectedobj)
         },
     };
@@ -291,6 +292,7 @@ const Inbox = ({useraddr,setUseraddr,boxData,setBoxData,detailData,setDetailData
         setVal(value)
     }
     const onconfirm = (obj) => {
+        console.log(obj)
         let maillist = obj.map(target => {
             return target.uid
             })

@@ -154,14 +154,16 @@ const DeletedBox = ({useraddr,setUseraddr,boxData,setBoxData,detailData,setDetai
         }
     ];
     const data = boxData
-    const [selectedobj,setSelectedObj] =useState()
+    //const [selectedobj,setSelectedObj] =useState()
+    var selectedobj = {}
     const rowSelection = {
         onSelect: (record, selected) => {
         },
         onSelectAll: (selected, selectedRows) => {
         },
         onChange: (selectedRowKeys, selectedRows) => {
-            setSelectedObj(selectedRows)
+            //setSelectedObj(selectedRows)
+            selectedobj = selectedRows
         },
     };
         const turnIntoTree = (target) => {

@@ -8,10 +8,10 @@ const Readmail = ({useraddr,setUseraddr,boxData,setBoxData,detailData,setDetailD
     //useraddr = JSON.parse(localStorage.getItem("userdata"))
     folderList = JSON.parse(localStorage.getItem("folderList"))
     const [params] = useSearchParams()
-    var data = localStorage.getItem("mailDetail")
-    console.log("data"+data)
-    console.log(detailData)
-    if(data.length === 0 || detailData == undefined){
+    var data = JSON.parse(localStorage.getItem("mailDetail"))
+    console.log(data)
+    //console.log(detailData)
+    if(data.length === 0 ||data === undefined){
         console.log("gengxin")
         console.log(data)
         var idlist = params.get('id').split("_")
@@ -19,9 +19,9 @@ const Readmail = ({useraddr,setUseraddr,boxData,setBoxData,detailData,setDetailD
     }else{
         console.log("bugengxin")
         console.log(data)
-        console.log(detailData)
-        if (detailData != undefined)
-            data = detailData
+        //console.log(detailData)
+        /*if (detailData != undefined)
+            data = detailData*/
     }
     //var idlist = params.get('id').split("_")
     //api.getMailDetail(idlist[0],useraddr,idlist[1],setDetailData)    
@@ -30,31 +30,37 @@ const Readmail = ({useraddr,setUseraddr,boxData,setBoxData,detailData,setDetailD
             data = detailData
         }        
     }
-    console.log(data)
+    //console.log(data)
     const FromText = () =>{
         let fromlist = []
         if(data !== undefined){
+            //console.log(data)
             let list = data.from
+            //console.log(list)
             if(list !== undefined){//防止因为异步调用而报错undefined
                 fromlist = list.map((item)=>{
                     return <><Text><Text style={{ color: 'rgba(var(--semi-green-6), 1)' }} strong>{item}</Text> {`<`}{item}{`>`}</Text></>
                 })
             }
         }
+
         return (fromlist)
     }
     const ReceiveText = () => {
         let tolist = []
         if(data !== undefined){
-            tolist.push(<><Text style={{ color: 'rgba(var(--semi-purple-7), 1)' }} strong>{data.fromEmailAccount}</Text><Text> {`<`}{data.fromEmailAccount}{`>`}</Text></>)
+            //tolist.push(<><Text style={{ color: 'rgba(var(--semi-purple-7), 1)' }} strong>{data.fromEmailAccount}</Text><Text> {`<`}{data.fromEmailAccount}{`>`}</Text></>)
             let list = data.recipients
+            list = list.map((item)=>{return item.address})
+            console.log(list)
             if(list !== undefined){//防止因为异步调用而报错undefined
-                if(list !== null){
+                if(list !== null && list != undefined){
                     tolist.push(list.map((item)=>{
-                        <><Text style={{ color: 'rgba(var(--semi-purple-7), 1)' }} strong>{item}</Text><Text> {`<`}{item}{`>`}</Text></>
+                         return <><Text><Text style={{ color: 'rgba(var(--semi-purple-7), 1)' }} strong>{item}</Text> {`<`}{item}{`>`}</Text></>
                     }))
                 }
             }
+            console.log(list.map((item)=>{return item.address}))
             
         }
         return (tolist)
@@ -116,11 +122,11 @@ const Readmail = ({useraddr,setUseraddr,boxData,setBoxData,detailData,setDetailD
                                         onClick={()=>console.log(params.get('id'))}>
                                         删除
                                 </Button>
-                                <Button type="primary"  
+                                {/*<Button type="primary"  
                                         style={{ padding: '6px 24px' }}
                                         onClick={()=>console.log(detailData)}>
                                         转发
-                                </Button>
+            </Button>*/}
                             </div>
                         </Form>
                     </Col>

@@ -2,10 +2,11 @@ import React, {useState} from 'react';
 import { Col, Form, Row, Button, Upload,Toast, useFormState,Collapsible,Typography} from '@douyinfe/semi-ui';
 import api from '../../api/api'
 import Icon, { IconUpload} from '@douyinfe/semi-icons'
-const ContentWrite = ({useraddr,setUseraddr,assoData,setAssoData}) => {
+const ContentWrite = ({useraddr,setUseraddr}) => {
     var username = useraddr.name
     const [submitstate, setsubmitstate] = useState();
     useraddr = JSON.parse(localStorage.getItem("userdata"))
+    var assoData = localStorage.getItem("currmail")
     const { Text } = Typography;
     var d = new Date()
     const time = () =>{

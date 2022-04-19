@@ -3,9 +3,9 @@ import { useNavigate } from 'react-router-dom';
 import { Button,Select,Nav } from '@douyinfe/semi-ui';
 import Icon, { IconUndo, IconSemiLogo, IconHelpCircle} from '@douyinfe/semi-icons'
 import api from '../api/api';
-const HeaderMain = ({useraddr,setUseraddr,assoData,setAssoData,folderList,setFolderList}) => {
+const HeaderMain = ({useraddr,setUseraddr,folderList,setFolderList}) => {
     useraddr = JSON.parse(localStorage.getItem("userdata"))
-    assoData = localStorage.getItem("currmail")
+    //assoData = localStorage.getItem("currmail")
     //console.log(assoData)
     const turnIntoList = (target) => {
         return{
@@ -20,15 +20,13 @@ const HeaderMain = ({useraddr,setUseraddr,assoData,setAssoData,folderList,setFol
     }else{
         assolist = [{value:'',label:''}]
     }
-    console.log(assoData)
     var username = useraddr.name
     const navigate = useNavigate()
     const selectOnchange = (value) => {
+        console.log(value)
         localStorage.setItem("currmail",value)
-        setAssoData(value)
-        api.getFolderList(useraddr,setFolderList)
+        api.getFolderList(value,setFolderList)
         navigate('/main/')
-        //console.log(value)
     }
     return(
         <div>
@@ -53,7 +51,7 @@ const HeaderMain = ({useraddr,setUseraddr,assoData,setAssoData,folderList,setFol
                 </span>
                 <span style={{ marginRight: '24px' }}>{username}，当前邮箱为：
                 <Select placeholder='请选择当前邮箱' style={{ width: 180 }}
-                optionList={assolist} defaultValue={assolist[0].value} onChange={selectOnchange}/>
+                optionList={assolist} defaultValue={localStorage.getItem("currmail")} onChange={selectOnchange}/>
                 </span>
                
             </span>

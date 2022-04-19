@@ -10,19 +10,20 @@ const MainPage = ({useraddr,setUseraddr}) =>{
     const [boxData,setBoxData] = useState();
     const [addrData, setAddrData] = useState();
     const [folderList, setFolderList] = useState();
-    const [assoData,setAssoData] = useState();//这个是当前的邮箱地址
+    const [assoData,setAssoData] = useState();//这个是当前的邮箱地址//
     if(folderList === undefined){
         api.getFolderList(localStorage.getItem("currmail"),setFolderList)
     }else{
         //console.log(folderList)
     }
+    if(assoData !== localStorage.getItem("currmail")){
+        api.getFolderList(localStorage.getItem("currmail"),setFolderList)
+        setAssoData(localStorage.getItem("currmail"))
+    }
     if(assoData === undefined){
-        console.log(1)
         api.getAssociatedAddrList(setAssoData)
     }else{
-        console.log(2)
-        localStorage.setItem("currmail",assoData)
-        console.log(assoData)
+        //localStorage.setItem("currmail",assoData)
     }
     const [detailData,setDetailData] = useState();
     //console.log("main:"+useraddr.name)
@@ -34,10 +35,10 @@ const MainPage = ({useraddr,setUseraddr}) =>{
             </Header>
             <Layout >
                 <Sider style={{ backgroundColor: 'var(--semi-color-bg-1)' }}>
-                    <SidererMain useraddr={assoData} setUseraddr={setAssoData} addrData={addrData} setAddrData={setAddrData}
+                    <SidererMain useraddr={localStorage.getItem("currmail")} setUseraddr={setAssoData} addrData={addrData} setAddrData={setAddrData}
                     boxData={boxData} setBoxData={setBoxData} 
                     folderList={folderList} setFolderList = {setFolderList}
-                    assoData={assoData} setAssoData ={setAssoData}/>    
+                    />    
                 </Sider>
                 <Content
                     style={{

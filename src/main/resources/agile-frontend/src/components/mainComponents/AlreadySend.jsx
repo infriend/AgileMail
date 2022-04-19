@@ -154,14 +154,16 @@ const AlreadySend = ({useraddr,setUseraddr,boxData,setBoxData,detailData,setDeta
         }
     ];
     const data = boxData
-    const [selectedobj,setSelectedObj] =useState()
+    //const [selectedobj,setSelectedObj] =useState()
+    var selectedobj = {}
     const rowSelection = {
         onSelect: (record, selected) => {
         },
         onSelectAll: (selected, selectedRows) => {
         },
         onChange: (selectedRowKeys, selectedRows) => {
-            setSelectedObj(selectedRows)
+            //setSelectedObj(selectedRows)
+            selectedobj = selectedRows
         },
     };
     const deleteOnclick = ()=> {
