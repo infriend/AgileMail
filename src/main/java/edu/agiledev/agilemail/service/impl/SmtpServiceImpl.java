@@ -273,8 +273,8 @@ public class SmtpServiceImpl implements SmtpService {
                 break;
             case "smail.nju.edu.cn":
             case "qq.com":
-                mailSender.setHost("smtp.gmail.com");
-                mailSender.setPort(993);
+                mailSender.setHost("smtp.qq.com");
+                mailSender.setPort(465);
                 props.put("mail.smtp.ssl.enable", true);
                 break;
             default:
