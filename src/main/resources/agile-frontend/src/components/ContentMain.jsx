@@ -13,10 +13,10 @@ import AssociateMail from './mainComponents/AssociateMail';
 const ContentMain = ({useraddr,setUseraddr,addrData,setAddrData,boxData,setBoxData,
     detailData,setDetailData,folderList,setFolderList,assoData,setAssoData}) => {
     if (useraddr === undefined){
-        useraddr = localStorage.getItem("userdata")
+        setUseraddr(localStorage.getItem("userdata"))
         }
     if (folderList === undefined){
-        folderList = localStorage.getItem("folderList")
+       setFolderList(localStorage.getItem("folderList"))
     }
     return(
         <>

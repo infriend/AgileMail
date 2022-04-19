@@ -49,6 +49,7 @@ const Inbox = ({useraddr,setUseraddr,boxData,setBoxData,detailData,setDetailData
     }
     const boxname = findName(folderList,params.get('bid'))
     if(boxData == undefined){
+        console.log("undefined")
         bidcurr = params.get('bid')
         api.getMailList(bidcurr,useraddr,setBoxData)
     }

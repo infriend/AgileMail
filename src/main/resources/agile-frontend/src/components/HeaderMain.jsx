@@ -23,11 +23,15 @@ const HeaderMain = ({useraddr,setUseraddr,folderList,setFolderList}) => {
     var username = useraddr.name
     const navigate = useNavigate()
     const selectOnchange = (value) => {
-        console.log(value)
-        localStorage.setItem("currmail",value)
-        localStorage.removeItem("folderList")
-        api.getFolderList(value,setFolderList)
-        navigate('/main/')
+        if(value !== useraddr){
+            api.switchMail(value)
+            console.log(value)
+            localStorage.setItem("currmail",value)
+            localStorage.removeItem("folderList")
+            api.getFolderList(value,setFolderList)
+            navigate('/main/')
+        }
+
     }
     return(
         <div>

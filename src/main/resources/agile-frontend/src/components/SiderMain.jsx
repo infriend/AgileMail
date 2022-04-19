@@ -29,8 +29,8 @@ const SiderMain = ({useraddr,setUseraddr,addrData,setAddrData,boxData,setBoxData
     }
     if(folderList === undefined|| folderList === null ||folderList.length === null){
         let fl = localStorage.getItem("folderList")
-        console.log(fl)
-        if (fl != null){
+        //console.log(fl)
+        if (fl !== null ||fl !== undefined){
             folderList = JSON.parse(localStorage.getItem("folderList"))
         }else{
             api.getFolderList(localStorage.getItem("currmail"),setFolderList)
@@ -54,7 +54,7 @@ const SiderMain = ({useraddr,setUseraddr,addrData,setAddrData,boxData,setBoxData
     }
     console.log(folderList)
     const siderOnSelect = (data) =>{
-        console.log(data)
+        //console.log(data)
         let tempaddr = ''
         if(data.itemKey.indexOf('addressbook') != -1){
             tempaddr = data.itemKey
@@ -95,7 +95,7 @@ const SiderMain = ({useraddr,setUseraddr,addrData,setAddrData,boxData,setBoxData
         defaultSelectedKeys={['Home']}
         items={itemlist}
         onSelect={siderOnSelect}
-        onClick={data => {console.log(data.itemKey)}}
+        onClick={data => {/*console.log(data.itemKey)*/}}
         footer={{
             collapseButton: true,
         }}

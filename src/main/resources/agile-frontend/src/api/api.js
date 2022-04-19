@@ -101,6 +101,16 @@ const deleteAssociatedAddr = (mailaddr) => {
     }).then(response=>{//没有body
     })
 }
+const switchMail = (mailaddr) => {
+    console.log("switch")
+    axios({
+        method:'POST',
+        url:`${baseUrl}/account/email/switch`,
+        data:{
+            emailAddress: mailaddr
+        }
+    }).then()
+}
 //-----读取文件夹与邮件接口-----
 const getFolderList = (useraddr,setFolderList) => {//获取folder信息
     console.log(useraddr)
@@ -327,6 +337,7 @@ export default {
                 getAssociatedAddrList,
                 associateNewAddr,
                 deleteAssociatedAddr,
+                switchMail,
 
                 getFolderList,
                 getMailList,
