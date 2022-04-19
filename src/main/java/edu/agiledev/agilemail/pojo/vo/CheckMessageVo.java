@@ -5,6 +5,7 @@ import edu.agiledev.agilemail.pojo.message.Recipient;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -23,8 +24,7 @@ public class CheckMessageVo {
     private List<Recipient> recipients;
     private String subject;
 
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
-    private Date datetime;
+    private String datetime;
 
     private boolean flagged;
     private boolean seen;
@@ -32,6 +32,9 @@ public class CheckMessageVo {
     private boolean deleted;
 
     private String fromEmailAccount;
+
+    private final static String pattern = "yyyy-MM-dd HH:mm";
+    private static SimpleDateFormat dateFormat = new SimpleDateFormat(pattern);
 
     public static CheckMessageVo from(AMessage message) {
         CheckMessageVo res = new CheckMessageVo();
@@ -43,7 +46,7 @@ public class CheckMessageVo {
         res.setSubject(message.getSubject());
 
         Date datetime = Date.from(message.getReceivedDate().toInstant());
-        res.setDatetime(datetime);
+        res.setDatetime(dateFormat.format(datetime));
 
         res.setFlagged(message.getFlagged());
         res.setRecent(message.getRecent());
