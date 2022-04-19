@@ -99,6 +99,10 @@ public class ImapService {
         return imapStore;
     }
 
+    public synchronized void resetImapStore(EmailAccount account) {
+        newImapStore(account);
+    }
+
 
     /**
      * 返回存在并且关闭的folder

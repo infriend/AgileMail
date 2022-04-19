@@ -13,6 +13,7 @@ import edu.agiledev.agilemail.pojo.vo.EmailInfoVO;
 import edu.agiledev.agilemail.security.TokenProvider;
 import edu.agiledev.agilemail.security.model.Credentials;
 import edu.agiledev.agilemail.service.AccountService;
+import edu.agiledev.agilemail.service.ImapService;
 import edu.agiledev.agilemail.utils.EncryptionUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,13 +38,13 @@ public class AccountController extends RBaseController {
 
     private final TokenProvider tokenProvider;
 
-    private final EncryptionUtil encryptionUtil;
+    private final ImapService imapService;
 
     @Autowired
-    public AccountController(AccountService accountService, TokenProvider tokenProvider, EncryptionUtil encryptionUtil) {
+    public AccountController(AccountService accountService, TokenProvider tokenProvider, ImapService imapService) {
         this.accountService = accountService;
         this.tokenProvider = tokenProvider;
-        this.encryptionUtil = encryptionUtil;
+        this.imapService = imapService;
     }
 
     @PostMapping("/login")
@@ -94,6 +95,13 @@ public class AccountController extends RBaseController {
         String userId = getCurrentUserId();
         boolean success = accountService.deleteEmailAccount(userId, emailAddress);
         return success ? success() : error(ReturnCode.ERROR, "删除邮箱账户失败");
+    }
+
+    @PostMapping("/account/email/switch")
+    public R<String> switchCurrentEmail(@RequestBody AddressBase addressDTO) {
+        EmailAccount account = getCurrentAccount(addressDTO.getEmailAddress());
+        imapService.resetImapStore(account);
+        return success("切换邮箱成功");
     }
 
     @GetMapping("/isOnline")
