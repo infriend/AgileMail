@@ -70,8 +70,10 @@ public class ImapService {
      * @return 已连通的Store对象
      */
     public IMAPStore getImapStore(EmailAccount account) {
-//        if (imapStore == null || !imapStore.isConnected()) {
         try {
+            if (imapStore != null && imapStore.isConnected()) {
+                imapStore.close();
+            }
             final Session session = Session.getInstance(initMailProperties(mailSSLSocketFactory, account.getDomain()), null);
             imapStore = (IMAPStore) session.getStore("imap");
             imapStore.connect(account.getAddress(), account.getPassword());
