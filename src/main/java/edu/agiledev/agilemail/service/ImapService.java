@@ -70,10 +70,14 @@ public class ImapService {
      * @return 已连通的Store对象
      */
     public IMAPStore getImapStore(EmailAccount account) {
+        if (imapStore == null || !imapStore.isConnected()) {
+            newImapStore(account);
+        }
+        return imapStore;
+    }
+
+    public IMAPStore newImapStore(EmailAccount account) {
         try {
-            if (imapStore != null && imapStore.isConnected()) {
-                imapStore.close();
-            }
             final Session session = Session.getInstance(initMailProperties(mailSSLSocketFactory, account.getDomain()), null);
             imapStore = (IMAPStore) session.getStore("imap");
             imapStore.connect(account.getAddress(), account.getPassword());
@@ -89,7 +93,6 @@ public class ImapService {
         } catch (MessagingException e) {
             throw new BaseException(ReturnCode.IMAP_CONNECTION_ERROR, "imap: 连接失败", e);
         }
-//        }
         return imapStore;
     }
 

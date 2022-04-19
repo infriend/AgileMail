@@ -60,7 +60,7 @@ public class MsgReadServiceImpl implements MsgReadService {
 
     @Override
     public List<FolderVO> getFolders(EmailAccount account) {
-        IMAPStore store = imapService.getImapStore(account);
+        IMAPStore store = imapService.newImapStore(account);
         SupportDomain domainInfo = domainMap.get(account.getDomain());
         try {
             IMAPFolder root = (IMAPFolder) store.getDefaultFolder();
