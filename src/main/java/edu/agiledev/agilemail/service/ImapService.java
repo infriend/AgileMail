@@ -78,6 +78,9 @@ public class ImapService {
 
     public IMAPStore newImapStore(EmailAccount account) {
         try {
+            if (imapStore != null && imapStore.isConnected()) {
+                imapStore.close();
+            }
             final Session session = Session.getInstance(initMailProperties(mailSSLSocketFactory, account.getDomain()), null);
             imapStore = (IMAPStore) session.getStore("imap");
             imapStore.connect(account.getAddress(), account.getPassword());
