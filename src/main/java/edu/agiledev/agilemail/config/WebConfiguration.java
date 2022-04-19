@@ -84,22 +84,22 @@ public class WebConfiguration implements WebMvcConfigurer, AsyncConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-                .allowedMethods("HEAD", "GET", "PUT", "POST", "DELETE", "PATCH");
+                .allowedMethods("HEAD", "GET", "PUT", "POST", "DELETE", "PATCH", "OPTIONS");
     }
 
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
-        final UrlBasedCorsConfigurationSource corsConfigurationSource = new UrlBasedCorsConfigurationSource();
-        corsConfigurationSource.registerCorsConfiguration("/**",
-                new CorsConfiguration().applyPermitDefaultValues());
-//        CorsConfiguration corsConfiguration = new CorsConfiguration();
-//        corsConfiguration.setAllowCredentials(true);
-//        corsConfiguration.addAllowedOriginPattern("*");
-//        corsConfiguration.addAllowedHeader("*");
-//        corsConfiguration.addAllowedMethod("*");
-//
-//        UrlBasedCorsConfigurationSource corsConfigurationSource = new UrlBasedCorsConfigurationSource();
-//        corsConfigurationSource.registerCorsConfiguration("/**", corsConfiguration);
+//        final UrlBasedCorsConfigurationSource corsConfigurationSource = new UrlBasedCorsConfigurationSource();
+//        corsConfigurationSource.registerCorsConfiguration("/**",
+//                new CorsConfiguration().applyPermitDefaultValues());
+        CorsConfiguration corsConfiguration = new CorsConfiguration();
+        corsConfiguration.setAllowCredentials(true);
+        corsConfiguration.addAllowedOriginPattern("*");
+        corsConfiguration.addAllowedHeader("*");
+        corsConfiguration.addAllowedMethod("*");
+
+        UrlBasedCorsConfigurationSource corsConfigurationSource = new UrlBasedCorsConfigurationSource();
+        corsConfigurationSource.registerCorsConfiguration("/**", corsConfiguration);
         return corsConfigurationSource;
     }
 //

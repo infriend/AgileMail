@@ -6,6 +6,7 @@ import edu.agiledev.agilemail.pojo.message.Recipient;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import java.text.SimpleDateFormat;
 import java.time.ZonedDateTime;
 import java.util.Date;
 import java.util.List;
@@ -26,8 +27,7 @@ public class DetailMessageVo {
     private List<Recipient> recipients;
     private String subject;
 
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
-    private Date datetime;
+    private String datetime;
 
     private Long size;
     private String content;
@@ -40,6 +40,9 @@ public class DetailMessageVo {
 
     private String fromEmailAccount;
 
+    private final static String pattern = "yyyy-MM-dd HH:mm";
+    private static SimpleDateFormat dateFormat = new SimpleDateFormat(pattern);
+
     public static DetailMessageVo from(AMessage m) {
         DetailMessageVo res = new DetailMessageVo();
         res.setUid(m.getUid());
@@ -48,7 +51,7 @@ public class DetailMessageVo {
         res.setReplyTo(m.getReplyTo());
         res.setRecipients(m.getRecipients());
         res.setSize(m.getSize());
-        res.setDatetime(Date.from(m.getReceivedDate().toInstant()));
+        res.setDatetime(dateFormat.format(Date.from(m.getReceivedDate().toInstant())));
         res.setContent(m.getContent());
         res.setAttachments(m.getAttachments());
 

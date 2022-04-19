@@ -56,7 +56,7 @@ public class ReadController extends RBaseController {
     @GetMapping("/{folderId}/message/{messageUid}")
     public R<DetailMessageVo> getMessageDetail(@PathVariable(value = "folderId") String folderId,
                                                @PathVariable(value = "messageUid") Long messageUid,
-                                               @RequestParam String emailAddress) {
+                                               @RequestParam("emailAddress") String emailAddress) {
 
         EmailAccount account = getCurrentAccount(emailAddress);
         DetailMessageVo res = msgReadService.readMessage(account, messageUid, EncodeUtil.toUrl(folderId));
@@ -67,8 +67,8 @@ public class ReadController extends RBaseController {
     public R<String> getAttachment(@PathVariable("folderId") String folderId,
                                    @PathVariable("messageUid") Long messageUid,
                                    @PathVariable("aid") String aid,
-                                   @RequestParam String emailAddress,
-                                   @RequestParam Boolean contentId,
+                                   @RequestParam("emailAddress") String emailAddress,
+                                   @RequestParam("contentId") Boolean contentId,
                                    HttpServletResponse response) {
 
         EmailAccount account = getCurrentAccount(emailAddress);
