@@ -34,7 +34,7 @@ const DraftBox = ({useraddr,setUseraddr,boxData,setBoxData,detailData,setDetailD
                     return ans
             }
             if(list[i].folderId === bid)
-                return list[i].message
+                return list[i].total
         }
         return ans
     }

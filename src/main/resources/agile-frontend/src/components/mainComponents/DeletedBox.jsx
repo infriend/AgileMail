@@ -34,7 +34,7 @@ const DeletedBox = ({useraddr,setUseraddr,boxData,setBoxData,detailData,setDetai
                     return ans
             }
             if(list[i].folderId === bid)
-                return list[i].message
+                return list[i].total
         }
         return ans
     }

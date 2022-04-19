@@ -33,7 +33,7 @@ const AlreadySend = ({useraddr,setUseraddr,boxData,setBoxData,detailData,setDeta
                     return ans
             }
             if(list[i].folderId === bid)
-                return list[i].message
+                return list[i].total
         }
         return ans
     }

@@ -38,7 +38,7 @@ const Inbox = ({useraddr,setUseraddr,boxData,setBoxData,detailData,setDetailData
             }
             if(list[i].folderId === bid){
                 return {
-                    all : list[i].message,
+                    all : list[i].total,
                     notread : list[i].unread,
                     recent: list[i].recent
                 }
@@ -58,6 +58,8 @@ const Inbox = ({useraddr,setUseraddr,boxData,setBoxData,detailData,setDetailData
         all = ans.all
         recent = ans.recent
         notRead = ans.notread
+        console.log(ans)
+        console.log(all)
 
     }
     

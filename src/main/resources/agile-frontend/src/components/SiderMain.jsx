@@ -41,11 +41,11 @@ const SiderMain = ({useraddr,setUseraddr,addrData,setAddrData,boxData,setBoxData
         folderList = JSON.parse(localStorage.getItem("folderList"))
         if(folderList.length !== undefined && folderList !== null && Array.isArray(folderList)){
             itemlist.push(...folderList.map(turnIntoItem))
-            if(folderList.length > 0){
+            /*if(folderList.length > 0){
                 let temp = itemlist[1]
                 itemlist[1] = itemlist[2]
                 itemlist[2] = temp
-            }
+            }*/
         }
         itemlist.push({itemKey: 'associateMail', text: '设置关联邮箱', icon: <IconPaperclip size="large" />})
     }
@@ -56,10 +56,10 @@ const SiderMain = ({useraddr,setUseraddr,addrData,setAddrData,boxData,setBoxData
     const siderOnSelect = (data) =>{
         console.log(data)
         let tempaddr = ''
-        if(data.itemKey.indexOf('addressbook') != -1){//api还没弄好
+        if(data.itemKey.indexOf('addressbook') != -1){
             tempaddr = data.itemKey
             api.getContact(setAddrData)
-        }else if(data.itemKey === 'writemail'){//api还没弄好
+        }else if(data.itemKey === 'writemail'){
             tempaddr = 'writemail'
         }else if(data.itemKey === 'associateMail'){
             tempaddr = 'associateMail'
