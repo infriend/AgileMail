@@ -1,10 +1,11 @@
 import {React,useCallback} from 'react';
 import { Col, Form, Row, Button,Typography,Card} from '@douyinfe/semi-ui';
 import api from '../../api/api'
-import { useSearchParams} from 'react-router-dom';
+import { useSearchParams,useNavigate} from 'react-router-dom';
 const Readmail = ({useraddr,setUseraddr,boxData,setBoxData,detailData,setDetailData,folderList,setFolderList}) =>{
     const { Section, Input } = Form;
     const {Text,Paragraph} = Typography
+    const navigate = useNavigate()
     //useraddr = JSON.parse(localStorage.getItem("userdata"))
     folderList = JSON.parse(localStorage.getItem("folderList"))
     const [params] = useSearchParams()
@@ -65,6 +66,14 @@ const Readmail = ({useraddr,setUseraddr,boxData,setBoxData,detailData,setDetailD
         }
         return (tolist)
     }
+    const deleteOnclick = () => {
+        console.log(params.get('id'))
+        let tid = params.get('id').split('_')
+        let list = []
+        list.push(tid[1])
+        api.putMailIntoTrash(tid[0],useraddr,list)
+        navigate('/main/')
+    }
     return(
         <>
             <div
@@ -119,7 +128,7 @@ const Readmail = ({useraddr,setUseraddr,boxData,setBoxData,detailData,setDetailD
                                 </Button>
                                 <Button type="danger"  
                                         style={{ padding: '6px 24px',marginRight: 25 }}
-                                        onClick={()=>console.log(params.get('id'))}>
+                                        onClick={deleteOnclick}>
                                         删除
                                 </Button>
                                 {/*<Button type="primary"  

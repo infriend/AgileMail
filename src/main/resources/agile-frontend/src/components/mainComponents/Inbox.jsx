@@ -104,7 +104,8 @@ const Inbox = ({useraddr,setUseraddr,boxData,setBoxData,detailData,setDetailData
             width: 'auto',
             render: (text, record, index) => {
                 var id = record.uid
-                //console.log(text)
+                //console.log(record.from[0])
+                //console.log(record.from[0].includes('@nju.edu.cn>'))
                 if(record.seen){//false表示最近还没看过
                     return (
                         <div onClick={()=>mailOnclick(id)} >
@@ -124,15 +125,28 @@ const Inbox = ({useraddr,setUseraddr,boxData,setBoxData,detailData,setDetailData
             },
             filters: [
                 {
-                    text: 'GMail',
-                    value: '@gmail.com',
+                    text: 'NJUmail',
+                    value: '@nju.edu.cn>',
                 },
                 {
-                    text: '163mail',
+                    text: 'foxmail',
+                    value: '@foxmail.com',
+                },
+                {
+                    text: '163',
                     value: '@163.com',
                 },
+                {
+                    text: 'qqmail',
+                    value: '@qq.com',
+                },
+                {
+                    text: 'NJU_Smail',
+                    value: '@smail.nju.edu.cn>',
+                },
+                
             ],
-            onFilter: (value, record) => record.from.includes(value)
+            onFilter: (value, record) => record.from[0].includes(value)
 
         },
         {
@@ -176,38 +190,6 @@ const Inbox = ({useraddr,setUseraddr,boxData,setBoxData,detailData,setDetailData
                 }
             }
         },
-        /*{
-            title: '收信邮箱',
-            dataIndex: 'fromEmailAccount',
-            width: 'auto',
-            render: (text, record, index) => {
-                var id = record.uid
-                if(record.seen){
-                    return(
-                        <div onClick={()=>mailOnclick(id)}>
-                            <Text>{text}</Text>
-                        </div>
-                    );
-                }
-                return(
-                    <div onClick={()=>mailOnclick(id)}>
-                        <Text strong>{text}</Text>
-                    </div>
-                );
-            },
-            filters: [
-                {
-                    text: 'GMail',
-                    value: '@gmail.com',
-                },
-                {
-                    text: '163mail',
-                    value: '@163.com',
-                },
-            ],
-            onFilter: (value, record) => record.fromEmailAccount.includes(value),
-            
-        },*/
         {
             dataIndex: 'flagged',
             width: 'auto',

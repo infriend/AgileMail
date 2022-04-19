@@ -58,10 +58,12 @@ const SiderMain = ({useraddr,setUseraddr,addrData,setAddrData,boxData,setBoxData
         let tempaddr = ''
         if(data.itemKey.indexOf('addressbook') != -1){//api还没弄好
             tempaddr = data.itemKey
+            api.getContact(setAddrData)
         }else if(data.itemKey === 'writemail'){//api还没弄好
             tempaddr = 'writemail'
         }else if(data.itemKey === 'associateMail'){
             tempaddr = 'associateMail'
+            api.getAssociatedAddrList(setUseraddr)
         }
         else if(data.itemKey.indexOf('INBOX') != -1){
             let arr = data.itemKey.split("_")

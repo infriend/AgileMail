@@ -48,8 +48,8 @@ const InitialMain = ({useraddr,setUseraddr}) => {
                         </Button>
                         <Button type="primary"  
                         style={{ padding: '6px 24px' }}
-                        onClick={() => navigate('/main/inbox?bid=1')}>
-                                收件箱
+                        onClick={() => navigate('/main/associateMail')}>
+                                设置关联邮箱
                         </Button>
                     </div>
                     

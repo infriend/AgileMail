@@ -215,6 +215,8 @@ const deleteMail = (folderid,useraddr,messageidList) => {//彻底删除邮件
     })
 }
 const setReadStatusMail = (folderid,seen,useraddr,messageidList) => {//设为已读/未读
+    let list = []
+    list.push(messageidList)
     axios({
         method: 'PUT',
         url:`${baseUrl}/${folderid}/messages/seen/${seen}`,
@@ -222,11 +224,13 @@ const setReadStatusMail = (folderid,seen,useraddr,messageidList) => {//设为已
             folderId : folderid,
             seen: seen,
         	emailAddress: useraddr,
-	        msgIds: messageidList
+	        msgIds: list
             }
     }).then()
 }
 const flagMail = (folderid,flagged,useraddr,messageidList) => {//设为已标记/取消标记
+    let list = []
+    list.push(messageidList)
     axios({
         method: 'PUT',
         url:`${baseUrl}/${folderid}/messages/flagged/${flagged}`,
@@ -234,7 +238,7 @@ const flagMail = (folderid,flagged,useraddr,messageidList) => {//设为已标记
             folderId : folderid,
             flagged: flagged,
         	emailAddress: useraddr,
-	        msgIds: messageidList
+	        msgIds: list
         }
     }).then()
 
@@ -278,7 +282,7 @@ const sendDraft = (note) => {
         const data = response.data
     })
 }
-
+//---------通讯录-------
 const getContact = (setAddrData) => {//临时接口，获取联系人名单
     axios({
         method: 'GET',
@@ -287,9 +291,33 @@ const getContact = (setAddrData) => {//临时接口，获取联系人名单
 
         }
     }).then(response=>{
-        const data = response.data
+        const data = response.data.data
+        //console.log(response.data)
+        //console.log(response.data.data)
         setAddrData(data)
+        localStorage.setItem("addrData",JSON.stringify(data))
+
     })
+}
+const addContact = (contactMail,name) => {//添加用户联系人
+    axios({
+        method:'POST',
+        url:`${baseUrl}/contact`,
+        data:{
+            contactEmail:contactMail,
+            name:name
+        }
+    }).then()
+
+}
+const deleteContact = (uid) => {
+    axios({
+        method:'DELETE',
+        url:`${baseUrl}/contact/${uid}`,
+        data:{
+            contactUid:uid
+        }
+    }).then()
 }
 export default {
                 setAuthToken,
@@ -313,5 +341,7 @@ export default {
 
                 sendMail,
                 sendDraft,
-                getContact
+                getContact,
+                addContact,
+                deleteContact
                 }

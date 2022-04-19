@@ -22,6 +22,7 @@ const MainPage = ({useraddr,setUseraddr}) =>{
     }
     if(assoData === undefined){
         api.getAssociatedAddrList(setAssoData)
+       setAssoData(JSON.parse(localStorage.getItem("associatedList")))
     }else{
         //localStorage.setItem("currmail",assoData)
     }

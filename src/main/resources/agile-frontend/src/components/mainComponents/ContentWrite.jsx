@@ -108,7 +108,7 @@ const ContentWrite = ({useraddr,setUseraddr}) => {
                             <Button theme='borderless' size='small' onClick={ccOnclick}>{ccbuttonName()}抄送</Button>
                             <Button theme='borderless' size='small' onClick={bccOnclick}>{bccbuttonName()}密送</Button>
                             <Form.Input field='title' label='主题' style={{ width: '100%' }}></Form.Input>
-                            <Form.Upload action='../images' field='files'label=' '>
+                            <Form.Upload action='' field='files'label=' '>
                                 <Button icon={<IconUpload />} theme="light">
                                     添加附件
                                 </Button>

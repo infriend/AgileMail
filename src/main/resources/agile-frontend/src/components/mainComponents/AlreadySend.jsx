@@ -80,16 +80,27 @@ const AlreadySend = ({useraddr,setUseraddr,boxData,setBoxData,detailData,setDeta
             },
             filters: [
                 {
-                    text: 'GMail',
-                    value: '@gmail.com',
+                    text: 'NJUmail',
+                    value: '@nju.edu.cn>',
                 },
                 {
-                    text: '163mail',
+                    text: 'foxmail',
+                    value: '@foxmail.com',
+                },
+                {
+                    text: '163',
                     value: '@163.com',
                 },
+                {
+                    text: 'qqmail',
+                    value: '@qq.com',
+                },
+                {
+                    text: 'NJU_Smail',
+                    value: '@smail.nju.edu.cn>',
+                },
             ],
-            onFilter: (value, record) => record.to.includes(value)
-
+            onFilter: (value, record) => record.replyTo[0].includes(value)
         },
         {
             title: '主题',
@@ -115,30 +126,6 @@ const AlreadySend = ({useraddr,setUseraddr,boxData,setBoxData,detailData,setDeta
                     </div>
                 );
             }
-        },
-        {
-            title: '发送邮箱',
-            dataIndex: 'fromEmailAccount',
-            render: (text, record, index) => {
-                var id = record.uid
-                return(
-                    <div onClick={()=>mailOnclick(id)}>
-                        {text}
-                    </div>
-                )
-                
-            },
-            filters: [
-                {
-                    text: 'GMail',
-                    value: '@gmail.com',
-                },
-                {
-                    text: '163mail',
-                    value: '@163.com',
-                },
-            ],
-            onFilter: (value, record) => record.fromEmailAccount.includes(value)
         },
         {
             dataIndex: 'flagged',

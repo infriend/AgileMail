@@ -25,6 +25,7 @@ const HeaderMain = ({useraddr,setUseraddr,folderList,setFolderList}) => {
     const selectOnchange = (value) => {
         console.log(value)
         localStorage.setItem("currmail",value)
+        localStorage.removeItem("folderList")
         api.getFolderList(value,setFolderList)
         navigate('/main/')
     }

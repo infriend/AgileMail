@@ -8,7 +8,8 @@ const AddressBook= ({useraddr,setUseraddr,addrData,setAddrData}) => {
     //useraddr = JSON.parse(localStorage.getItem("userdata"))
     var all
     if(addrData === undefined) {
-        all = 0
+        if(JSON.parse(localStorage.getItem("addrData"))!== null)
+            all = JSON.parse(localStorage.getItem("addrData")).length
         //api.getAddrBook(useraddr,addrData,setAddrData)
         //api.getContact(setAddrData)
         }
@@ -23,29 +24,19 @@ const AddressBook= ({useraddr,setUseraddr,addrData,setAddrData}) => {
         },
         {
             title: '邮箱',
-            dataIndex: 'emailAddress',
+            dataIndex: 'contactEmail',
             width:500,
         },
-        {
-            title: '来自邮箱',
-            dataIndex: 'fromEmailAccount',
-            width:'auto',
-            filters: [
-                {
-                    text: 'GMail',
-                    value: '@gmail.com',
-                },
-                {
-                    text: '163mail',
-                    value: '@163.com',
-                },
-            ],
-            onFilter: (value, record) => record.fromEmailAccount.includes(value)
-        },
     ];
-    const data = addrData
-    //console.log(addrData)
-    const [selectedobj,setSelectedObj] =useState()
+    var data
+    if(addrData === undefined){
+        data = JSON.parse(localStorage.getItem("addrData"))
+    }else{
+        data = addrData
+    }
+    console.log(data)
+    //const [selectedobj,setSelectedObj] =useState()
+    var selectedobj = {}
     const [addContactMail, setAddContactMail] = useState()
     const rowSelection = {
         onSelect: (record, selected) => {
@@ -56,31 +47,33 @@ const AddressBook= ({useraddr,setUseraddr,addrData,setAddrData}) => {
         },
         onChange: (selectedRowKeys, selectedRows) => {
             //console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
-            setSelectedObj(selectedRows)
+            //setSelectedObj(selectedRows)
+            selectedobj = selectedRows
         },
     };
     const onconfirm = () => {
         if(selectedobj.length === undefined){
             Toast.error('删除列表为空！')
         }else{
+            console.log(selectedobj)
             let contactlist = selectedobj.map(target => {
-            return target.uid
+            return target.id
             })
             if(contactlist.length === 0){
             Toast.error('删除列表为空！')
             }else{
-                //console.log(contactlist)
+                console.log(contactlist)
                 //此处应有删除联系人的api
-                //api.
+                api.deleteContact(contactlist[0])
                 Toast.success('删除成功')
                 navigate('/main/addressbook')
             }
         } 
     }
     const submitContact = () => {
-        console.log("value")
-        console.log(useraddr)
-        api.
+        //console.log(addContactMail)
+        //console.log(useraddr)
+        api.addContact(addContactMail.contactAddr,addContactMail.contactName)
         console.log(addContactMail);
     }
     const pagination = useMemo(() => ({
@@ -98,7 +91,7 @@ const AddressBook= ({useraddr,setUseraddr,addrData,setAddrData}) => {
                     padding: '16px',
                 }}
             >
-                <Table columns={columns} dataSource={data} rowSelection={rowSelection} pagination={pagination} rowKey="uid"/>
+                <Table columns={columns} dataSource={data} rowSelection={rowSelection} pagination={pagination} rowKey="id"/>
                 <Popconfirm
                     title="确定是否要彻底删除联系人？"
                     content="此修改将不可逆"
